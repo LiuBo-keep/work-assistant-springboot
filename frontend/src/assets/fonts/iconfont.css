@@ -1,0 +1,109 @@
+@font-face {
+  font-family: "iconfont"; /* Project id 3026263 */
+  src: url('iconfont.woff2?t=1647915421295') format('woff2'),
+       url('iconfont.woff?t=1647915421295') format('woff'),
+       url('iconfont.ttf?t=1647915421295') format('truetype');
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 18px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  width: 24px;
+  margin-right: 8px;
+  text-align: center;
+}
+
+.icon-circle:before {
+  content: "\e649";
+  vertical-align: middle;
+}
+
+.icon-circle-border:before {
+  content: "\e654";
+  vertical-align: middle;
+}
+
+.icon-email:before {
+  content: "\e617";
+}
+
+.icon-report:before {
+  content: "\e66c";
+}
+
+.icon-invoice-issued:before {
+  content: "\e671";
+}
+
+.icon-info:before {
+  content: "\e648";
+}
+
+.icon-send:before {
+  content: "\e676";
+}
+
+.icon-invoice:before {
+  content: "\e7bc";
+}
+
+.icon-wechat:before {
+  content: "\e621";
+}
+
+.icon-error:before {
+  content: "\e6c6";
+  color: #f56c6c;
+  font-size: 3rem;
+}
+
+.icon-download:before {
+  content: "\e66a";
+  font-size: 12px;
+}
+
+.icon-language:before {
+  content: "\e600";
+}
+
+.icon-channel:before {
+  content: "\e7d5";
+  font-size: 20px;
+}
+
+.icon-setting:before {
+  content: "\e78e";
+}
+
+.icon-search:before {
+  content: "\e741";
+  font-size: 12px;
+}
+
+.icon-client:before {
+  content: "\e71a";
+}
+
+.icon-user:before {
+  content: "\e62b";
+  font-size: 14px;
+}
+
+.icon-success:before {
+  content: "\e65a";
+  font-size: 5rem;
+  color: rgb(47,204,180);
+}
+
+.icon-building:before {
+  content: "\ea24";
+}
+
+.icon-reset:before {
+  content: "\e610";
+  font-size: 12px;
+}
+

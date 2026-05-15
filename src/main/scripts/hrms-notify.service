@@ -1,0 +1,12 @@
+[Unit]
+Description=hrms-notify Service
+After=network.target
+
+[Service]
+ExecStart=/opt/java/jdk-11.0.16.1+1/bin/java -jar /opt/@dist.project.name@/@project.build.finalName@-runner.jar
+WorkingDirectory=/root
+Restart=always
+User=root
+
+[Install]
+WantedBy=multi-user.target

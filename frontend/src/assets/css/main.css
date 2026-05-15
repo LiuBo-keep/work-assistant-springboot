@@ -1,0 +1,141 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+html{
+    width: 100%;
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+body{
+    width: 100%;
+    min-height: 100%;
+    overflow: hidden;
+}
+#app,
+.wrapper {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'PingFang SC', "Helvetica Neue", Helvetica, "microsoft yahei", arial, STHeiTi, sans-serif;
+}
+
+a {
+    text-decoration: none
+}
+
+
+.content-box {
+    position: absolute;
+    left: 250px;
+    right: 0;
+    top: 70px;
+    bottom: 0;
+    -webkit-transition: left .3s ease-in-out;
+    transition: left .3s ease-in-out;
+    background: #f0f0f0;
+}
+
+.content {
+    width: auto;
+    height: 100%;
+    padding: 0px 10px 10px 10px;
+    overflow-y: auto;
+    box-sizing: border-box;
+    background: #F5F5F5;
+}
+
+.content .main-content {
+    position: inherit !important;
+}
+
+.content-collapse {
+    left: 65px;
+}
+
+.container {
+    padding: 30px;
+    background: #F5F5F5;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.crumbs {
+    margin: 10px 0;
+}
+
+.el-table th {
+    background-color: #f5f7fa !important;
+    border-top: 1px solid #EBEEF5;
+}
+
+.pagination {
+    margin: 20px 0;
+    text-align: right;
+}
+
+.plugins-tips {
+    padding: 20px 10px;
+    margin-bottom: 20px;
+}
+
+.el-button+.el-tooltip {
+    margin-left: 10px;
+}
+
+.el-button--small {
+    padding: 8px 15px !important;
+}
+
+.el-table tr:hover {
+    background: #f5f7fa;
+}
+
+.kl-content {
+    height:calc(100% - 26px);
+    display:flex;
+    flex-direction: column;
+}
+
+.kl-detail-content {
+    height:calc(100% - 90px);
+    overflow: auto;
+}
+
+/*定义滚动条高宽及背景 高宽分别对应横竖滚动条的尺寸*/
+.kl-detail-content::-webkit-scrollbar, .el-table__body-wrapper::-webkit-scrollbar {
+    width: 8px;
+    height: 8px
+}
+
+/*定义滚动条轨道 内阴影+圆角*/
+.kl-detail-content::-webkit-scrollbar-track, .el-table__body-wrapper::-webkit-scrollbar-track {
+    background-color: transparent;
+}
+
+/*定义滑块 内阴影+圆角*/
+.kl-detail-content::-webkit-scrollbar-thumb, .el-table__body-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 8px;
+    -webkit-box-shadow: inset 0 0 8px lightGray ;
+    box-shadow: inset 0 0 1px lightGray ;
+    background-color: lightGray ;
+}
+
+.kl-text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.el-card__body{
+    padding: 10px !important;
+}
+
+.el-card__header{
+    padding: 15px 10px !important;
+}

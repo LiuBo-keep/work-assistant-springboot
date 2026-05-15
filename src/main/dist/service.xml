@@ -1,0 +1,13 @@
+<service>
+	<id>@dist.project.name@-service</id>
+	<name>@dist.project.name@</name>
+	<description>@dist.project.description@</description>
+	<workingdirectory>%BASE%\</workingdirectory>
+	<logmode>none</logmode>
+	<env name="JAVA_HOME" value="D:\JAVA\jdk-11" />
+	<executable>%JAVA_HOME%\bin\java</executable>
+	<arguments>-Xmx2048m -Xms2048m -XX:+HeapDumpOnOutOfMemoryError -Dfile.encoding=UTF-8 -jar "%BASE%\@project.build.finalName@-runner.jar"</arguments>
+	<!--配置服务启动jar包失败，自动重启时间(单位：秒)-->
+	<onfailure action="restart" delay="10 sec" />
+	<delayedAutoStart />
+</service>

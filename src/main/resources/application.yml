@@ -1,0 +1,13 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: work-assistant
+  liquibase:
+    change-log: classpath:/db/changeLog.xml
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 123456
+    url: jdbc:postgresql://49.232.206.117:5432/work-assistant
