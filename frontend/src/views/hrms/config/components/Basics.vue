@@ -1,397 +1,332 @@
 <template>
-  <div class="config-page">
-    <el-card class="config-card" shadow="never">
-      <template #header>
-        <div class="card-header">
-          <span class="card-title">通知配置</span>
-        </div>
-      </template>
+  <div class="page-wrap" v-loading="loading">
+    <div class="config-card">
 
+      <!-- 卡片头 -->
+      <div class="card-head">
+        <div class="head-icon">
+          <el-icon :size="14">
+            <Setting/>
+          </el-icon>
+        </div>
+        <span class="head-title">基础配置</span>
+      </div>
+
+      <!-- 表单体 -->
       <el-form
-        ref="configFormRef"
-        :model="form"
-        :rules="rules"
-        label-width="140px"
-        label-position="right"
-        class="config-form"
+          ref="configFormRef"
+          :model="form"
+          :rules="rules"
+          label-position="top"
+          class="config-form"
       >
-        <el-row :gutter="20">
+        <div class="form-grid">
+
           <!-- 是否启用 -->
-          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-            <el-form-item label="是否启用" prop="enabled">
-              <el-switch v-model="form.enabled" />
-            </el-form-item>
-          </el-col>
+          <div class="field-wrap">
+            <div class="field-label">是否启用</div>
+            <div class="switch-row">
+              <el-switch v-model="form.enabled"/>
+              <span class="switch-hint" :class="form.enabled ? 'on' : 'off'">
+                {{ form.enabled ? '通知已开启' : '通知已关闭' }}
+              </span>
+            </div>
+          </div>
 
           <!-- 通知渠道 -->
-          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-            <el-form-item label="通知渠道" prop="notifyChannel">
-              <el-select
+          <el-form-item prop="notifyChannel" class="field-wrap">
+            <template #label><span class="field-label">通知渠道</span></template>
+            <el-select
                 v-model="form.notifyChannel"
                 clearable
                 placeholder="请选择通知渠道"
-                style="width: 100%"
-              >
-                <el-option
+                style="width:100%"
+            >
+              <el-option
                   v-for="item in notifyChannelOptions"
                   :key="item.value"
                   :label="item.label"
                   :value="item.value"
-                />
-              </el-select>
-            </el-form-item>
-          </el-col>
-
-          <!-- HRMS URL -->
-          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-            <el-form-item label="刷卡记录地址" prop="hrmsUrl">
-              <el-input
-                v-model="form.hrmsUrl"
-                clearable
-                placeholder="请输入 刷卡记录地址"
               />
-            </el-form-item>
-          </el-col>
+            </el-select>
+          </el-form-item>
 
-          <!-- HRMS TOKEN -->
-          <el-col :xs="24" :sm="12" :md="12" :lg="8">
-            <el-form-item label="刷卡记录Cookie" prop="hrmsToken">
-              <el-input
+          <!-- 刷卡记录地址 -->
+          <el-form-item prop="hrmsUrl" class="field-wrap">
+            <template #label><span class="field-label">刷卡记录地址</span></template>
+            <el-input v-model="form.hrmsUrl" clearable placeholder="请输入刷卡记录地址"/>
+          </el-form-item>
+
+          <!-- 刷卡记录 Cookie -->
+          <el-form-item prop="hrmsToken" class="field-wrap">
+            <template #label><span class="field-label">刷卡记录 Cookie</span></template>
+            <el-input
                 v-model="form.hrmsToken"
                 type="password"
                 show-password
                 clearable
-                placeholder="刷卡记录Cookie"
-              />
-            </el-form-item>
-          </el-col>
+                placeholder="请输入刷卡记录 Cookie"
+            />
+          </el-form-item>
 
-          <!-- 微信配置 -->
+          <!-- 微信渠道 -->
           <template v-if="isWechatChannel">
-            <el-col :xs="24" :sm="12" :md="12" :lg="8">
-              <el-form-item label="PushPlus URL" prop="pushPlusUrl">
-                <el-input
-                  v-model="form.pushPlusUrl"
-                  clearable
-                  placeholder="请输入 PushPlus URL"
-                />
-              </el-form-item>
-            </el-col>
-
-            <el-col :xs="24" :sm="12" :md="12" :lg="8">
-              <el-form-item label="PushPlus Token" prop="pushPlusToken">
-                <el-input
+            <el-form-item prop="pushPlusUrl" class="field-wrap">
+              <template #label><span class="field-label">PushPlus URL</span></template>
+              <el-input v-model="form.pushPlusUrl" clearable placeholder="请输入 PushPlus URL"/>
+            </el-form-item>
+            <el-form-item prop="pushPlusToken" class="field-wrap">
+              <template #label><span class="field-label">PushPlus Token</span></template>
+              <el-input
                   v-model="form.pushPlusToken"
                   type="password"
                   show-password
                   clearable
                   placeholder="请输入 PushPlus Token"
-                />
-              </el-form-item>
-            </el-col>
+              />
+            </el-form-item>
           </template>
 
-          <!-- 钉钉配置 -->
+          <!-- 钉钉渠道 -->
           <template v-if="isDingTalkChannel">
-            <el-col :xs="24" :sm="12" :md="12" :lg="8">
-              <el-form-item label="钉钉通知 URL" prop="dingTalkUrl">
-                <el-input
-                  v-model="form.dingTalkUrl"
-                  clearable
-                  placeholder="请输入钉钉通知 URL"
-                />
-              </el-form-item>
-            </el-col>
+            <el-form-item prop="dingTalkUrl" class="field-wrap">
+              <template #label><span class="field-label">钉钉通知 URL</span></template>
+              <el-input v-model="form.dingTalkUrl" clearable placeholder="请输入钉钉通知 URL"/>
+            </el-form-item>
           </template>
-        </el-row>
 
-        <!-- 按钮 -->
+        </div>
+
+        <!-- 底部按钮 -->
         <div class="form-footer">
-          <el-button
-            type="primary"
-            :loading="loading"
-            @click="save"
-          >
-            保存配置
-          </el-button>
-
-          <el-button @click="resetForm">
-            重置
-          </el-button>
+          <el-button @click="resetForm">重置</el-button>
+          <el-button type="primary" :loading="loading" @click="save">保存配置</el-button>
         </div>
       </el-form>
-    </el-card>
+    </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, reactive, ref } from 'vue'
-import { ElNotification } from 'element-plus'
+import {computed, onMounted, reactive, ref} from 'vue'
+import {ElNotification} from 'element-plus'
+import {Setting} from '@element-plus/icons-vue'
 import systemService from '@/services/hrms/hrms-config/system.service'
 
 const configFormRef = ref()
-
 const loading = ref(false)
 
 const NOTIFY_CHANNEL_OPTIONS = [
-  {
-    label: '微信',
-    value: 'WECHAT'
-  },
-  {
-    label: '钉钉',
-    value: 'DING_TALK'
-  }
+  {label: '微信', value: 'WECHAT'},
+  {label: '钉钉', value: 'DING_TALK'}
 ]
 
 const DEFAULT_FORM = {
-  id: '',
-  enabled: false,
-  notifyChannel: '',
-  pushPlusUrl: '',
-  pushPlusToken: '',
-  dingTalkUrl: '',
-  hrmsUrl: '',
-  hrmsToken: ''
+  id: '', enabled: false, notifyChannel: '',
+  pushPlusUrl: '', pushPlusToken: '',
+  dingTalkUrl: '', hrmsUrl: '', hrmsToken: ''
 }
 
-const form = reactive({
-  ...DEFAULT_FORM
-})
+const form = reactive({...DEFAULT_FORM})
 
-/**
- * 通知渠道选项
- */
-const notifyChannelOptions = computed(() => {
-  return NOTIFY_CHANNEL_OPTIONS
-})
+const notifyChannelOptions = computed(() => NOTIFY_CHANNEL_OPTIONS)
+const isWechatChannel = computed(() => form.notifyChannel === 'WECHAT')
+const isDingTalkChannel = computed(() => form.notifyChannel === 'DING_TALK')
 
-/**
- * 是否微信渠道
- */
-const isWechatChannel = computed(() => {
-  return form.notifyChannel === 'WECHAT'
-})
+const rules = computed(() => ({
+  notifyChannel: [{required: true, message: '请选择通知渠道', trigger: 'change'}],
+  hrmsUrl: [{required: true, message: '刷卡记录地址必填', trigger: 'blur'}],
+  hrmsToken: [{required: true, message: '刷卡记录 Cookie 必填', trigger: 'blur'}],
+  pushPlusUrl: [{required: isWechatChannel.value, message: 'PushPlus URL 必填', trigger: 'blur'}],
+  pushPlusToken: [{required: isWechatChannel.value, message: 'PushPlus Token 必填', trigger: 'blur'}],
+  dingTalkUrl: [{required: isDingTalkChannel.value, message: '钉钉通知 URL 必填', trigger: 'blur'}]
+}))
 
-/**
- * 是否钉钉渠道
- */
-const isDingTalkChannel = computed(() => {
-  return form.notifyChannel === 'DING_TALK'
-})
-
-/**
- * 表单校验
- */
-const rules = computed(() => {
-  return {
-    notifyChannel: [
-      {
-        required: true,
-        message: '请选择通知渠道',
-        trigger: 'change'
-      }
-    ],
-
-    hrmsUrl: [
-      {
-        required: true,
-        message: 'HRMS URL 必填',
-        trigger: 'blur'
-      }
-    ],
-
-    hrmsToken: [
-      {
-        required: true,
-        message: 'HRMS Token 必填',
-        trigger: 'blur'
-      }
-    ],
-
-    pushPlusUrl: [
-      {
-        required: isWechatChannel.value,
-        message: 'PushPlus URL 必填',
-        trigger: 'blur'
-      }
-    ],
-
-    pushPlusToken: [
-      {
-        required: isWechatChannel.value,
-        message: 'PushPlus Token 必填',
-        trigger: 'blur'
-      }
-    ],
-
-    dingTalkUrl: [
-      {
-        required: isDingTalkChannel.value,
-        message: '钉钉通知 URL 必填',
-        trigger: 'blur'
-      }
-    ]
-  }
-})
-
-/**
- * 获取配置
- */
-const getConfig = async () => {
+async function getConfig() {
   loading.value = true
-
   try {
-    const response = await systemService.getConfig()
-
-    if (response.code !== 200) {
-      ElNotification.error({
-        message: response.error || '获取配置失败'
-      })
-      return
-    }
-
-    if (response.data) {
-      Object.assign(form, DEFAULT_FORM, response.data)
-    }
-  } catch (error) {
-    ElNotification.error({
-      message: error.message || '获取配置失败'
-    })
+    const res = await systemService.getConfig()
+    if (res.code !== 200) return ElNotification.error({message: res.error || '获取配置失败'})
+    if (res.data) Object.assign(form, DEFAULT_FORM, res.data)
+  } catch (e) {
+    ElNotification.error({message: e.message || '获取配置失败'})
   } finally {
     loading.value = false
   }
 }
 
-/**
- * 保存配置
- */
-const save = async () => {
+async function save() {
+  const valid = await configFormRef.value.validate().catch(() => false)
+  if (!valid) return
+  loading.value = true
   try {
-    const valid = await configFormRef.value.validate().catch(() => false)
-
-    if (!valid) {
-      return
+    const req = {...form}
+    if (req.notifyChannel === 'WECHAT') req.dingTalkUrl = ''
+    if (req.notifyChannel === 'DING_TALK') {
+      req.pushPlusUrl = '';
+      req.pushPlusToken = ''
     }
-
-    loading.value = true
-
-    const request = {
-      ...form
-    }
-
-    // 微信渠道清空钉钉配置
-    if (request.notifyChannel === 'WECHAT') {
-      request.dingTalkUrl = ''
-    }
-
-    // 钉钉渠道清空微信配置
-    if (request.notifyChannel === 'DING_TALK') {
-      request.pushPlusUrl = ''
-      request.pushPlusToken = ''
-    }
-
-    const response = await systemService.save(request)
-
-    if (response.code !== 200) {
-      ElNotification.error({
-        message: response.error || '保存失败'
-      })
-      return
-    }
-
-    ElNotification.success({
-      message: '保存成功'
-    })
-
+    const res = await systemService.save(req)
+    if (res.code !== 200) return ElNotification.error({message: res.error || '保存失败'})
+    ElNotification.success({message: '保存成功'})
     await getConfig()
-  } catch (error) {
-    ElNotification.error({
-      message: error.message || '保存失败'
-    })
+  } catch (e) {
+    ElNotification.error({message: e.message || '保存失败'})
   } finally {
     loading.value = false
   }
 }
 
-/**
- * 重置表单
- */
-const resetForm = () => {
+function resetForm() {
   configFormRef.value?.resetFields()
-
   Object.assign(form, DEFAULT_FORM)
 }
 
-onMounted(() => {
-  getConfig()
-})
+onMounted(() => getConfig())
 </script>
 
-<style scoped lang="scss">
-.config-page {
-  min-height: 100%;
+<style lang="scss" scoped>
+/* ===== 页面容器 ===== */
+.page-wrap {
   padding: 16px;
-  box-sizing: border-box;
   background: #f5f7fa;
+  min-height: 100%;
+  box-sizing: border-box;
 }
 
+/* ===== 卡片 ===== */
 .config-card {
+  background: #fff;
+  border: 1px solid #ebeef5;
   border-radius: 8px;
-
-  :deep(.el-card__header) {
-    padding: 18px 20px;
-    border-bottom: 1px solid #ebeef5;
-  }
-
-  :deep(.el-card__body) {
-    padding: 24px;
-  }
+  overflow: hidden;
 }
 
-.card-header {
+/* 卡片头部 */
+.card-head {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 8px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f0f0f0;
 }
 
-.card-title {
-  font-size: 16px;
+.head-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  background: #e6f1fb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #185fa5;
+  flex-shrink: 0;
+}
+
+.head-title {
+  font-size: 14px;
   font-weight: 600;
   color: #303133;
 }
 
+/* ===== 表单主体 ===== */
 .config-form {
-  :deep(.el-form-item) {
-    margin-bottom: 22px;
-  }
+  padding: 20px 24px 0;
+}
 
+/* 3 列网格 */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 24px;
+}
+
+/* 每个字段容器 */
+.field-wrap {
+  margin-bottom: 20px !important;
+
+  /* 覆盖 el-form-item 默认 label 样式 */
   :deep(.el-form-item__label) {
-    font-size: 14px;
-    color: #606266;
+    padding: 0 0 6px !important;
+    line-height: 1 !important;
+    height: auto !important;
   }
 }
 
+/* 字段 label */
+.field-label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #606266;
+}
+
+/* 必填红星位置微调 */
+:deep(.el-form-item.is-required:not(.is-no-asterisk)) {
+  .el-form-item__label::before {
+    margin-right: 3px;
+  }
+}
+
+/* 统一输入框高度 */
+:deep(.el-input__wrapper),
+:deep(.el-select .el-input__wrapper) {
+  height: 32px;
+  box-shadow: 0 0 0 1px #dcdfe6 inset;
+
+  &:hover {
+    box-shadow: 0 0 0 1px #c0c4cc inset;
+  }
+
+  &.is-focus {
+    box-shadow: 0 0 0 1px #409eff inset;
+  }
+}
+
+/* 开关行 */
+.switch-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 32px;
+}
+
+.switch-hint {
+  font-size: 12px;
+
+  &.on {
+    color: #0f6e56;
+  }
+
+  &.off {
+    color: #909399;
+  }
+}
+
+/* ===== 底部按钮 ===== */
 .form-footer {
   display: flex;
   justify-content: flex-end;
-  gap: 12px;
-  margin-top: 12px;
-  padding-top: 20px;
-  border-top: 1px solid #ebeef5;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 0 20px;
+  border-top: 1px solid #f0f0f0;
+  margin-top: 4px;
 }
 
-@media screen and (max-width: 768px) {
-  .config-page {
-    padding: 12px;
+/* ===== 响应式 ===== */
+@media screen and (max-width: 960px) {
+  .form-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+}
 
-  .config-card {
-    :deep(.el-card__body) {
-      padding: 16px;
-    }
+@media screen and (max-width: 600px) {
+  .config-form {
+    padding: 16px 16px 0;
   }
-
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
   .form-footer {
     flex-direction: column;
 
