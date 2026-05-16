@@ -169,13 +169,13 @@
         </dependency>
 
         <!-- win-sw jar -->
-        <dependency>
-            <groupId>com.sun.winsw</groupId>
-            <artifactId>winsw</artifactId>
-            <version>${winsw.version}</version>
-            <classifier>bin</classifier>
-            <type>exe</type>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sun.winsw</groupId>-->
+<!--            <artifactId>winsw</artifactId>-->
+<!--            <version>${winsw.version}</version>-->
+<!--            <classifier>bin</classifier>-->
+<!--            <type>exe</type>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
