@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public enum DingTalkMsgType {
 
-    @JsonProperty("text")
-    TEXT,
+  @JsonProperty("text")
+  TEXT,
 
-    @JsonProperty("markdown")
-    MARKDOWN
+  @JsonProperty("markdown")
+  MARKDOWN
 }

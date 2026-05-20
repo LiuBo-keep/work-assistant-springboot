@@ -10,13 +10,13 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class PushPlusNotifyHandler implements NotifyHandler {
-    @Override
-    public NotifyType getNotifyType() {
-        return null;
-    }
+  @Override
+  public NotifyType getNotifyType() {
+    return null;
+  }
 
-    @Override
-    public NotifyResponse notify(NotifyRequest request) {
-        return null;
-    }
+  @Override
+  public NotifyResponse notify(NotifyRequest request) {
+    return null;
+  }
 }

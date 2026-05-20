@@ -1,10 +1,8 @@
 package com.work.assistant.biz.hrms.repository;
 
 import com.work.assistant.biz.hrms.model.hrms.HrmsCardRecord;
-
-import java.time.LocalDate;
-
 import com.work.assistant.common.hrms.CheckInType;
+import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -17,5 +15,5 @@ import org.springframework.stereotype.Repository;
 public interface HrmsCardRecordRepository extends JpaRepository<HrmsCardRecord, String> {
 
 
-    HrmsCardRecord findByClockInDateAndClockInType(LocalDate date, CheckInType checkInType);
+  HrmsCardRecord findByClockInDateAndClockInType(LocalDate date, CheckInType checkInType);
 }

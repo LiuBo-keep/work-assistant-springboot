@@ -1,7 +1,6 @@
 package com.work.assistant.biz.hrms.metadata;
 
 import com.work.assistant.common.hrms.CheckInType;
-import java.time.LocalDateTime;
 import lombok.Data;
 
 /**

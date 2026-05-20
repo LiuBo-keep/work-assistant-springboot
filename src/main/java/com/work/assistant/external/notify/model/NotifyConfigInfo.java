@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class NotifyConfigInfo {
 
-    private String dingTalkUrl;
+  private String dingTalkUrl;
 
-    private String pushPlusUrl;
+  private String pushPlusUrl;
 
-    private String pushPlusToken;
+  private String pushPlusToken;
 }

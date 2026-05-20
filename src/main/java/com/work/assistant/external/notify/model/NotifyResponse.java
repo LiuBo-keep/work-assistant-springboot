@@ -10,13 +10,13 @@ import lombok.Data;
 @Builder
 public class NotifyResponse {
 
-    /**
-     * 是否成功
-     */
-    private Boolean success;
+  /**
+   * 是否成功
+   */
+  private Boolean success;
 
-    /**
-     * 响应消息
-     */
-    private String message;
+  /**
+   * 响应消息
+   */
+  private String message;
 }

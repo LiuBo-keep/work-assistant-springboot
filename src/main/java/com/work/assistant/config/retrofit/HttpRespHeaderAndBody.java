@@ -10,7 +10,7 @@ import lombok.Data;
 public class HttpRespHeaderAndBody<T> {
 
   private Integer httpStatusCode;
-  private Map<String,String> headerMap;
+  private Map<String, String> headerMap;
 
   /**
    * 注意，当泛型为『Void』,body = null.

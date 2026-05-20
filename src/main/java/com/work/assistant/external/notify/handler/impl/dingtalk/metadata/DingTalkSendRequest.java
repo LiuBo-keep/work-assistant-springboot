@@ -1,36 +1,34 @@
 package com.work.assistant.external.notify.handler.impl.dingtalk.metadata;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.work.assistant.external.notify.handler.impl.dingtalk.enums.DingTalkMsgType;
-import lombok.Data;
-
 import java.util.List;
+import lombok.Data;
 
 @Data
 public class DingTalkSendRequest {
 
-    private DingTalkMsgType msgtype;
+  private DingTalkMsgType msgtype;
 
-    private Markdown markdown;
+  private Markdown markdown;
 
-    private Text text;
+  private Text text;
 
-    private AtWho at;
+  private AtWho at;
 
-    @Data
-    public static class Markdown{
-        private String title;
-        private String text;
-    }
+  @Data
+  public static class Markdown {
+    private String title;
+    private String text;
+  }
 
-    @Data
-    public static class Text{
-        private String content;
-    }
+  @Data
+  public static class Text {
+    private String content;
+  }
 
-    @Data
-    public static class AtWho{
-        private List<String> atMobiles;
-        private Boolean isAtAll;
-    }
+  @Data
+  public static class AtWho {
+    private List<String> atMobiles;
+    private Boolean isAtAll;
+  }
 }

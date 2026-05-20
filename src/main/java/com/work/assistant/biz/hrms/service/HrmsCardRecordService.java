@@ -24,38 +24,39 @@ import org.springframework.stereotype.Service;
 @Service
 public class HrmsCardRecordService {
 
-    private final JPAQueryFactory jpaQueryFactory;
-    private final ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert;
+  private final JPAQueryFactory jpaQueryFactory;
+  private final ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert;
 
-    public HrmsCardRecordService(JPAQueryFactory jpaQueryFactory, ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert) {
-        this.jpaQueryFactory = jpaQueryFactory;
-        this.toHrmsCardRecordPageResponseConvert = toHrmsCardRecordPageResponseConvert;
+  public HrmsCardRecordService(JPAQueryFactory jpaQueryFactory, ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert) {
+    this.jpaQueryFactory = jpaQueryFactory;
+    this.toHrmsCardRecordPageResponseConvert = toHrmsCardRecordPageResponseConvert;
+  }
+
+  public PageResponse<HrmsCardRecordPageResponse> page(Integer pageNumber, Integer pageSize, HrmsCardRecordPageRequest pageRequest) {
+    QHrmsCardRecord qHrmsCardRecord = QHrmsCardRecord.hrmsCardRecord;
+    BooleanBuilder booleanBuilder = new BooleanBuilder();
+    if (ObjectUtils.isNotEmpty(pageRequest.getClockInType())) {
+      booleanBuilder.and(qHrmsCardRecord.clockInType.eq(pageRequest.getClockInType()));
+    }
+    if (ObjectUtils.isNotEmpty(pageRequest.getStartClockInTime())) {
+      booleanBuilder.and(qHrmsCardRecord.clockInDate.goe(pageRequest.getStartClockInTime()));
+    }
+    if (ObjectUtils.isNotEmpty(pageRequest.getEndClockInTime())) {
+      booleanBuilder.and(qHrmsCardRecord.clockInDate.loe(pageRequest.getEndClockInTime()));
     }
 
-    public PageResponse<HrmsCardRecordPageResponse> page(Integer pageNumber, Integer pageSize, HrmsCardRecordPageRequest pageRequest) {
-        QHrmsCardRecord qHrmsCardRecord = QHrmsCardRecord.hrmsCardRecord;
-        BooleanBuilder booleanBuilder = new BooleanBuilder();
-        if (ObjectUtils.isNotEmpty(pageRequest.getClockInType())) {
-            booleanBuilder.and(qHrmsCardRecord.clockInType.eq(pageRequest.getClockInType()));
-        }
-        if (ObjectUtils.isNotEmpty(pageRequest.getStartClockInTime())) {
-            booleanBuilder.and(qHrmsCardRecord.clockInDate.goe(pageRequest.getStartClockInTime()));
-        }
-        if (ObjectUtils.isNotEmpty(pageRequest.getEndClockInTime())) {
-            booleanBuilder.and(qHrmsCardRecord.clockInDate.loe(pageRequest.getEndClockInTime()));
-        }
-
-        Pageable pageable = Pageable.of(pageNumber, pageSize);
-        List<HrmsCardRecordPageResponse> hrmsCardRecordPageResponseList = new ArrayList<>();
-        Long totalCount = jpaQueryFactory.select(qHrmsCardRecord.count()).from(qHrmsCardRecord).where(booleanBuilder).fetchFirst();
-        if (ObjectUtils.isNotEmpty(totalCount)) {
-            List<HrmsCardRecord> hrmsCardRecords = jpaQueryFactory.selectFrom(qHrmsCardRecord).where(booleanBuilder).orderBy(qHrmsCardRecord.clockInTime.desc()).offset(pageable.getOffset())
-                    .limit(pageable.getPageSize()).fetch();
-            for (HrmsCardRecord hrmsCardRecord : hrmsCardRecords) {
-                HrmsCardRecordPageResponse hrmsCardRecordPageResponse = toHrmsCardRecordPageResponseConvert.fromHrmsCardRecord(hrmsCardRecord);
-                hrmsCardRecordPageResponseList.add(hrmsCardRecordPageResponse);
-            }
-        }
-        return new PageResponse<>(pageable, totalCount, hrmsCardRecordPageResponseList);
+    Pageable pageable = Pageable.of(pageNumber, pageSize);
+    List<HrmsCardRecordPageResponse> hrmsCardRecordPageResponseList = new ArrayList<>();
+    Long totalCount = jpaQueryFactory.select(qHrmsCardRecord.count()).from(qHrmsCardRecord).where(booleanBuilder).fetchFirst();
+    if (ObjectUtils.isNotEmpty(totalCount)) {
+      List<HrmsCardRecord> hrmsCardRecords =
+          jpaQueryFactory.selectFrom(qHrmsCardRecord).where(booleanBuilder).orderBy(qHrmsCardRecord.clockInTime.desc()).offset(pageable.getOffset())
+              .limit(pageable.getPageSize()).fetch();
+      for (HrmsCardRecord hrmsCardRecord : hrmsCardRecords) {
+        HrmsCardRecordPageResponse hrmsCardRecordPageResponse = toHrmsCardRecordPageResponseConvert.fromHrmsCardRecord(hrmsCardRecord);
+        hrmsCardRecordPageResponseList.add(hrmsCardRecordPageResponse);
+      }
     }
+    return new PageResponse<>(pageable, totalCount, hrmsCardRecordPageResponseList);
+  }
 }

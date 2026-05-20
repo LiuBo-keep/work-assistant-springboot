@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class SecurityAuthRequest {
 
-    private String userName;
+  private String userName;
 
-    private String password;
+  private String password;
 }

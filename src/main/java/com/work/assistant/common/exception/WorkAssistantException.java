@@ -36,7 +36,7 @@ public class WorkAssistantException extends Exception {
 
   /**
    * @param errorCode errorCode，
-   * @param errorMsg 自定义errorMsg，不使用errorCode的参考错误消息
+   * @param errorMsg  自定义errorMsg，不使用errorCode的参考错误消息
    */
   public WorkAssistantException(AppErrorCode errorCode, String errorMsg) {
 
@@ -58,7 +58,6 @@ public class WorkAssistantException extends Exception {
 
     this.errorMsg = message;
   }
-
 
 
   @Override

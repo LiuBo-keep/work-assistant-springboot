@@ -6,10 +6,10 @@ import lombok.Data;
 @Data
 public class DingTalkSendResponse {
 
-    @JsonProperty("errcode")
-    private int errCode;
+  @JsonProperty("errcode")
+  private int errCode;
 
-    @JsonProperty("errmsg")
-    private String errMsg;
+  @JsonProperty("errmsg")
+  private String errMsg;
 
 }

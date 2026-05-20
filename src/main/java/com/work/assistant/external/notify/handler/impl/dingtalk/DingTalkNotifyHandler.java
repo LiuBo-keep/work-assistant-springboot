@@ -24,52 +24,53 @@ import retrofit2.Retrofit;
 @Component
 public class DingTalkNotifyHandler implements NotifyHandler {
 
-    private final NotifyConfigProvider notifyConfigProvider;
-    private final RetrofitClientProvider retrofitClientProvider;
-    private final RetrofitClientResponseHelper retrofitClientResponseHelper;
+  private final NotifyConfigProvider notifyConfigProvider;
+  private final RetrofitClientProvider retrofitClientProvider;
+  private final RetrofitClientResponseHelper retrofitClientResponseHelper;
 
-    public DingTalkNotifyHandler(NotifyConfigProvider notifyConfigProvider, RetrofitClientProvider retrofitClientProvider, RetrofitClientResponseHelper retrofitClientResponseHelper) {
-        this.notifyConfigProvider = notifyConfigProvider;
-        this.retrofitClientProvider = retrofitClientProvider;
-        this.retrofitClientResponseHelper = retrofitClientResponseHelper;
+  public DingTalkNotifyHandler(NotifyConfigProvider notifyConfigProvider, RetrofitClientProvider retrofitClientProvider,
+                               RetrofitClientResponseHelper retrofitClientResponseHelper) {
+    this.notifyConfigProvider = notifyConfigProvider;
+    this.retrofitClientProvider = retrofitClientProvider;
+    this.retrofitClientResponseHelper = retrofitClientResponseHelper;
+  }
+
+
+  @Override
+  public NotifyType getNotifyType() {
+    return NotifyType.DING_TALK;
+  }
+
+  @Override
+  public NotifyResponse notify(NotifyRequest request) {
+
+
+    NotifyConfigInfo notifyConfig = notifyConfigProvider.getNotifyConfig(NotifyType.DING_TALK);
+    if (ObjectUtils.isEmpty(notifyConfig)) {
+      return NotifyResponse.builder().success(false).message("").build();
     }
 
+    DingTalkSendRequest dingTalkSendRequest = new DingTalkSendRequest();
+    dingTalkSendRequest.setMsgtype(DingTalkMsgType.MARKDOWN);
+    dingTalkSendRequest.setMarkdown(new DingTalkSendRequest.Markdown());
+    dingTalkSendRequest.getMarkdown().setTitle(request.getTitle());
+    dingTalkSendRequest.getMarkdown().setText(request.getContent());
+    dingTalkSendRequest.setAt(new DingTalkSendRequest.AtWho());
+    dingTalkSendRequest.getAt().setIsAtAll(false);
 
-    @Override
-    public NotifyType getNotifyType() {
-        return NotifyType.DING_TALK;
+    String dingTalkUrl = notifyConfig.getDingTalkUrl();
+
+    try {
+      Retrofit retrofit = retrofitClientProvider.httpForJson(DingTalkHelper.getDingTalkDomain(dingTalkUrl));
+      DingTalkRestClient dingTalkRestClient = retrofit.create(DingTalkRestClient.class);
+      Call<DingTalkSendResponse> responseCall = dingTalkRestClient.send(DingTalkHelper.getDingTalkToken(dingTalkUrl), dingTalkSendRequest);
+      DingTalkSendResponse dingTalkSendResponse =
+          retrofitClientResponseHelper.processResponse(responseCall, "sendDingTalk");
+      log.info("【钉钉推送通知】请求信息:[{}],响应信息:[{}]", dingTalkSendRequest.toString(),
+          dingTalkSendResponse.toString());
+    } catch (Exception e) {
+
     }
-
-    @Override
-    public NotifyResponse notify(NotifyRequest request) {
-
-
-        NotifyConfigInfo notifyConfig = notifyConfigProvider.getNotifyConfig(NotifyType.DING_TALK);
-        if (ObjectUtils.isEmpty(notifyConfig)) {
-            return NotifyResponse.builder().success(false).message("").build();
-        }
-
-        DingTalkSendRequest dingTalkSendRequest = new DingTalkSendRequest();
-        dingTalkSendRequest.setMsgtype(DingTalkMsgType.MARKDOWN);
-        dingTalkSendRequest.setMarkdown(new DingTalkSendRequest.Markdown());
-        dingTalkSendRequest.getMarkdown().setTitle(request.getTitle());
-        dingTalkSendRequest.getMarkdown().setText(request.getContent());
-        dingTalkSendRequest.setAt(new DingTalkSendRequest.AtWho());
-        dingTalkSendRequest.getAt().setIsAtAll(false);
-
-        String dingTalkUrl = notifyConfig.getDingTalkUrl();
-
-        try {
-            Retrofit retrofit = retrofitClientProvider.httpForJson(DingTalkHelper.getDingTalkDomain(dingTalkUrl));
-            DingTalkRestClient dingTalkRestClient = retrofit.create(DingTalkRestClient.class);
-            Call<DingTalkSendResponse> responseCall = dingTalkRestClient.send(DingTalkHelper.getDingTalkToken(dingTalkUrl), dingTalkSendRequest);
-            DingTalkSendResponse dingTalkSendResponse =
-                    retrofitClientResponseHelper.processResponse(responseCall, "sendDingTalk");
-            log.info("【钉钉推送通知】请求信息:[{}],响应信息:[{}]", dingTalkSendRequest.toString(),
-                    dingTalkSendResponse.toString());
-        } catch (Exception e) {
-
-        }
-        return NotifyResponse.builder().success(true).build();
-    }
+    return NotifyResponse.builder().success(true).build();
+  }
 }

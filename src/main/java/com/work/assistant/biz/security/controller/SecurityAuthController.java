@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1/token")
 public class SecurityAuthController {
 
-    @PostMapping
-    public void getToken(@RequestBody SecurityAuthRequest securityAuthRequest) throws WorkAssistantException {
+  @PostMapping
+  public void getToken(@RequestBody SecurityAuthRequest securityAuthRequest) throws WorkAssistantException {
 
-        if (!StringUtils.isNoneBlank(securityAuthRequest.getPassword(), securityAuthRequest.getUserName())) {
-            throw new WorkAssistantException(AppErrorCode.LOGIN_FAILED, "Username or password cannot be empty");
-        }
-        if (!StringUtils.endsWithIgnoreCase(securityAuthRequest.getUserName(), "AIDAN") ||
-                !StringUtils.endsWithIgnoreCase(securityAuthRequest.getPassword(), AesEncryptorUtils.decrypt("Zx1JaTnseEJouY9tmWHnSg=="))) {
-            throw new WorkAssistantException(AppErrorCode.LOGIN_FAILED, "Username or password is wrong");
-        }
+    if (!StringUtils.isNoneBlank(securityAuthRequest.getPassword(), securityAuthRequest.getUserName())) {
+      throw new WorkAssistantException(AppErrorCode.LOGIN_FAILED, "Username or password cannot be empty");
     }
+    if (!StringUtils.endsWithIgnoreCase(securityAuthRequest.getUserName(), "AIDAN") ||
+        !StringUtils.endsWithIgnoreCase(securityAuthRequest.getPassword(), AesEncryptorUtils.decrypt("Zx1JaTnseEJouY9tmWHnSg=="))) {
+      throw new WorkAssistantException(AppErrorCode.LOGIN_FAILED, "Username or password is wrong");
+    }
+  }
 }
