@@ -21,7 +21,7 @@ public class RetrofitClientResponseHelper {
 
   public <T> T processResponse(Call<T> responseCall, String serviceName) throws WorkAssistantException {
 
-    return this.getHeaderAndBody(responseCall, serviceName, null).getBody();
+    return this.getHeaderAndBody(responseCall, serviceName).getBody();
   }
 
 
