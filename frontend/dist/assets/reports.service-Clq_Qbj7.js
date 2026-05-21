@@ -1,0 +1,1 @@
+import{B as s}from"./baseservice-Bnwin_jR.js";class a extends s{getCardRecords(e,r){return this.post(`/api/v1/hrms/card-record/page?pageNumber=${e.page}&pageSize=${e.size}`,{data:r})}}const c=new a;export{c as r};

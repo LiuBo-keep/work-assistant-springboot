@@ -2,11 +2,14 @@ package com.work.assistant.biz.hrms.service;
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.work.assistant.biz.hrms.manager.HrmsCardRecordPullManager;
 import com.work.assistant.biz.hrms.metadata.HrmsCardRecordPageRequest;
 import com.work.assistant.biz.hrms.metadata.HrmsCardRecordPageResponse;
+import com.work.assistant.biz.hrms.metadata.HrmsCardRecordRefreshRequest;
 import com.work.assistant.biz.hrms.metadata.convert.ToHrmsCardRecordPageResponseConvert;
 import com.work.assistant.biz.hrms.model.hrms.HrmsCardRecord;
 import com.work.assistant.biz.hrms.model.hrms.QHrmsCardRecord;
+import com.work.assistant.common.hrms.CheckInType;
 import com.work.assistant.common.response.PageResponse;
 import com.work.assistant.common.response.Pageable;
 
@@ -25,10 +28,13 @@ import org.springframework.stereotype.Service;
 public class HrmsCardRecordService {
 
   private final JPAQueryFactory jpaQueryFactory;
+  private final HrmsCardRecordPullManager hrmsCardRecordPullManager;
   private final ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert;
 
-  public HrmsCardRecordService(JPAQueryFactory jpaQueryFactory, ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert) {
+  public HrmsCardRecordService(JPAQueryFactory jpaQueryFactory, HrmsCardRecordPullManager hrmsCardRecordPullManager,
+                               ToHrmsCardRecordPageResponseConvert toHrmsCardRecordPageResponseConvert) {
     this.jpaQueryFactory = jpaQueryFactory;
+    this.hrmsCardRecordPullManager = hrmsCardRecordPullManager;
     this.toHrmsCardRecordPageResponseConvert = toHrmsCardRecordPageResponseConvert;
   }
 
@@ -58,5 +64,21 @@ public class HrmsCardRecordService {
       }
     }
     return new PageResponse<>(pageable, totalCount, hrmsCardRecordPageResponseList);
+  }
+
+  /**
+   * 同步打卡信息
+   */
+  public void refresh(HrmsCardRecordRefreshRequest request) {
+    if (ObjectUtils.isNotEmpty(request.getClockInType())) {
+      if (CheckInType.CHECK_IN_AT_WORK.equals(request.getClockInType())) {
+        hrmsCardRecordPullManager.pullMorning();
+      } else {
+        hrmsCardRecordPullManager.pullAfternoon();
+      }
+    } else {
+      hrmsCardRecordPullManager.pullMorning();
+      hrmsCardRecordPullManager.pullAfternoon();
+    }
   }
 }

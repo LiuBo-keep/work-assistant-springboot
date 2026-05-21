@@ -2,6 +2,7 @@ package com.work.assistant.biz.hrms.controller;
 
 import com.work.assistant.biz.hrms.metadata.HrmsCardRecordPageRequest;
 import com.work.assistant.biz.hrms.metadata.HrmsCardRecordPageResponse;
+import com.work.assistant.biz.hrms.metadata.HrmsCardRecordRefreshRequest;
 import com.work.assistant.biz.hrms.service.HrmsCardRecordService;
 import com.work.assistant.common.response.PageResponse;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +32,11 @@ public class HrmsCardRecordController {
       @RequestParam("pageNumber") Integer pageNumber,
       @RequestBody HrmsCardRecordPageRequest pageRequest) {
     return hrmsCardRecordService.page(pageNumber, pageSize, pageRequest);
+  }
+
+  @PostMapping("/refresh")
+  public void refresh(
+      @RequestBody HrmsCardRecordRefreshRequest pageRequest) {
+    hrmsCardRecordService.refresh(pageRequest);
   }
 }

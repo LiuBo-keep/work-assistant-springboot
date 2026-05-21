@@ -25,13 +25,24 @@
               end-placeholder="刷卡时间止"
               :default-time="[new Date('2000-01-01 00:00:00'), new Date('2000-01-01 23:59:59')]"
               size="small"
-              style="width:90%"
             />
           </div>
         </div>
         <div class="search-footer">
           <el-button size="small" :icon="Refresh" @click="reset()">重置</el-button>
           <el-button size="small" type="primary" :icon="Search" @click="getCardRecords(1)">搜索</el-button>
+          <div class="footer-divider" />
+          <el-tooltip content="从 HRMS 拉取今日最新打卡记录并刷新列表" placement="top" :show-after="400">
+            <el-button
+              size="small"
+              :icon="Promotion"
+              :loading="syncing"
+              class="btn-sync"
+              @click="syncToday"
+            >
+              同步今日打卡
+            </el-button>
+          </el-tooltip>
         </div>
       </el-form>
     </div>
@@ -42,17 +53,18 @@
         <span class="table-title">
           <el-icon><Grid /></el-icon>打卡记录明细
         </span>
-        <span class="table-meta">共 {{ pageInfo.total }} 条记录</span>
+        <div class="table-bar-right">
+          <span v-if="lastSyncTime" class="sync-time">
+            <el-icon :size="12"><Clock /></el-icon>
+            上次同步：{{ lastSyncTime }}
+          </span>
+          <span class="table-meta">共 {{ pageInfo.total }} 条记录</span>
+        </div>
       </div>
 
-      <el-table
-        :data="tableData"
-        stripe
-        size="small"
-        style="width:100%"
-      >
-        <el-table-column type="index" label="序号" />
-        <el-table-column prop="type" label="打卡类型">
+      <el-table :data="tableData" stripe size="small" style="width:100%">
+        <el-table-column type="index" label="序号" width="60" align="center" />
+        <el-table-column prop="clockInType" label="打卡类型" width="90" align="center">
           <template #default="{ row }">
             <el-tag v-if="row.clockInType === 'CHECK_IN_AT_WORK'" size="small" effect="plain">上班</el-tag>
             <el-tag v-else size="small" effect="plain" type="success">下班</el-tag>
@@ -92,19 +104,27 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { Search, Refresh, CircleCheck, CircleClose, Grid } from '@element-plus/icons-vue'
+import { Search, Refresh, Grid, Promotion, Clock } from '@element-plus/icons-vue'
+import { ElMessage } from 'element-plus'
 import reportsService from '@/services/hrms/reports/reports.service.js'
 import notify from '@/utils/notify'
 
 /* ---- refs ---- */
 const loading = ref(false)
+const syncing = ref(false)
 const formRef = ref(null)
 const tableData = ref([])
+const lastSyncTime = ref(localStorage.getItem('wa.cardRecord.lastSync') || '')
 
 /* ---- helpers ---- */
 function getCurrentDate() {
   const d = new Date()
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+function getNow() {
+  const d = new Date()
+  return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}:${String(d.getSeconds()).padStart(2, '0')}`
 }
 
 /* ---- state ---- */
@@ -134,13 +154,6 @@ async function getCardRecords(currentPage) {
       search.startClockInTime = null
       search.endClockInTime = null
     }
-    if (search.notifyTime?.length === 2) {
-      search.startNotifyTime = search.notifyTime[0]
-      search.endNotifyTime = search.notifyTime[1]
-    } else {
-      search.startNotifyTime = null
-      search.endNotifyTime = null
-    }
     const res = await reportsService.getCardRecords(
       { page: currentPage - 1, size: pageInfo.size },
       search
@@ -151,6 +164,35 @@ async function getCardRecords(currentPage) {
     pageInfo.page = res.data.page.pageIndex + 1
   })
   loading.value = false
+}
+
+/* ---- 同步今日打卡 ---- */
+async function syncToday() {
+  syncing.value = true
+  await execute(async () => {
+    const res = await reportsService.refreshCardRecord({
+      clockInType: search.clockInType  // null = 同步上班 + 下班全部类型
+    })
+    if (res.code !== 200 || res.data?.error) {
+      ElMessage({
+        showClose: true,
+        dangerouslyUseHTMLString: true,
+        message: `<div style="max-height:300px;overflow-y:auto">${res.error || res.data?.error?.message || '同步失败'}</div>`,
+        type: 'error',
+        duration: 0
+      })
+      return
+    }
+    // 记录同步时间
+    const now = `今天 ${getNow()}`
+    lastSyncTime.value = now
+    localStorage.setItem('wa.cardRecord.lastSync', now)
+    ElMessage.success('同步成功，已拉取最新打卡记录')
+    // 自动切换到今日并刷新
+    search.clockInTime = [getCurrentDate(), getCurrentDate()]
+    await getCardRecords(1)
+  })
+  syncing.value = false
 }
 
 function handleSizeChange(size) {
@@ -173,7 +215,6 @@ onMounted(() => getCardRecords(1))
 </script>
 
 <style lang="scss" scoped>
-/* ===== 页面容器 ===== */
 .page-wrap {
   display: flex;
   flex-direction: column;
@@ -194,7 +235,7 @@ onMounted(() => getCardRecords(1))
 
 .search-grid {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: 160px 1fr;
   gap: 8px;
   margin-bottom: 10px;
 }
@@ -204,9 +245,7 @@ onMounted(() => getCardRecords(1))
   flex-direction: column;
   gap: 4px;
 
-  .el-input,
-  .el-select,
-  .el-date-editor {
+  .el-input, .el-select, .el-date-editor {
     width: 100% !important;
   }
 }
@@ -219,10 +258,36 @@ onMounted(() => getCardRecords(1))
 
 .search-footer {
   display: flex;
+  align-items: center;
   justify-content: flex-end;
   gap: 6px;
   padding-top: 10px;
   border-top: 1px solid #f0f0f0;
+}
+
+/* 分隔竖线 */
+.footer-divider {
+  width: 1px;
+  height: 18px;
+  background: #e4e7ed;
+  margin: 0 2px;
+}
+
+/* 同步按钮 */
+.btn-sync {
+  background: #f0faf6 !important;
+  border-color: #b3dece !important;
+  color: #0f6e56 !important;
+
+  &:hover {
+    background: #0f6e56 !important;
+    border-color: #0f6e56 !important;
+    color: #fff !important;
+  }
+
+  &.is-loading {
+    opacity: 0.75;
+  }
 }
 
 /* ===== 数据表卡 ===== */
@@ -244,6 +309,12 @@ onMounted(() => getCardRecords(1))
   flex-shrink: 0;
 }
 
+.table-bar-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
 .table-title {
   display: flex;
   align-items: center;
@@ -258,12 +329,20 @@ onMounted(() => getCardRecords(1))
   }
 }
 
+/* 上次同步时间 */
+.sync-time {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #b8bfc8;
+}
+
 .table-meta {
   font-size: 12px;
   color: #c0c4cc;
 }
 
-/* 表头覆盖 */
 :deep(.el-table th.el-table__cell) {
   font-size: 11px;
   letter-spacing: 0.03em;
@@ -282,7 +361,6 @@ onMounted(() => getCardRecords(1))
   width: 100% !important;
 }
 
-/* 姓名 / 英文名 */
 .name-cell {
   font-weight: 500;
   color: #303133;
@@ -293,29 +371,6 @@ onMounted(() => getCardRecords(1))
   font-size: 12px;
 }
 
-/* 通知状态 */
-.status-ok,
-.status-fail {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  font-size: 12px;
-  font-weight: 500;
-
-  .el-icon {
-    font-size: 14px;
-  }
-}
-
-.status-ok {
-  color: #0f6e56;
-}
-
-.status-fail {
-  color: #a32d2d;
-}
-
-/* ===== 分页条 ===== */
 .pagination-bar {
   display: flex;
   justify-content: flex-end;
