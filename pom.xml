@@ -58,6 +58,7 @@
 
     <properties>
         <java.version>21</java.version>
+        <jib.version>3.4.2</jib.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
 
         <!-- win-sw evn params and version -->
@@ -312,6 +313,76 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <!--    Jib Maven Plugin
+                      作用：
+                      1. 将 SpringBoot 项目打包为 Docker 镜像
+                      2. 自动推送到腾讯云 TCR 镜像仓库
+                      3. 无需 Dockerfile
+                      4. 无需执行 docker build / docker push
+
+                      执行命令：
+                      mvn clean package -DskipTests jib:build
+
+                      执行后流程：
+                      Maven编译
+                          ↓
+                      Jib构建镜像
+                          ↓
+                      自动Push腾讯云TCR
+                     -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>${jib.version}</version>
+
+                <configuration>
+
+                    <!-- JDK21 基础镜像 -->
+                    <from>
+                        <image>ccr.ccs.tencentyun.com/java-info/eclipse-temurin:21</image>
+                    </from>
+
+                    <!-- 腾讯云镜像仓库 -->
+                    <to>
+                        <!-- 修改为你的实际仓库 -->
+                        <image>
+                            ccr.ccs.tencentyun.com/work-assistant/${artifactId}:${version}
+                        </image>
+
+                        <!-- 腾讯云账号 -->
+                        <auth>
+                            <username>test</username>
+                            <password>test</password>
+                        </auth>
+
+                    </to>
+
+                    <container>
+                        <ports>
+                            <port>8088</port>
+                        </ports>
+                        <jvmFlags>
+                            <jvmFlag>
+                                -XX:+UseContainerSupport
+                            </jvmFlag>
+                            <jvmFlag>
+                                -XX:MaxRAMPercentage=75
+                            </jvmFlag>
+                            <jvmFlag>
+                                -Dfile.encoding=UTF-8
+                            </jvmFlag>
+                            <jvmFlag>
+                                -Duser.timezone=Asia/Shanghai
+                            </jvmFlag>
+                        </jvmFlags>
+
+                        <creationTime>
+                            USE_CURRENT_TIMESTAMP
+                        </creationTime>
+                    </container>
+                </configuration>
             </plugin>
         </plugins>
     </build>
