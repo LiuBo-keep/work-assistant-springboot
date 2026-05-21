@@ -10,8 +10,8 @@
  */
 
 const STORAGE_KEY = 'wa.passwords'
-const SALT_KEY = 'wa.vault.salt'
-const VERIFY_KEY = 'wa.vault.verify'
+const SALT_KEY    = 'wa.vault.salt'
+const VERIFY_KEY  = 'wa.vault.verify'
 const PBKDF2_ITER = 120000
 const VERIFY_TEXT = 'wa-vault-ok'
 
@@ -48,8 +48,8 @@ async function deriveKey(masterPassword, salt) {
 
 /** AES-256-GCM 加密，返回 base64 字符串 "iv:ciphertext" */
 async function encryptField(key, plaintext) {
-  const iv = crypto.getRandomValues(new Uint8Array(12))
-  const encoded = new TextEncoder().encode(plaintext)
+  const iv        = crypto.getRandomValues(new Uint8Array(12))
+  const encoded   = new TextEncoder().encode(plaintext)
   const cipherBuf = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, encoded)
   return `${bytesToBase64(iv)}:${bytesToBase64(new Uint8Array(cipherBuf))}`
 }
@@ -57,9 +57,9 @@ async function encryptField(key, plaintext) {
 /** AES-256-GCM 解密，输入 "iv:ciphertext" 格式 */
 async function decryptField(key, encrypted) {
   const [ivB64, ctB64] = encrypted.split(':')
-  const iv = base64ToBytes(ivB64)
+  const iv        = base64ToBytes(ivB64)
   const cipherBuf = base64ToBytes(ctB64)
-  const plainBuf = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBuf)
+  const plainBuf  = await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, cipherBuf)
   return new TextDecoder().decode(plainBuf)
 }
 
@@ -82,11 +82,8 @@ function today() {
 }
 
 function loadRaw() {
-  try {
-    return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]')
-  } catch {
-    return []
-  }
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]') }
+  catch { return [] }
 }
 
 function saveRaw(list) {
@@ -120,9 +117,8 @@ class PasswordService {
    */
   async setupMasterPassword(masterPassword) {
     try {
-      const salt = getSalt()
-      const key = await deriveKey(masterPassword, salt)
-      // 写入加密校验串，供后续 unlock 验证密码是否正确
+      const salt      = getSalt()
+      const key       = await deriveKey(masterPassword, salt)
       const verifyEnc = await encryptField(key, VERIFY_TEXT)
       localStorage.setItem(VERIFY_KEY, verifyEnc)
       this._key = key
@@ -138,9 +134,9 @@ class PasswordService {
    */
   async unlock(masterPassword) {
     try {
-      const salt = getSalt()
-      const key = await deriveKey(masterPassword, salt)
-      const verifyEnc = localStorage.getItem(VERIFY_KEY)
+      const salt        = getSalt()
+      const key         = await deriveKey(masterPassword, salt)
+      const verifyEnc   = localStorage.getItem(VERIFY_KEY)
       if (!verifyEnc) return { code: 400, error: '未设置主密码' }
       const verifyPlain = await decryptField(key, verifyEnc)
       if (verifyPlain !== VERIFY_TEXT) return { code: 401, error: '主密码错误' }
@@ -162,9 +158,9 @@ class PasswordService {
     if (unlockRes.code !== 200) return unlockRes
     try {
       const allDecrypted = await this.getAll()
-      const salt = getSalt()
-      const newKey = await deriveKey(newPwd, salt)
-      const newList = await Promise.all(
+      const salt         = getSalt()
+      const newKey       = await deriveKey(newPwd, salt)
+      const newList      = await Promise.all(
         allDecrypted.map(async item => ({
           ...item,
           password: await encryptField(newKey, item.password)
@@ -201,14 +197,15 @@ class PasswordService {
   async add(data) {
     if (!this._key) return { code: 401, error: '请先解锁密码库' }
     try {
-      const list = loadRaw()
+      const list   = loadRaw()
       const record = {
-        id: genId(),
-        name: data.name || '',
-        category: data.category || '其他',
-        account: data.account || '',
-        password: await encryptField(this._key, data.password || ''),
-        remark: data.remark || '',
+        id:         genId(),
+        name:       data.name     || '',
+        category:   data.category || '其他',
+        account:    data.account  || '',
+        password:   await encryptField(this._key, data.password || ''),
+        url:        data.url      || '',   // 网站地址（可选，明文存储）
+        remark:     data.remark   || '',
         createDate: today(),
         updateDate: today()
       }
@@ -225,15 +222,16 @@ class PasswordService {
     if (!this._key) return { code: 401, error: '请先解锁密码库' }
     try {
       const list = loadRaw()
-      const idx = list.findIndex(i => i.id === id)
+      const idx  = list.findIndex(i => i.id === id)
       if (idx === -1) return { code: 404, error: '记录不存在' }
       list[idx] = {
         ...list[idx],
-        name: data.name ?? list[idx].name,
-        category: data.category ?? list[idx].category,
-        account: data.account ?? list[idx].account,
-        password: await encryptField(this._key, data.password || ''),
-        remark: data.remark ?? list[idx].remark,
+        name:       data.name     ?? list[idx].name,
+        category:   data.category ?? list[idx].category,
+        account:    data.account  ?? list[idx].account,
+        password:   await encryptField(this._key, data.password || ''),
+        url:        data.url      ?? list[idx].url ?? '',  // 兼容旧数据无 url 字段
+        remark:     data.remark   ?? list[idx].remark,
         updateDate: today()
       }
       saveRaw(list)
@@ -252,9 +250,9 @@ class PasswordService {
   /** 搜索（本地过滤，需先解密） */
   async search({ keyword = '', category = '' } = {}) {
     const all = await this.getAll()
-    const kw = keyword.trim().toLowerCase()
+    const kw  = keyword.trim().toLowerCase()
     return all.filter(item => {
-      const matchKw = !kw || [item.name, item.account, item.remark]
+      const matchKw  = !kw || [item.name, item.account, item.url, item.remark]
         .some(f => (f || '').toLowerCase().includes(kw))
       const matchCat = !category || item.category === category
       return matchKw && matchCat
@@ -270,17 +268,17 @@ class PasswordService {
   exportBackup() {
     const backup = {
       version: 1,
-      salt: localStorage.getItem(SALT_KEY) || '',
-      verify: localStorage.getItem(VERIFY_KEY) || '',
-      data: loadRaw()
+      salt:    localStorage.getItem(SALT_KEY)   || '',
+      verify:  localStorage.getItem(VERIFY_KEY) || '',
+      data:    loadRaw()
     }
     const blob = new Blob(
       [JSON.stringify(backup, null, 2)],
       { type: 'application/json' }
     )
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
+    const url  = URL.createObjectURL(blob)
+    const a    = document.createElement('a')
+    a.href     = url
     a.download = `password-vault-${Date.now()}.json`
     a.click()
     URL.revokeObjectURL(url)
@@ -298,14 +296,12 @@ class PasswordService {
       if (!backup.version || !backup.salt || !backup.verify || !backup.data) {
         return { code: 400, error: '备份文件格式不正确' }
       }
-      // 用备份文件的 salt 派生密钥验证主密码
-      const salt = base64ToBytes(backup.salt)
-      const key = await deriveKey(masterPassword, salt)
+      const salt        = base64ToBytes(backup.salt)
+      const key         = await deriveKey(masterPassword, salt)
       const verifyPlain = await decryptField(key, backup.verify)
       if (verifyPlain !== VERIFY_TEXT) return { code: 401, error: '主密码错误，导入失败' }
 
-      // 验证通过，替换本地数据
-      localStorage.setItem(SALT_KEY, backup.salt)
+      localStorage.setItem(SALT_KEY,   backup.salt)
       localStorage.setItem(VERIFY_KEY, backup.verify)
       saveRaw(backup.data)
       this._key = key

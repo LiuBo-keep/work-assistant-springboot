@@ -127,6 +127,23 @@
               <span class="mono-cell">{{ row.account || '—' }}</span>
             </template>
           </el-table-column>
+          <el-table-column prop="url" label="网站地址" min-width="150">
+            <template #default="{ row }">
+              <a
+                v-if="row.url"
+                class="url-link"
+                :href="row.url.startsWith('http') ? row.url : 'https://' + row.url"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <el-icon :size="12">
+                  <Link />
+                </el-icon>
+                <span class="url-text">{{ row.url }}</span>
+              </a>
+              <span v-else class="muted">—</span>
+            </template>
+          </el-table-column>
           <el-table-column label="密码">
             <template #default="{ row }">
               <div class="pwd-cell">
@@ -240,7 +257,7 @@ import { ref, onMounted } from 'vue'
 import {
   Search, Refresh, Plus, Edit, Delete,
   Lock, View, Hide, CopyDocument,
-  Key, Download, Upload, WarningFilled
+  Key, Download, Upload, WarningFilled, Link
 } from '@element-plus/icons-vue'
 import { Lock as Lock2 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
@@ -483,10 +500,20 @@ onMounted(() => {
 }
 
 .search-grid {
-  display: grid;
-  grid-template-columns: 1fr 200px;
+  display: flex;
+  align-items: flex-end;
   gap: 8px;
   margin-bottom: 10px;
+
+  .search-field:nth-child(1) {
+    width: 280px;
+    flex-shrink: 0;
+  }
+
+  .search-field:nth-child(2) {
+    width: 180px;
+    flex-shrink: 0;
+  }
 }
 
 .search-field {
@@ -580,6 +607,27 @@ onMounted(() => {
 .muted {
   font-size: 12px;
   color: #c0c4cc;
+}
+
+/* 网站地址链接 */
+.url-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #409eff;
+  text-decoration: none;
+  max-width: 100%;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  .url-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
 }
 
 .pwd-cell {

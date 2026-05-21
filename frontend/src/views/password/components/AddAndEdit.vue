@@ -59,6 +59,32 @@
         </div>
       </el-form-item>
 
+      <el-form-item label="网站地址（可选）" prop="url">
+        <el-input
+          v-model="form.url"
+          clearable
+          placeholder="例：https://github.com"
+        >
+          <template #prefix>
+            <el-icon>
+              <Link />
+            </el-icon>
+          </template>
+          <template #append>
+            <el-tooltip content="在新标签页打开" placement="top">
+              <el-button
+                :disabled="!form.url"
+                @click="openUrl"
+              >
+                <el-icon>
+                  <TopRight />
+                </el-icon>
+              </el-button>
+            </el-tooltip>
+          </template>
+        </el-input>
+      </el-form-item>
+
       <el-form-item label="备注（可选）" prop="remark">
         <el-input v-model="form.remark" type="textarea" :rows="2" placeholder="添加备注…" />
       </el-form-item>
@@ -74,7 +100,7 @@
 
 <script setup>
 import { ref, reactive, computed } from 'vue'
-import { View, Hide, Refresh, CopyDocument } from '@element-plus/icons-vue'
+import { View, Hide, Refresh, CopyDocument, Link, TopRight } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import passwordService from '@/services/password/password.service'
 
@@ -88,7 +114,7 @@ const editId = ref(null)
 
 const categories = ['工作', '开发', '数据库', '社交', '金融', '其他']
 
-const form = reactive({ name: '', category: '其他', account: '', password: '', remark: '' })
+const form = reactive({ name: '', category: '其他', account: '', password: '', url: '', remark: '' })
 
 const rules = {
   name: [{ required: true, message: '名称必填', trigger: 'blur' }],
@@ -166,7 +192,7 @@ async function submit() {
 
 function resetForm() {
   formRef.value?.resetFields()
-  Object.assign(form, { name: '', category: '其他', account: '', password: '', remark: '' })
+  Object.assign(form, { name: '', category: '其他', account: '', password: '', url: '', remark: '' })
   showPwd.value = false
   isEdit.value = false
   editId.value = null
@@ -178,11 +204,18 @@ function open(record = null) {
     editId.value = record.id
     Object.assign(form, {
       name: record.name, category: record.category,
-      account: record.account, password: record.password, remark: record.remark
+      account: record.account, password: record.password,
+      url: record.url || '', remark: record.remark
     })
     showPwd.value = false
   }
   visible.value = true
+}
+
+function openUrl() {
+  if (!form.url) return
+  const url = /^https?:\/\//i.test(form.url) ? form.url : `https://${form.url}`
+  window.open(url, '_blank')
 }
 
 defineExpose({ open })
