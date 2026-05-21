@@ -353,8 +353,8 @@
 
                         <!-- 腾讯云账号 -->
                         <auth>
-                            <username>100044373768</username>
-                            <password>lsj19970911</password>
+                            <username>test</username>
+                            <password>test</password>
                         </auth>
 
                     </to>
