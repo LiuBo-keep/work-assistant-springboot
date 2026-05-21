@@ -48,6 +48,7 @@ public class HrmsNotifyConfig {
   /**
    * 微信通知url
    */
+  @Convert(converter = AesEncryptorConverter.class)
   @Column(name = "push_plus_url")
   private String pushPlusUrl;
 
@@ -61,13 +62,14 @@ public class HrmsNotifyConfig {
   /**
    * 钉钉通知url
    */
-
+  @Convert(converter = AesEncryptorConverter.class)
   @Column(name = "ding_talk_url")
   private String dingTalkUrl;
 
   /**
    * hr系统url
    */
+  @Convert(converter = AesEncryptorConverter.class)
   @Column(name = "hrms_url")
   private String hrmsUrl;
 

@@ -11,3 +11,13 @@ spring:
     username: postgres
     password: 123456
     url: jdbc:postgresql://localhost:5432/work-assistant
+logging:
+  file:
+    name: logs/app.log
+  logback:
+    rollingpolicy:
+      max-file-size: 100MB
+      max-history: 30
+      total-size-cap: 5GB
+      file-name-pattern: /data/logs/myapp/app-%d{yyyy-MM-dd}.%i.log
+
