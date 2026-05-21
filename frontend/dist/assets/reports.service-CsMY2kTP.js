@@ -1,0 +1,1 @@
+import{B as s}from"./baseservice-BUAkT7SD.js";class a extends s{getCardRecords(r,e){return this.post(`/api/v1/hrms/card-record/page?pageNumber=${r.page}&pageSize=${r.size}`,{data:e})}refreshCardRecord(r){return this.post("/api/v1/hrms/card-record/refresh",{data:r})}}const d=new a;export{d as r};

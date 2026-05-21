@@ -52,10 +52,11 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { Message, PieChart, DataAnalysis, Setting, Lock, Wallet } from '@element-plus/icons-vue'
 import bus from '../utils/bus'
+import pkg from '../../package.json'
 
 const route = useRoute()
 const collapse = ref(false)
-const version = import.meta.env.VITE_APP_VERSION || '1.0.0'
+const version = pkg.version
 
 /* ---- 主题响应 ---- */
 const themeBg = ref(localStorage.getItem('wa.theme.bg') || '#1e2d3d')

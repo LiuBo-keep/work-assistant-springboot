@@ -1,0 +1,257 @@
+2026-05-21T14:13:13.355+08:00  INFO 19772 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Starting WorkAssistantApplication using Java 21.0.4 with PID 19772 (E:\me\code\work-assistant-springboot\target\classes started by 86133 in E:\me\code\work-assistant-springboot)
+2026-05-21T14:13:13.361+08:00  INFO 19772 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-05-21T14:13:14.047+08:00  INFO 19772 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-21T14:13:14.122+08:00  INFO 19772 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 2 JPA repository interfaces.
+2026-05-21T14:13:14.652+08:00  INFO 19772 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8088 (http)
+2026-05-21T14:13:14.667+08:00  INFO 19772 --- [work-assistant] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-21T14:13:14.668+08:00  INFO 19772 --- [work-assistant] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-05-21T14:13:14.716+08:00  INFO 19772 --- [work-assistant] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1296 ms
+2026-05-21T14:13:14.869+08:00  INFO 19772 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-21T14:13:14.997+08:00  INFO 19772 --- [work-assistant] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@35ac9ebd
+2026-05-21T14:13:14.999+08:00  INFO 19772 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-21T14:13:15.043+08:00  WARN 19772 --- [work-assistant] [main] liquibase.database                       : Your PostgreSQL software version (12.2) seems to indicate that your software is older than 12.20. This means that you might encounter strange behaviour and incorrect error messages.
+2026-05-21T14:13:15.232+08:00  INFO 19772 --- [work-assistant] [main] liquibase.database                       : Set default schema name to public
+2026-05-21T14:13:16.877+08:00  INFO 19772 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T14:13:16.934+08:00  INFO 19772 --- [work-assistant] [main] liquibase.ui                             : Database is up to date, no changesets to execute
+2026-05-21T14:13:16.935+08:00  INFO 19772 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T14:13:16.943+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : UPDATE SUMMARY
+2026-05-21T14:13:16.944+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : Run:                          0
+2026-05-21T14:13:16.944+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : Previously run:               2
+2026-05-21T14:13:16.944+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : Filtered out:                 0
+2026-05-21T14:13:16.944+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : -------------------------------
+2026-05-21T14:13:16.944+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : Total change sets:            2
+2026-05-21T14:13:16.945+08:00  INFO 19772 --- [work-assistant] [main] liquibase.util                           : Update summary generated
+2026-05-21T14:13:16.946+08:00  INFO 19772 --- [work-assistant] [main] liquibase.command                        : Command execution complete
+2026-05-21T14:13:17.047+08:00  INFO 19772 --- [work-assistant] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-21T14:13:17.121+08:00  INFO 19772 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-05-21T14:13:17.605+08:00  INFO 19772 --- [work-assistant] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-21T14:13:17.678+08:00  WARN 19772 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000511: The 12.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly.The minimum supported version is 13.0.0. Check the community dialects project for available legacy versions.
+2026-05-21T14:13:17.700+08:00  INFO 19772 --- [work-assistant] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/work-assistant]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 12.2
+	Default catalog/schema: work-assistant/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-21T14:13:18.935+08:00  INFO 19772 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-21T14:13:18.943+08:00  INFO 19772 --- [work-assistant] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T14:13:19.103+08:00  INFO 19772 --- [work-assistant] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-21T14:13:19.326+08:00  INFO 19772 --- [work-assistant] [main] c.w.a.e.notify.manager.NotifyManager     : notify handler init success, handlers=[null, DING_TALK]
+2026-05-21T14:13:19.388+08:00  WARN 19772 --- [work-assistant] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-21T14:13:19.410+08:00  INFO 19772 --- [work-assistant] [main] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [META-INF/resources/index.html]
+2026-05-21T14:13:19.771+08:00  INFO 19772 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8088 (http) with context path '/'
+2026-05-21T14:13:19.779+08:00  INFO 19772 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Started WorkAssistantApplication in 6.94 seconds (process running for 8.024)
+2026-05-21T14:17:04.577+08:00  INFO 19772 --- [work-assistant] [http-nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-21T14:17:04.581+08:00  INFO 19772 --- [work-assistant] [http-nio-8088-exec-1] o.s.web.servlet.DispatcherServlet        : Completed initialization in 3 ms
+2026-05-21T14:20:01.235+08:00  INFO 19772 --- [work-assistant] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-21T14:20:01.245+08:00  INFO 19772 --- [work-assistant] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-21T14:20:01.250+08:00  INFO 19772 --- [work-assistant] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T14:20:01.254+08:00  INFO 19772 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-21T14:20:01.260+08:00  INFO 19772 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-21T15:03:27.169+08:00  INFO 28024 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Starting WorkAssistantApplication using Java 21.0.4 with PID 28024 (E:\me\code\work-assistant-springboot\target\classes started by 86133 in E:\me\code\work-assistant-springboot)
+2026-05-21T15:03:27.172+08:00  INFO 28024 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-05-21T15:03:27.795+08:00  INFO 28024 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-21T15:03:27.870+08:00  INFO 28024 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 65 ms. Found 2 JPA repository interfaces.
+2026-05-21T15:03:28.312+08:00  WARN 28024 --- [work-assistant] [main] ConfigServletWebServerApplicationContext : Exception encountered during context initialization - cancelling refresh attempt: org.springframework.context.ApplicationContextException: Unable to start web server
+2026-05-21T15:03:28.318+08:00  INFO 28024 --- [work-assistant] [main] .s.b.a.l.ConditionEvaluationReportLogger : 
+
+Error starting ApplicationContext. To display the condition evaluation report re-run your application with 'debug' enabled.
+2026-05-21T15:03:28.333+08:00 ERROR 28024 --- [work-assistant] [main] o.s.boot.SpringApplication               : Application run failed
+
+org.springframework.context.ApplicationContextException: Unable to start web server
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:167) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.context.support.AbstractApplicationContext.refresh(AbstractApplicationContext.java:615) ~[spring-context-7.0.7.jar:7.0.7]
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.refresh(ServletWebServerApplicationContext.java:143) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.SpringApplication.refresh(SpringApplication.java:756) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.SpringApplication.refreshContext(SpringApplication.java:445) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:321) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1365) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.SpringApplication.run(SpringApplication.java:1354) ~[spring-boot-4.0.6.jar:4.0.6]
+	at com.work.assistant.WorkAssistantApplication.main(WorkAssistantApplication.java:12) ~[classes/:na]
+Caused by: java.lang.IllegalStateException: Unable to create key store: no such provider: classpath:localhost+2.p12
+	at org.springframework.boot.ssl.jks.JksSslStoreBundle.createKeyStore(JksSslStoreBundle.java:114) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.ssl.jks.JksSslStoreBundle.lambda$new$0(JksSslStoreBundle.java:77) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.util.function.SingletonSupplier.get(SingletonSupplier.java:113) ~[spring-core-7.0.7.jar:7.0.7]
+	at org.springframework.boot.ssl.jks.JksSslStoreBundle.getKeyStore(JksSslStoreBundle.java:83) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.WebServerSslBundle.createKeyStore(WebServerSslBundle.java:159) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.WebServerSslBundle.createStoreBundle(WebServerSslBundle.java:149) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.WebServerSslBundle.get(WebServerSslBundle.java:144) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.AbstractConfigurableWebServerFactory.getSslBundle(AbstractConfigurableWebServerFactory.java:201) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.tomcat.TomcatWebServerFactory.customizeSsl(TomcatWebServerFactory.java:437) ~[spring-boot-tomcat-4.0.6.jar:4.0.6]
+	at org.springframework.boot.tomcat.TomcatWebServerFactory.customizeConnector(TomcatWebServerFactory.java:413) ~[spring-boot-tomcat-4.0.6.jar:4.0.6]
+	at org.springframework.boot.tomcat.TomcatWebServerFactory.createTomcat(TomcatWebServerFactory.java:383) ~[spring-boot-tomcat-4.0.6.jar:4.0.6]
+	at org.springframework.boot.tomcat.servlet.TomcatServletWebServerFactory.getWebServer(TomcatServletWebServerFactory.java:164) ~[spring-boot-tomcat-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.createWebServer(ServletWebServerApplicationContext.java:190) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	at org.springframework.boot.web.server.servlet.context.ServletWebServerApplicationContext.onRefresh(ServletWebServerApplicationContext.java:164) ~[spring-boot-web-server-4.0.6.jar:4.0.6]
+	... 8 common frames omitted
+Caused by: java.security.NoSuchProviderException: no such provider: classpath:localhost+2.p12
+	at java.base/sun.security.jca.GetInstance.getService(GetInstance.java:83) ~[na:na]
+	at java.base/sun.security.jca.GetInstance.getInstance(GetInstance.java:206) ~[na:na]
+	at java.base/java.security.Security.getImpl(Security.java:658) ~[na:na]
+	at java.base/java.security.KeyStore.getInstance(KeyStore.java:919) ~[na:na]
+	at org.springframework.boot.ssl.jks.JksSslStoreBundle.getKeyStoreInstance(JksSslStoreBundle.java:120) ~[spring-boot-4.0.6.jar:4.0.6]
+	at org.springframework.boot.ssl.jks.JksSslStoreBundle.createKeyStore(JksSslStoreBundle.java:104) ~[spring-boot-4.0.6.jar:4.0.6]
+	... 21 common frames omitted
+
+2026-05-21T15:04:54.942+08:00  INFO 30336 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Starting WorkAssistantApplication using Java 21.0.4 with PID 30336 (E:\me\code\work-assistant-springboot\target\classes started by 86133 in E:\me\code\work-assistant-springboot)
+2026-05-21T15:04:54.945+08:00  INFO 30336 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-05-21T15:04:55.434+08:00  INFO 30336 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-21T15:04:55.497+08:00  INFO 30336 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 56 ms. Found 2 JPA repository interfaces.
+2026-05-21T15:04:55.991+08:00  INFO 30336 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8088 (https)
+2026-05-21T15:04:56.006+08:00  INFO 30336 --- [work-assistant] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-21T15:04:56.007+08:00  INFO 30336 --- [work-assistant] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-05-21T15:04:56.051+08:00  INFO 30336 --- [work-assistant] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1072 ms
+2026-05-21T15:04:56.191+08:00  INFO 30336 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-21T15:04:56.331+08:00  INFO 30336 --- [work-assistant] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@5c70d7f0
+2026-05-21T15:04:56.332+08:00  INFO 30336 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-21T15:04:56.386+08:00  WARN 30336 --- [work-assistant] [main] liquibase.database                       : Your PostgreSQL software version (12.2) seems to indicate that your software is older than 12.20. This means that you might encounter strange behaviour and incorrect error messages.
+2026-05-21T15:04:56.572+08:00  INFO 30336 --- [work-assistant] [main] liquibase.database                       : Set default schema name to public
+2026-05-21T15:04:58.340+08:00  INFO 30336 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:04:58.388+08:00  INFO 30336 --- [work-assistant] [main] liquibase.ui                             : Database is up to date, no changesets to execute
+2026-05-21T15:04:58.389+08:00  INFO 30336 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:04:58.397+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : UPDATE SUMMARY
+2026-05-21T15:04:58.397+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : Run:                          0
+2026-05-21T15:04:58.397+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : Previously run:               2
+2026-05-21T15:04:58.397+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : Filtered out:                 0
+2026-05-21T15:04:58.397+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : -------------------------------
+2026-05-21T15:04:58.398+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : Total change sets:            2
+2026-05-21T15:04:58.398+08:00  INFO 30336 --- [work-assistant] [main] liquibase.util                           : Update summary generated
+2026-05-21T15:04:58.399+08:00  INFO 30336 --- [work-assistant] [main] liquibase.command                        : Command execution complete
+2026-05-21T15:04:58.488+08:00  INFO 30336 --- [work-assistant] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-21T15:04:58.555+08:00  INFO 30336 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-05-21T15:04:59.008+08:00  INFO 30336 --- [work-assistant] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-21T15:04:59.069+08:00  WARN 30336 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000511: The 12.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly.The minimum supported version is 13.0.0. Check the community dialects project for available legacy versions.
+2026-05-21T15:04:59.085+08:00  INFO 30336 --- [work-assistant] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/work-assistant]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 12.2
+	Default catalog/schema: work-assistant/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-21T15:05:00.010+08:00  INFO 30336 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-21T15:05:00.018+08:00  INFO 30336 --- [work-assistant] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:05:00.148+08:00  INFO 30336 --- [work-assistant] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-21T15:05:00.343+08:00  INFO 30336 --- [work-assistant] [main] c.w.a.e.notify.manager.NotifyManager     : notify handler init success, handlers=[null, DING_TALK]
+2026-05-21T15:05:00.401+08:00  WARN 30336 --- [work-assistant] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-21T15:05:00.419+08:00  INFO 30336 --- [work-assistant] [main] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [META-INF/resources/index.html]
+2026-05-21T15:05:00.822+08:00  INFO 30336 --- [work-assistant] [main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8088], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-05-21T15:05:00.840+08:00  INFO 30336 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8088 (https) with context path '/'
+2026-05-21T15:05:00.847+08:00  INFO 30336 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Started WorkAssistantApplication in 6.405 seconds (process running for 7.096)
+2026-05-21T15:07:42.790+08:00  INFO 30336 --- [work-assistant] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-21T15:07:42.795+08:00  INFO 30336 --- [work-assistant] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-21T15:07:42.798+08:00  INFO 30336 --- [work-assistant] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:07:42.800+08:00  INFO 30336 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-21T15:07:42.804+08:00  INFO 30336 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-21T15:08:13.166+08:00  INFO 29564 --- [work-assistant] [main] c.w.a.w.WorkAssistantApplicationTests    : Starting WorkAssistantApplicationTests using Java 21.0.4 with PID 29564 (started by 86133 in E:\me\code\work-assistant-springboot)
+2026-05-21T15:08:13.167+08:00  INFO 29564 --- [work-assistant] [main] c.w.a.w.WorkAssistantApplicationTests    : No active profile set, falling back to 1 default profile: "default"
+2026-05-21T15:08:13.846+08:00  INFO 29564 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-21T15:08:13.925+08:00  INFO 29564 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 71 ms. Found 2 JPA repository interfaces.
+2026-05-21T15:08:14.380+08:00  INFO 29564 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-21T15:08:14.554+08:00  INFO 29564 --- [work-assistant] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@6b9697ae
+2026-05-21T15:08:14.555+08:00  INFO 29564 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-21T15:08:14.592+08:00  WARN 29564 --- [work-assistant] [main] liquibase.database                       : Your PostgreSQL software version (12.2) seems to indicate that your software is older than 12.20. This means that you might encounter strange behaviour and incorrect error messages.
+2026-05-21T15:08:14.764+08:00  INFO 29564 --- [work-assistant] [main] liquibase.database                       : Set default schema name to public
+2026-05-21T15:08:18.213+08:00  INFO 29564 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:08:18.276+08:00  INFO 29564 --- [work-assistant] [main] liquibase.ui                             : Database is up to date, no changesets to execute
+2026-05-21T15:08:18.279+08:00  INFO 29564 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:08:18.288+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : UPDATE SUMMARY
+2026-05-21T15:08:18.288+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : Run:                          0
+2026-05-21T15:08:18.288+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : Previously run:               2
+2026-05-21T15:08:18.289+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : Filtered out:                 0
+2026-05-21T15:08:18.289+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : -------------------------------
+2026-05-21T15:08:18.289+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : Total change sets:            2
+2026-05-21T15:08:18.290+08:00  INFO 29564 --- [work-assistant] [main] liquibase.util                           : Update summary generated
+2026-05-21T15:08:18.291+08:00  INFO 29564 --- [work-assistant] [main] liquibase.command                        : Command execution complete
+2026-05-21T15:08:18.430+08:00  INFO 29564 --- [work-assistant] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-21T15:08:18.553+08:00  INFO 29564 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-05-21T15:08:19.156+08:00  INFO 29564 --- [work-assistant] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-21T15:08:19.219+08:00  WARN 29564 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000511: The 12.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly.The minimum supported version is 13.0.0. Check the community dialects project for available legacy versions.
+2026-05-21T15:08:19.238+08:00  INFO 29564 --- [work-assistant] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/work-assistant]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 12.2
+	Default catalog/schema: work-assistant/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-21T15:08:20.098+08:00  INFO 29564 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-21T15:08:20.103+08:00  INFO 29564 --- [work-assistant] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:08:20.242+08:00  INFO 29564 --- [work-assistant] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-21T15:08:20.429+08:00  INFO 29564 --- [work-assistant] [main] c.w.a.e.notify.manager.NotifyManager     : notify handler init success, handlers=[null, DING_TALK]
+2026-05-21T15:08:20.512+08:00  WARN 29564 --- [work-assistant] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-21T15:08:20.531+08:00  INFO 29564 --- [work-assistant] [main] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [META-INF/resources/index.html]
+2026-05-21T15:08:21.044+08:00  INFO 29564 --- [work-assistant] [main] c.w.a.w.WorkAssistantApplicationTests    : Started WorkAssistantApplicationTests in 8.194 seconds (process running for 9.333)
+2026-05-21T15:08:21.532+08:00  INFO 29564 --- [work-assistant] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:08:21.536+08:00  INFO 29564 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-21T15:08:21.547+08:00  INFO 29564 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
+2026-05-21T15:08:34.214+08:00  INFO 25264 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Starting WorkAssistantApplication using Java 21.0.4 with PID 25264 (E:\me\code\work-assistant-springboot\target\classes started by 86133 in E:\me\code\work-assistant-springboot)
+2026-05-21T15:08:34.217+08:00  INFO 25264 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : No active profile set, falling back to 1 default profile: "default"
+2026-05-21T15:08:34.768+08:00  INFO 25264 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-05-21T15:08:34.835+08:00  INFO 25264 --- [work-assistant] [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 59 ms. Found 2 JPA repository interfaces.
+2026-05-21T15:08:35.310+08:00  INFO 25264 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8088 (https)
+2026-05-21T15:08:35.324+08:00  INFO 25264 --- [work-assistant] [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2026-05-21T15:08:35.325+08:00  INFO 25264 --- [work-assistant] [main] o.apache.catalina.core.StandardEngine    : Starting Servlet engine: [Apache Tomcat/11.0.21]
+2026-05-21T15:08:35.364+08:00  INFO 25264 --- [work-assistant] [main] b.w.c.s.WebApplicationContextInitializer : Root WebApplicationContext: initialization completed in 1105 ms
+2026-05-21T15:08:35.485+08:00  INFO 25264 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-05-21T15:08:35.612+08:00  INFO 25264 --- [work-assistant] [main] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection org.postgresql.jdbc.PgConnection@32a8ca06
+2026-05-21T15:08:35.613+08:00  INFO 25264 --- [work-assistant] [main] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-05-21T15:08:35.645+08:00  WARN 25264 --- [work-assistant] [main] liquibase.database                       : Your PostgreSQL software version (12.2) seems to indicate that your software is older than 12.20. This means that you might encounter strange behaviour and incorrect error messages.
+2026-05-21T15:08:35.798+08:00  INFO 25264 --- [work-assistant] [main] liquibase.database                       : Set default schema name to public
+2026-05-21T15:08:37.777+08:00  INFO 25264 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:08:37.818+08:00  INFO 25264 --- [work-assistant] [main] liquibase.ui                             : Database is up to date, no changesets to execute
+2026-05-21T15:08:37.819+08:00  INFO 25264 --- [work-assistant] [main] liquibase.changelog                      : Reading from public.databasechangelog
+2026-05-21T15:08:37.827+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : UPDATE SUMMARY
+2026-05-21T15:08:37.828+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : Run:                          0
+2026-05-21T15:08:37.828+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : Previously run:               2
+2026-05-21T15:08:37.828+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : Filtered out:                 0
+2026-05-21T15:08:37.828+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : -------------------------------
+2026-05-21T15:08:37.828+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : Total change sets:            2
+2026-05-21T15:08:37.829+08:00  INFO 25264 --- [work-assistant] [main] liquibase.util                           : Update summary generated
+2026-05-21T15:08:37.829+08:00  INFO 25264 --- [work-assistant] [main] liquibase.command                        : Command execution complete
+2026-05-21T15:08:37.901+08:00  INFO 25264 --- [work-assistant] [main] org.hibernate.orm.jpa                    : HHH008540: Processing PersistenceUnitInfo [name: default]
+2026-05-21T15:08:37.941+08:00  INFO 25264 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000001: Hibernate ORM core version 7.2.12.Final
+2026-05-21T15:08:38.330+08:00  INFO 25264 --- [work-assistant] [main] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-05-21T15:08:38.379+08:00  WARN 25264 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000511: The 12.2.0 version for [org.hibernate.dialect.PostgreSQLDialect] is no longer supported, hence certain features may not work properly.The minimum supported version is 13.0.0. Check the community dialects project for available legacy versions.
+2026-05-21T15:08:38.394+08:00  INFO 25264 --- [work-assistant] [main] org.hibernate.orm.connections.pooling    : HHH10001005: Database info:
+	Database JDBC URL [jdbc:postgresql://localhost:5432/work-assistant]
+	Database driver: PostgreSQL JDBC Driver
+	Database dialect: PostgreSQLDialect
+	Database version: 12.2
+	Default catalog/schema: work-assistant/public
+	Autocommit mode: undefined/unknown
+	Isolation level: READ_COMMITTED [default READ_COMMITTED]
+	JDBC fetch size: none
+	Pool: DataSourceConnectionProvider
+	Minimum pool size: undefined/unknown
+	Maximum pool size: undefined/unknown
+2026-05-21T15:08:39.199+08:00  INFO 25264 --- [work-assistant] [main] org.hibernate.orm.core                   : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-05-21T15:08:39.206+08:00  INFO 25264 --- [work-assistant] [main] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:08:39.318+08:00  INFO 25264 --- [work-assistant] [main] o.s.d.j.r.query.QueryEnhancerFactories   : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-05-21T15:08:39.487+08:00  INFO 25264 --- [work-assistant] [main] c.w.a.e.notify.manager.NotifyManager     : notify handler init success, handlers=[null, DING_TALK]
+2026-05-21T15:08:39.539+08:00  WARN 25264 --- [work-assistant] [main] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-05-21T15:08:39.557+08:00  INFO 25264 --- [work-assistant] [main] o.s.b.w.a.WelcomePageHandlerMapping      : Adding welcome page: class path resource [META-INF/resources/index.html]
+2026-05-21T15:08:39.910+08:00  INFO 25264 --- [work-assistant] [main] o.a.t.util.net.NioEndpoint.certificate   : Connector [https-jsse-nio-8088], TLS virtual host [_default_], certificate type [UNDEFINED] configured from keystore [Set directly - location unknown] using alias [tomcat] with trust store [null]
+2026-05-21T15:08:39.927+08:00  INFO 25264 --- [work-assistant] [main] o.s.boot.tomcat.TomcatWebServer          : Tomcat started on port 8088 (https) with context path '/'
+2026-05-21T15:08:39.935+08:00  INFO 25264 --- [work-assistant] [main] c.w.assistant.WorkAssistantApplication   : Started WorkAssistantApplication in 6.283 seconds (process running for 7.089)
+2026-05-21T15:09:00.105+08:00  INFO 25264 --- [work-assistant] [https-jsse-nio-8088-exec-4] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-05-21T15:09:00.125+08:00  INFO 25264 --- [work-assistant] [https-jsse-nio-8088-exec-4] o.s.web.servlet.DispatcherServlet        : Initializing Servlet 'dispatcherServlet'
+2026-05-21T15:09:00.130+08:00  INFO 25264 --- [work-assistant] [https-jsse-nio-8088-exec-4] o.s.web.servlet.DispatcherServlet        : Completed initialization in 4 ms
+2026-05-21T15:09:09.533+08:00  INFO 25264 --- [work-assistant] [SpringApplicationShutdownHook] o.s.boot.tomcat.GracefulShutdown         : Commencing graceful shutdown. Waiting for active requests to complete
+2026-05-21T15:09:09.537+08:00  INFO 25264 --- [work-assistant] [tomcat-shutdown] o.s.boot.tomcat.GracefulShutdown         : Graceful shutdown complete
+2026-05-21T15:09:09.541+08:00  INFO 25264 --- [work-assistant] [SpringApplicationShutdownHook] j.LocalContainerEntityManagerFactoryBean : Closing JPA EntityManagerFactory for persistence unit 'default'
+2026-05-21T15:09:09.542+08:00  INFO 25264 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown initiated...
+2026-05-21T15:09:09.546+08:00  INFO 25264 --- [work-assistant] [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Shutdown completed.
