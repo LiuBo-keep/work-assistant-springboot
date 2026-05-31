@@ -1,9 +1,7 @@
 <template>
   <div class="notes-layout">
-
     <!-- ===== 左侧：笔记列表 ===== -->
     <div class="notes-sidebar" :class="{ collapsed: sidebarCollapsed }">
-
       <!-- 顶部栏 -->
       <div class="sb-head">
         <span class="sb-title">
@@ -12,16 +10,16 @@
         <div class="sb-head-actions">
           <el-tooltip content="新建笔记" placement="top">
             <div class="icon-btn" @click="createNote" aria-label="新建笔记">
-              <el-icon :size="14">
-                <Plus />
-              </el-icon>
+              <el-icon :size="14"><Plus /></el-icon>
             </div>
           </el-tooltip>
           <el-tooltip content="收起列表" placement="top">
-            <div class="icon-btn" @click="sidebarCollapsed = !sidebarCollapsed" aria-label="收起列表">
-              <el-icon :size="14">
-                <Fold />
-              </el-icon>
+            <div
+              class="icon-btn"
+              @click="sidebarCollapsed = !sidebarCollapsed"
+              aria-label="收起列表"
+            >
+              <el-icon :size="14"><Fold /></el-icon>
             </div>
           </el-tooltip>
         </div>
@@ -47,16 +45,15 @@
           :key="c"
           class="cat-chip"
           :class="{ active: filterCat === (c === '全部' ? '' : c) }"
-          @click="filterCat = c === '全部' ? '' : doSearch()"
-        >{{ c }}</span>
+          @click="onCatClick(c)"
+          >{{ c }}</span
+        >
       </div>
 
       <!-- 笔记列表 -->
       <div class="sb-list">
         <div v-if="noteList.length === 0" class="sb-empty">
-          <el-icon :size="24">
-            <Document />
-          </el-icon>
+          <el-icon :size="24"><Document /></el-icon>
           <span>暂无笔记</span>
         </div>
         <div
@@ -73,7 +70,9 @@
             <span class="ni-time">{{ relativeTime(note.updatedAt) }}</span>
           </div>
           <div class="ni-title">{{ note.title }}</div>
-          <div class="ni-preview">{{ preview(note.content) || '暂无内容…' }}</div>
+          <div class="ni-preview">
+            {{ preview(note.content) || '暂无内容…' }}
+          </div>
         </div>
       </div>
 
@@ -82,44 +81,76 @@
     </div>
 
     <!-- 展开侧边栏按钮（collapsed 时显示） -->
-    <div v-if="sidebarCollapsed" class="sidebar-toggle" @click="sidebarCollapsed = false">
-      <el-icon :size="14">
-        <Expand />
-      </el-icon>
+    <div
+      v-if="sidebarCollapsed"
+      class="sidebar-toggle"
+      @click="sidebarCollapsed = false"
+    >
+      <el-icon :size="14"><Expand /></el-icon>
     </div>
 
     <!-- ===== 右侧：编辑区 ===== -->
     <div class="editor-area" v-if="current">
-
       <!-- 编辑区头部 -->
       <div class="editor-head">
+        <!-- 预览模式：标题只读展示 -->
+        <span v-if="previewMode" class="title-readonly">{{
+          current.title
+        }}</span>
+        <!-- 编辑模式：标题可编辑 -->
         <el-input
+          v-else
           v-model="current.title"
           class="title-input"
           placeholder="笔记标题…"
           @input="markDirty"
         />
         <div class="editor-actions">
+          <!-- 分类：预览时只读标签，编辑时下拉 -->
+          <span
+            v-if="previewMode"
+            class="ni-tag"
+            :class="`cat-${getCatKey(current.category)}`"
+          >
+            {{ current.category }}
+          </span>
           <el-select
+            v-else
             v-model="current.category"
             size="small"
-            style="width:88px"
+            style="width: 88px"
             @change="markDirty"
           >
             <el-option v-for="c in categories" :key="c" :label="c" :value="c" />
           </el-select>
-          <el-button size="small" :icon="View" @click="togglePreview">
-            {{ previewMode ? '编辑' : '预览' }}
-          </el-button>
+
+          <!-- 预览模式 → 显示"编辑"按钮 -->
           <el-button
+            v-if="previewMode"
             size="small"
+            :icon="EditPen"
             type="primary"
-            :icon="isDirty ? DocumentChecked : Check"
-            :loading="saving"
-            @click="saveNote"
+            plain
+            @click="togglePreview"
           >
-            {{ isDirty ? '保存' : '已保存' }}
+            编辑
           </el-button>
+          <!-- 编辑模式 → 显示"预览"按钮 + 保存 -->
+          <template v-else>
+            <el-button size="small" :icon="View" @click="togglePreview"
+              >预览</el-button
+            >
+            <el-button
+              size="small"
+              type="primary"
+              :icon="isDirty ? DocumentChecked : Check"
+              :loading="saving"
+              @click="saveNote"
+            >
+              {{ isDirty ? '保存' : '已保存' }}
+            </el-button>
+          </template>
+
           <el-popconfirm
             title="确认删除这篇笔记？"
             confirm-button-text="删除"
@@ -136,9 +167,12 @@
 
       <!-- 编辑器 / 预览切换 -->
       <div class="editor-body" ref="editorBodyRef">
-
         <!-- Toast UI Editor -->
-        <div v-show="!previewMode" ref="editorRef" class="toastui-editor-wrap" />
+        <div
+          v-show="!previewMode"
+          ref="editorRef"
+          class="toastui-editor-wrap"
+        />
 
         <!-- Markdown 预览（只读） -->
         <div
@@ -146,47 +180,60 @@
           class="md-preview toastui-editor-contents"
           v-html="renderedHtml"
         />
-
       </div>
 
       <!-- 底部元信息 -->
       <div class="editor-foot">
         <div class="foot-meta">
-          <span><el-icon :size="11"><Calendar /></el-icon> 创建 {{ formatDate(current.createdAt) }}</span>
-          <span><el-icon :size="11"><Clock /></el-icon> 修改 {{ relativeTime(current.updatedAt) }}</span>
-          <span><el-icon :size="11"><Document /></el-icon> {{ wordCount }} 字</span>
+          <span
+            ><el-icon :size="11"><Calendar /></el-icon> 创建
+            {{ formatDate(current.createdAt) }}</span
+          >
+          <span
+            ><el-icon :size="11"><Clock /></el-icon> 修改
+            {{ relativeTime(current.updatedAt) }}</span
+          >
+          <span
+            ><el-icon :size="11"><Document /></el-icon> {{ wordCount }} 字</span
+          >
         </div>
         <div v-if="isDirty" class="foot-unsaved">
-          <el-icon :size="11">
-            <Warning />
-          </el-icon>
-          有未保存的更改
+          <el-icon :size="11"><Warning /></el-icon> 有未保存的更改
         </div>
       </div>
-
     </div>
 
     <!-- 空状态（无选中笔记） -->
     <div v-else class="editor-empty">
-      <el-icon :size="48" class="empty-icon">
-        <Notebook />
-      </el-icon>
+      <el-icon :size="48" class="empty-icon"><Notebook /></el-icon>
       <p class="empty-title">选择或新建一篇笔记</p>
-      <el-button type="primary" :icon="Plus" @click="createNote">新建笔记</el-button>
+      <el-button type="primary" :icon="Plus" @click="createNote"
+        >新建笔记</el-button
+      >
     </div>
-
   </div>
 </template>
 
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue'
 import {
-  Plus, Search, Fold, Expand, View, Delete,
-  Document, DocumentChecked, Check,
-  Notebook, Calendar, Clock, Warning
+  Plus,
+  Search,
+  Fold,
+  Expand,
+  View,
+  Delete,
+  Document,
+  DocumentChecked,
+  Check,
+  EditPen,
+  Notebook,
+  Calendar,
+  Clock,
+  Warning,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
-import notesService from '@/services/efficiency-record/notes/Notes.service'
+import notesService from '@/services/efficiency-record/notes/notes.service'
 
 /* ---- Toast UI Editor ---- */
 let Editor = null
@@ -197,7 +244,7 @@ const keyword = ref('')
 const filterCat = ref('')
 const noteList = ref([])
 const currentId = ref(null)
-const current = ref(null)   // 当前编辑的笔记副本
+const current = ref(null) // 当前编辑的笔记副本
 const isDirty = ref(false)
 const saving = ref(false)
 const previewMode = ref(false)
@@ -210,7 +257,7 @@ const categories = ['工作', '开发', '会议', '其他']
 
 /* ---- 计算属性 ---- */
 const wordCount = computed(() =>
-  current.value ? notesService.constructor.wordCount(current.value.content) : 0
+  current.value ? notesService.constructor.wordCount(current.value.content) : 0,
 )
 
 /* ---- 工具函数（来自 service） ---- */
@@ -220,30 +267,40 @@ const preview = notesService.constructor.preview
 
 /* ---- 分类 key（用于 CSS class） ---- */
 function getCatKey(cat) {
-  const map = { '工作': 'work', '开发': 'dev', '会议': 'meet', '其他': 'other' }
+  const map = { 工作: 'work', 开发: 'dev', 会议: 'meet', 其他: 'other' }
   return map[cat] || 'other'
+}
+
+/* ---- 分类点击 ---- */
+function onCatClick(c) {
+  filterCat.value = c === '全部' ? '' : c
+  doSearch()
 }
 
 /* ---- 搜索 ---- */
 function doSearch() {
   noteList.value = notesService.search({
     keyword: keyword.value,
-    category: filterCat.value
+    category: filterCat.value,
   })
 }
 
 /* ---- 选中笔记 ---- */
 async function selectNote(note) {
   if (isDirty.value) {
-    const ok = await ElMessage.warning('当前笔记有未保存的更改，切换将丢失修改') || true
+    const ok =
+      (await ElMessage.warning('当前笔记有未保存的更改，切换将丢失修改')) ||
+      true
     if (!ok) return
   }
   currentId.value = note.id
   current.value = { ...note }
   isDirty.value = false
-  previewMode.value = false
+  previewMode.value = true // 默认预览模式
+  destroyEditor()
+  // 渲染预览 HTML
   await nextTick()
-  initEditor(note.content)
+  await renderPreview(note.content)
 }
 
 /* ---- 新建笔记 ---- */
@@ -251,11 +308,17 @@ async function createNote() {
   const res = notesService.add({
     title: '无标题',
     content: '',
-    category: '其他'
+    category: '其他',
   })
   if (res.code !== 200) return
   doSearch()
-  await selectNote(res.data)
+  // 新建笔记直接进入编辑模式
+  currentId.value = res.data.id
+  current.value = { ...res.data }
+  isDirty.value = false
+  previewMode.value = false
+  await nextTick()
+  initEditor('')
   // 自动聚焦标题
   await nextTick()
   document.querySelector('.title-input input')?.select()
@@ -272,7 +335,7 @@ async function saveNote() {
   const res = notesService.update(current.value.id, {
     title: current.value.title,
     content: current.value.content,
-    category: current.value.category
+    category: current.value.category,
   })
   saving.value = false
   if (res.code !== 200) return ElMessage.error(res.error || '保存失败')
@@ -299,33 +362,46 @@ function markDirty() {
   isDirty.value = true
 }
 
-/* ---- 切换预览模式 ---- */
+/* ---- 渲染预览 HTML ---- */
+async function renderPreview(content) {
+  if (!content) {
+    renderedHtml.value = ''
+    return
+  }
+  try {
+    if (!Editor) {
+      const mod = await import('@toast-ui/editor')
+      Editor = mod.default
+    }
+    const viewer = Editor.factory({
+      el: document.createElement('div'),
+      viewer: true,
+      initialValue: content,
+    })
+    renderedHtml.value = viewer?.getHTML?.() || markdownToHtml(content)
+  } catch {
+    renderedHtml.value = markdownToHtml(content)
+  }
+}
+
+/* ---- 切换预览 / 编辑 ---- */
 async function togglePreview() {
-  if (!previewMode.value) {
-    // 切换到预览：同步内容 → 渲染 HTML
+  if (previewMode.value) {
+    // 预览 → 编辑
+    previewMode.value = false
+    await nextTick()
+    initEditor(current.value.content)
+  } else {
+    // 编辑 → 预览：同步内容并保存
     if (editorInst) {
       current.value.content = editorInst.getMarkdown()
     }
-    if (Editor) {
-      renderedHtml.value = Editor.factory({
-        el: document.createElement('div'),
-        initialValue: current.value.content,
-        viewer: true
-      })?.getHTML?.() || ''
-      // 用 Viewer 渲染
-      const viewer = Editor.factory({
-        el: document.createElement('div'),
-        viewer: true,
-        initialValue: current.value.content
-      })
-      renderedHtml.value = viewer?.getHTML?.() || markdownToHtml(current.value.content)
-    }
-  } else {
-    // 切换到编辑
+    await saveNote()
+    destroyEditor()
+    previewMode.value = true
     await nextTick()
-    initEditor(current.value.content)
+    await renderPreview(current.value.content)
   }
-  previewMode.value = !previewMode.value
 }
 
 /* ---- 简易 Markdown 转 HTML（预览降级方案） ---- */
@@ -368,11 +444,11 @@ async function initEditor(initialValue = '') {
         ['hr', 'quote'],
         ['ul', 'ol', 'task'],
         ['table', 'link'],
-        ['code', 'codeblock']
+        ['code', 'codeblock'],
       ],
       events: {
-        change: () => markDirty()
-      }
+        change: () => markDirty(),
+      },
     })
   } catch (e) {
     console.warn('[Notes] Toast UI Editor 初始化失败', e)
@@ -383,8 +459,7 @@ function destroyEditor() {
   if (editorInst) {
     try {
       editorInst.destroy()
-    } catch {
-    }
+    } catch {}
     editorInst = null
   }
 }
@@ -438,7 +513,9 @@ onBeforeUnmount(() => {
   border-right: 1px solid #ebeef5;
   display: flex;
   flex-direction: column;
-  transition: width 0.2s ease, opacity 0.2s ease;
+  transition:
+    width 0.2s ease,
+    opacity 0.2s ease;
   overflow: hidden;
 
   &.collapsed {
@@ -465,7 +542,6 @@ onBeforeUnmount(() => {
   font-weight: 500;
   color: #303133;
   white-space: nowrap;
-
   .el-icon {
     color: #909399;
   }
@@ -486,8 +562,9 @@ onBeforeUnmount(() => {
   justify-content: center;
   cursor: pointer;
   color: #909399;
-  transition: background 0.15s, color 0.15s;
-
+  transition:
+    background 0.15s,
+    color 0.15s;
   &:hover {
     background: #f0f2f5;
     color: #303133;
@@ -525,7 +602,6 @@ onBeforeUnmount(() => {
     border-color: #c6e2ff;
     color: #409eff;
   }
-
   &.active {
     background: #ecf5ff;
     color: #409eff;
@@ -536,11 +612,9 @@ onBeforeUnmount(() => {
 .sb-list {
   flex: 1;
   overflow-y: auto;
-
   &::-webkit-scrollbar {
     width: 4px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: #ebeef5;
     border-radius: 2px;
@@ -566,7 +640,6 @@ onBeforeUnmount(() => {
   &:hover {
     background: #f5f7fa;
   }
-
   &.active {
     background: #ecf5ff;
     border-left-color: #409eff;
@@ -585,22 +658,18 @@ onBeforeUnmount(() => {
   border-radius: 3px;
   font-size: 10px;
   font-weight: 500;
-
   &.cat-work {
-    background: #E6F1FB;
-    color: #0C447C;
+    background: #e6f1fb;
+    color: #0c447c;
   }
-
   &.cat-dev {
-    background: #EEEDFE;
-    color: #534AB7;
+    background: #eeedfe;
+    color: #534ab7;
   }
-
   &.cat-meet {
-    background: #E1F5EE;
+    background: #e1f5ee;
     color: #085041;
   }
-
   &.cat-other {
     background: #f1f1f1;
     color: #909399;
@@ -611,7 +680,6 @@ onBeforeUnmount(() => {
   font-size: 10px;
   color: #c0c4cc;
 }
-
 .ni-title {
   font-size: 12px;
   font-weight: 500;
@@ -621,7 +689,6 @@ onBeforeUnmount(() => {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
 .ni-preview {
   font-size: 11px;
   color: #c0c4cc;
@@ -656,7 +723,6 @@ onBeforeUnmount(() => {
   cursor: pointer;
   color: #909399;
   z-index: 10;
-
   &:hover {
     color: #409eff;
   }
@@ -682,18 +748,27 @@ onBeforeUnmount(() => {
 
 .title-input {
   flex: 1;
-
   :deep(.el-input__wrapper) {
     box-shadow: none !important;
     border: none;
     padding: 0;
   }
-
   :deep(.el-input__inner) {
     font-size: 16px;
     font-weight: 500;
     color: #303133;
   }
+}
+
+/* 预览模式下的只读标题 */
+.title-readonly {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 500;
+  color: #303133;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .editor-actions {
@@ -738,7 +813,6 @@ onBeforeUnmount(() => {
   &::-webkit-scrollbar {
     width: 4px;
   }
-
   &::-webkit-scrollbar-thumb {
     background: #ebeef5;
     border-radius: 2px;
@@ -789,7 +863,6 @@ onBeforeUnmount(() => {
   .empty-icon {
     color: #dcdfe6;
   }
-
   .empty-title {
     font-size: 14px;
     color: #c0c4cc;
