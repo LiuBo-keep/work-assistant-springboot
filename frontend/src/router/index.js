@@ -63,6 +63,11 @@ const routes = [
         path: '/password/list',
         component: () => import('../views/password/List.vue'),
         meta: { title: '密码管理', active: '/password/list', auth: true }
+      },
+      {
+        path: '/efficiency-record/notes',
+        component: () => import('../views/efficiency-record/notes/notes.vue'),
+        meta: { title: '工作笔记', active: '/efficiency-record/notes', auth: true }
       }
     ]
   },

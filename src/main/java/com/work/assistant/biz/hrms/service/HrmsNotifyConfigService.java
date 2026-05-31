@@ -9,6 +9,7 @@ import com.work.assistant.biz.hrms.repository.HrmsNotifyConfigRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 /**
@@ -36,7 +37,17 @@ public class HrmsNotifyConfigService {
    */
   @Transactional(rollbackOn = Exception.class)
   public void save(HrmsNotifyConfigSaveRequest request) {
-    HrmsNotifyConfig hrmsNotifyConfig = hrmsNotifyConfigConvert.fromHrmsNotifyConfigCreateRequest(request);
+    HrmsNotifyConfig hrmsNotifyConfig;
+    if (request.getId() == null) {
+       hrmsNotifyConfig = hrmsNotifyConfigConvert.fromHrmsNotifyConfigCreateRequest(request);
+    }else {
+       hrmsNotifyConfig = hrmsNotifyConfigRepository.findById(request.getId()).orElse(null);
+       if (ObjectUtils.isEmpty(hrmsNotifyConfig)){
+           return;
+       }
+       hrmsNotifyConfigConvert.fromHrmsNotifyConfigCreateRequest(hrmsNotifyConfig,request);
+    }
+
     hrmsNotifyConfigRepository.save(hrmsNotifyConfig);
   }
 
