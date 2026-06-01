@@ -68,6 +68,12 @@ const routes = [
         path: '/efficiency-record/notes',
         component: () => import('../views/efficiency-record/notes/notes.vue'),
         meta: { title: '工作笔记', active: '/efficiency-record/notes', auth: true }
+      },
+      {
+        path: '/tool-box/json',
+        component: () => import('../views/tool-box/json/jsonFormatter.vue'),
+        meta: { title: 'JSON 工具', active: '/tool-box/json', auth: true }
+
       }
     ]
   },
