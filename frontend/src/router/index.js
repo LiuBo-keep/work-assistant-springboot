@@ -74,6 +74,11 @@ const routes = [
         component: () => import('../views/tool-box/json/jsonFormatter.vue'),
         meta: { title: 'JSON 工具', active: '/tool-box/json', auth: true }
 
+      },
+      {
+        path: '/tool-box/qrcode',
+        component: () => import('../views/tool-box/qrcode/qrcode.vue'),
+        meta: { title: '二维码生成', active: '/tool-box/qrcode', auth: true }
       }
     ]
   },
