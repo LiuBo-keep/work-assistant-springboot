@@ -254,7 +254,7 @@
               ref="transWrap"
               :style="transWrapStyle"
             >
-              <img :src="trans.bgSrc" class="trans-bg-img" draggable="false" />
+              <img :src="trans.bgSrc" class="trans-bg-img-fixed" draggable="false" />
               <img
                 :src="transQRDataUrl"
                 class="trans-qr-overlay"
@@ -367,6 +367,7 @@ async function generateNormal() {
 
     // 使用 QRCode 到临时 div
     const div = document.createElement('div')
+    div.style.display = 'none'
     document.body.appendChild(div)
     const qr = new QRCode(div, {
       text: normal.text,
@@ -445,6 +446,7 @@ async function generateTrans() {
   try {
     await loadQRLib()
     const div = document.createElement('div')
+    div.style.display = 'none'
     document.body.appendChild(div)
     const qr = new QRCode(div, {
       text: trans.text,
@@ -534,8 +536,12 @@ const transQRStyle = computed(() => {
 // 预览容器样式（保持背景图宽高比）
 const transWrapStyle = computed(() => {
   if (!trans.bgNaturalW || !trans.bgNaturalH) return {}
-  const ratio = trans.bgNaturalH / trans.bgNaturalW
-  return { paddingBottom: ratio * 100 + '%' }
+  return {
+    position: 'relative',
+    display: 'inline-block', // 让包裹层紧紧贴合图片的实际渲染大小
+    maxWidth: '100%',
+    maxHeight: '100%'
+  }
 })
 
 function initTransQRPos() {
@@ -1104,24 +1110,28 @@ input[type="range"] {
 
 /* ── Transparent Preview ── */
 .trans-preview-box {
-  align-items: stretch;
-  justify-content: flex-start;
-  padding: 0;
+  display: flex;         /* 启用 flex 居中 */
+  align-items: center;   /* 垂直居中 */
+  justify-content: center;/* 水平居中 */
+  padding: 10px;         /* 留一点点内边距，防止图片贴边 */
+  box-sizing: border-box;
 }
 
 .trans-canvas-wrap {
   position: relative;
-  width: 100%;
-  height: 0;
-  overflow: hidden;
+  width: auto;           /* 撤销原本的 width: 100% */
+  height: auto;          /* 撤销原本的 height: 0 */
+  max-width: 100%;       /* 严格限制，不能超过外层盒子 */
+  max-height: 100%;      /* 严格限制，不能超过外层盒子 */
+  overflow: visible;     /* 允许里面的二维码边缘有一点点悬空 */
 }
 
-.trans-bg-img {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  object-fit: contain;
+.trans-bg-img-fixed {
   display: block;
+  max-width: 100%;       /* 宽度自适应 */
+  max-height: 55vh;      /* 关键：限制图片在视口中的最大高度（可根据实际微调，比如50vh-60vh） */
+  width: auto;
+  height: auto;
   pointer-events: none;
   user-select: none;
 }
