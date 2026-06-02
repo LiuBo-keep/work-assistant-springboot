@@ -448,22 +448,23 @@ async function generateTrans() {
     const div = document.createElement('div')
     div.style.display = 'none'
     document.body.appendChild(div)
+
+    // ─── 核心修改 1：让基础码永远是标准的黑白码，用来做最精准的像素裁切 ───
     const qr = new QRCode(div, {
       text: trans.text,
       width: trans.size,
       height: trans.size,
-      colorDark: trans.darkColor,
-      colorLight: 'rgba(0,0,0,0)', // 透明背景
+      colorDark: '#000000',  // 永远用纯黑
+      colorLight: '#ffffff', // 永远用纯白
       correctLevel: QRCode.CorrectLevel[trans.ecLevel]
     })
 
-    await new Promise(r => setTimeout(r, 80))
+    await new Promise(r => setTimeout(r, 100)) // 略微增加延迟确保低端设备渲染完毕
 
     const qrEl = div.querySelector('img') || div.querySelector('canvas')
     document.body.removeChild(div)
     if (!qrEl) return
 
-    // 重绘：只保留暗色模块，亮色变透明
     const tmpCanvas = document.createElement('canvas')
     tmpCanvas.width = trans.size
     tmpCanvas.height = trans.size
@@ -479,20 +480,25 @@ async function generateTrans() {
       tmp.src = qrEl.tagName === 'IMG' ? qrEl.src : qrEl.toDataURL()
     })
 
-    // 将浅色像素变透明，深色像素调整透明度
     const imgData = tCtx.getImageData(0, 0, trans.size, trans.size)
     const d = imgData.data
+
+    // 解析用户真正选择的颜色
     const darkR = parseInt(trans.darkColor.slice(1, 3), 16)
     const darkG = parseInt(trans.darkColor.slice(3, 5), 16)
     const darkB = parseInt(trans.darkColor.slice(5, 7), 16)
 
+    // ─── 核心修改 2：基于标准黑白精准上色 ───
     for (let i = 0; i < d.length; i += 4) {
+      // 算出当前像素的灰度值
       const brightness = (d[i] + d[i+1] + d[i+2]) / 3
-      if (brightness > 200) {
-        // 浅色 → 透明
+
+      // 只要偏向白色（因为原图是纯白底）
+      if (brightness > 128) {
+        // 浅色/背景部分 → 完全透明
         d[i+3] = 0
       } else {
-        // 深色 → 自定义颜色 + 透明度
+        // 黑色/二维码实体部分 → 替换为用户选的深颜色 + 设定的透明度
         d[i]   = darkR
         d[i+1] = darkG
         d[i+2] = darkB
@@ -503,9 +509,14 @@ async function generateTrans() {
 
     transQRDataUrl.value = tmpCanvas.toDataURL('image/png')
 
-    // 初始位置：居中偏右下
+    // ─── 核心修改 3：防止拖拽位置被意外重置 ───
     await nextTick()
-    initTransQRPos()
+    // 只有在没有初始化过位置的时候才初始化，防止改颜色导致位置乱跳
+    if (trans.qrX === 20 && trans.qrY === 20) {
+      initTransQRPos()
+    } else {
+      clampQRPos(trans.qrX, trans.qrY)
+    }
   } catch (e) {
     console.error('透明QR生成失败', e)
   }
