@@ -89,6 +89,16 @@ const routes = [
         path: '/tool-box/base64pdf',
         component: () => import('../views/tool-box/base64pdf/base64Pdf.vue'),
         meta: { title: 'Base64 转 PDF', active: '/tool-box/base64pdf', auth: true }
+      },
+      {
+        path: '/tool-box/random-string',
+        component: () => import('../views/tool-box/random-string/randomString.vue'),
+        meta: { title: '随机字符串', active: '/tool-box/random-string', auth: true }
+      },
+      {
+        path: '/tool-box/text-diff',
+        component: () => import('../views/tool-box/text-diff/textDiff.vue'),
+        meta: { title: '文本对比', active: '/tool-box/text-diff', auth: true }
       }
     ]
   },
