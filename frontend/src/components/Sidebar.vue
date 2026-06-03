@@ -50,7 +50,17 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
-import { Message, PieChart, DataAnalysis, Setting, Lock, Wallet, Notebook, Tools } from '@element-plus/icons-vue'
+import {
+  Message,
+  PieChart,
+  DataAnalysis,
+  Setting,
+  Lock,
+  Wallet,
+  Notebook,
+  Tools,
+  Document
+} from '@element-plus/icons-vue'
 import bus from '../utils/bus'
 import pkg from '../../package.json'
 
@@ -111,7 +121,9 @@ const menuItems = ref([
     icon: Tools, index: 'tool-box', title: '工具箱',
     subs: [
       { icon: DataAnalysis, index: '/tool-box/json', title: 'JSON工具' },
-      { icon: PieChart, index: '/tool-box/qrcode', title: '二维码生成' }
+      { icon: PieChart, index: '/tool-box/qrcode', title: '二维码生成' },
+      { icon: Lock, index: '/tool-box/token', title: 'TOKEN 解析' },
+      { icon: Document, index: '/tool-box/base64pdf', title: 'Base64PDF转换' }
     ]
   }
 ])

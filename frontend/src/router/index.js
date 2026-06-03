@@ -79,6 +79,16 @@ const routes = [
         path: '/tool-box/qrcode',
         component: () => import('../views/tool-box/qrcode/qrcode.vue'),
         meta: { title: '二维码生成', active: '/tool-box/qrcode', auth: true }
+      },
+      {
+        path: '/tool-box/token',
+        component: () => import('../views/tool-box/token/tokenParser.vue'),
+        meta: { title: 'Token 解析', active: '/tool-box/token', auth: true }
+      },
+      {
+        path: '/tool-box/base64pdf',
+        component: () => import('../views/tool-box/base64pdf/base64Pdf.vue'),
+        meta: { title: 'Base64 转 PDF', active: '/tool-box/base64pdf', auth: true }
       }
     ]
   },
