@@ -99,6 +99,11 @@ const routes = [
         path: '/tool-box/text-diff',
         component: () => import('../views/tool-box/text-diff/textDiff.vue'),
         meta: { title: '文本对比', active: '/tool-box/text-diff', auth: true }
+      },
+      {
+        path: '/tool-box/dev-utils',
+        component: () => import('../views/tool-box/dev-utils/devUtils.vue'),
+        meta: { title: '开发者工具集', active: '/tool-box/dev-utils', auth: true }
       }
     ]
   },
