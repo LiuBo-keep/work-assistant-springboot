@@ -14,7 +14,7 @@ server:
     keep-alive-timeout: 5000
     max-keep-alive-requests: 100
     max-http-form-post-size: 2MB
-  max-http-request-header-size: 16KB
+  max-http-request-header-size: 60KB
 
 spring:
   application:

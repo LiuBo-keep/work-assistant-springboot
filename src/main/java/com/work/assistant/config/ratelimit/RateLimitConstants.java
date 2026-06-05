@@ -10,7 +10,7 @@ public final class RateLimitConstants {
   /**
    * 每秒允许请求次数
    */
-  public static final int MAX_REQUEST_PER_SECOND = 3;
+  public static final int MAX_REQUEST_PER_SECOND = 10;
 
   /**
    * 最大IP缓存数
