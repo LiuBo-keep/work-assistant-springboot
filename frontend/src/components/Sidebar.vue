@@ -129,7 +129,7 @@ const menuItems = ref([
       { icon: Document, index: '/tool-box/base64pdf', title: 'Base64PDF转换' },
       { icon: MagicStick, index: '/tool-box/random-string', title: '随机字符串' },
       { icon: Switch, index: '/tool-box/text-diff', title: '文本对比' },
-      { icon: Monitor, index: '/tool-box/dev-utils', title: '开发者工具集' }
+      { icon: Monitor, index: '/tool-box/dev-utils', title: '开发者小工具集' }
     ]
   }
 ])
