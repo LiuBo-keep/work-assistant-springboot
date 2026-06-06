@@ -2,12 +2,12 @@
   <div class="sidebar" :class="{ 'is-collapse': collapse }" :style="sidebarStyle">
 
     <el-menu
-      class="sidebar-menu"
-      :default-active="route.meta.active"
-      :collapse="collapse"
-      :collapse-transition="false"
-      unique-opened
-      router
+        class="sidebar-menu"
+        :default-active="route.meta.active"
+        :collapse="collapse"
+        :collapse-transition="false"
+        unique-opened
+        router
     >
       <div v-show="!collapse" class="menu-group-label">主菜单</div>
 
@@ -15,17 +15,17 @@
         <el-sub-menu v-if="item.subs" :index="item.index">
           <template #title>
             <el-icon>
-              <component :is="item.icon" />
+              <component :is="item.icon"/>
             </el-icon>
             <span>{{ item.title }}</span>
           </template>
           <el-menu-item
-            v-for="sub in item.subs"
-            :key="sub.index"
-            :index="sub.index"
+              v-for="sub in item.subs"
+              :key="sub.index"
+              :index="sub.index"
           >
             <el-icon>
-              <component :is="sub.icon" />
+              <component :is="sub.icon"/>
             </el-icon>
             <template #title>{{ sub.title }}</template>
           </el-menu-item>
@@ -33,7 +33,7 @@
 
         <el-menu-item v-else :index="item.index">
           <el-icon>
-            <component :is="item.icon" />
+            <component :is="item.icon"/>
           </el-icon>
           <template #title>{{ item.title }}</template>
         </el-menu-item>
@@ -48,8 +48,8 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
-import { useRoute } from 'vue-router'
+import {ref, computed, onMounted, onBeforeUnmount} from 'vue'
+import {useRoute} from 'vue-router'
 import {
   Message,
   PieChart,
@@ -62,7 +62,8 @@ import {
   Document,
   MagicStick,
   Switch,
-  Monitor
+  Monitor,
+  Connection
 } from '@element-plus/icons-vue'
 import bus from '../utils/bus'
 import pkg from '../../package.json'
@@ -86,7 +87,7 @@ const updateCssVar = () => {
   document.documentElement.style.setProperty('--sidebar-accent', themeAccent.value)
 }
 
-const handleThemeChange = ({ bg, accent }) => {
+const handleThemeChange = ({bg, accent}) => {
   themeBg.value = bg
   themeAccent.value = accent
   localStorage.setItem('wa.theme.bg', bg)
@@ -104,32 +105,33 @@ const menuItems = ref([
   {
     icon: Message, index: 'hrms', title: '打卡管理',
     subs: [
-      { icon: DataAnalysis, index: '/hrms/reports/card-record', title: '打卡记录' },
-      { icon: Setting, index: '/hrms/config', title: '通知设置' }
+      {icon: DataAnalysis, index: '/hrms/reports/card-record', title: '打卡记录'},
+      {icon: Setting, index: '/hrms/config', title: '通知设置'}
     ]
   },
   {
     icon: Lock, index: 'password', title: '密码管理',
     subs: [
-      { icon: Wallet, index: '/password/list', title: '密码包' }
+      {icon: Wallet, index: '/password/list', title: '密码包'}
     ]
   },
   {
     icon: Notebook, index: 'efficiency-record', title: '效率记录',
     subs: [
-      { icon: Wallet, index: '/efficiency-record/notes', title: '工作笔记' }
+      {icon: Wallet, index: '/efficiency-record/notes', title: '工作笔记'}
     ]
   },
   {
     icon: Tools, index: 'tool-box', title: '工具箱',
     subs: [
-      { icon: DataAnalysis, index: '/tool-box/json', title: 'JSON工具' },
-      { icon: PieChart, index: '/tool-box/qrcode', title: '二维码生成' },
-      { icon: Lock, index: '/tool-box/token', title: 'TOKEN 解析' },
-      { icon: Document, index: '/tool-box/base64pdf', title: 'Base64PDF转换' },
-      { icon: MagicStick, index: '/tool-box/random-string', title: '随机字符串' },
-      { icon: Switch, index: '/tool-box/text-diff', title: '文本对比' },
-      { icon: Monitor, index: '/tool-box/dev-utils', title: '开发者小工具集' }
+      {icon: DataAnalysis, index: '/tool-box/json', title: 'JSON工具'},
+      {icon: PieChart, index: '/tool-box/qrcode', title: '二维码生成'},
+      {icon: Lock, index: '/tool-box/token', title: 'TOKEN 解析'},
+      {icon: Document, index: '/tool-box/base64pdf', title: 'Base64PDF转换'},
+      {icon: MagicStick, index: '/tool-box/random-string', title: '随机字符串'},
+      {icon: Switch, index: '/tool-box/text-diff', title: '文本对比'},
+      {icon: Monitor, index: '/tool-box/dev-utils', title: '开发者小工具集'},
+      {icon: Connection, index: '/tool-box/network-tools', title: '网络工具集'}
     ]
   }
 ])
