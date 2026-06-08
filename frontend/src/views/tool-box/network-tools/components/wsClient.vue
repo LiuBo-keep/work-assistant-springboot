@@ -1,14 +1,16 @@
 <template>
   <div class="panel-wrap">
     <div class="ws-layout">
+      <!-- ══ 左侧：连接配置 ══ -->
       <div class="ws-left">
+        <!-- 连接面板 -->
         <div class="card">
           <div class="card-header">
             <span class="card-label">WebSocket 连接</span>
             <div class="conn-status-dot" :class="wsStatus" />
             <span class="conn-status-text" :class="wsStatus">{{
-                statusLabel
-              }}</span>
+              statusLabel
+            }}</span>
           </div>
           <div class="card-body gap10">
             <div class="field-row">
@@ -20,7 +22,6 @@
                 :disabled="connected"
               />
             </div>
-
             <div class="field-row">
               <label class="field-label">子协议</label>
               <input
@@ -30,11 +31,9 @@
                 :disabled="connected"
               />
             </div>
-
             <div class="tip-sm">
               WebSocket 握手头由浏览器控制，无法自定义 Authorization 等头部
             </div>
-
             <div class="conn-btns">
               <button
                 v-if="!connected"
@@ -42,17 +41,17 @@
                 @click="connect"
                 :disabled="!wsUrl || connecting"
               >
-              <svg
-                width="13"
-                height="13"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-              {{ connecting ? '连接中...' : '连接' }}
+                <svg
+                  width="13"
+                  height="13"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+                {{ connecting ? '连接中...' : '连接' }}
               </button>
               <button v-else class="conn-btn disconnect" @click="disconnect">
                 <svg
@@ -75,6 +74,7 @@
           </div>
         </div>
 
+        <!-- 发送消息 -->
         <div class="card">
           <div class="card-header">
             <span class="card-label">发送消息</span>
@@ -114,8 +114,9 @@
               <span class="send-hint">Ctrl+Enter 发送</span>
               <div class="send-actions">
                 <label class="radio-label">
-                  <input type="checkbox" v-model="autoSend" />
-                  <span>自动发送</span>
+                  <input type="checkbox" v-model="autoSend" /><span
+                    >自动发送</span
+                  >
                 </label>
                 <input
                   v-if="autoSend"
@@ -128,7 +129,7 @@
                 <span
                   v-if="autoSend"
                   style="font-size: 11px; color: var(--el-text-color-secondary)"
-                >ms</span
+                  >ms</span
                 >
                 <button
                   class="send-btn-ws"
@@ -153,6 +154,7 @@
           </div>
         </div>
 
+        <!-- 快速模板 -->
         <div class="card">
           <div class="card-header">
             <span class="card-label">消息模板</span>
@@ -170,6 +172,7 @@
         </div>
       </div>
 
+      <!-- ══ 右侧：消息记录 ══ -->
       <div class="ws-right">
         <div class="card msg-card">
           <div class="card-header">
@@ -200,23 +203,26 @@
             </div>
           </div>
 
-          <div class="msg-list" ref="msgListRef">
-            <div v-if="messages.length === 0" class="msg-empty">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="0.8"
-                opacity="0.2"
-              >
-                <path
-                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                />
-              </svg>
-              <p>{{ connected ? '等待消息...' : '连接后开始接收消息' }}</p>
-            </div>
+          <!-- 空状态 -->
+          <div v-if="messages.length === 0" class="msg-empty">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              opacity="0.2"
+            >
+              <path
+                d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+              />
+            </svg>
+            <p>{{ connected ? '等待消息...' : '连接后开始接收消息' }}</p>
+          </div>
+
+          <!-- 消息列表 — 唯一滚动容器 -->
+          <div v-else class="msg-list" ref="msgListRef">
             <div
               v-for="(msg, i) in messages"
               :key="i"
@@ -225,12 +231,12 @@
             >
               <div class="msg-meta">
                 <span class="msg-dir-icon">{{
-                    msg.direction === 'sent' ? '↑' : '↓'
-                  }}</span>
+                  msg.direction === 'sent' ? '↑' : '↓'
+                }}</span>
                 <span class="msg-time">{{ msg.time }}</span>
                 <span class="msg-type-badge" :class="msg.direction">{{
-                    msg.direction === 'sent' ? '发送' : '接收'
-                  }}</span>
+                  msg.direction === 'sent' ? '发送' : '接收'
+                }}</span>
                 <span class="msg-size">{{ msg.size }}</span>
                 <button class="copy-mini" @click="copyText(msg.content)">
                   <svg
@@ -248,9 +254,21 @@
                   </svg>
                 </button>
               </div>
-              <pre class="msg-content mono">{{
-                  formatMsgContent(msg.content)
-                }}</pre>
+              <!-- 超过3行折叠 -->
+              <div class="msg-body">
+                <pre
+                  class="msg-content mono"
+                  :class="{ collapsed: !msg.expanded && isLong(msg.content) }"
+                  >{{ formatMsgContent(msg.content) }}</pre
+                >
+                <button
+                  v-if="isLong(msg.content)"
+                  class="expand-btn"
+                  @click="msg.expanded = !msg.expanded"
+                >
+                  {{ msg.expanded ? '收起 ▲' : '展开 ▼' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -262,7 +280,7 @@
 <script setup>
 import { ref, computed, watch, nextTick, onBeforeUnmount } from 'vue'
 
-const wsUrl = ref('wss://echo.websocket.org')
+const wsUrl = ref('ws://echo.websocket.org')
 const wsProtocol = ref('')
 const sendMsg = ref('')
 const sendFormat = ref('text')
@@ -283,16 +301,16 @@ let autoTimer = null
 /* ── 状态 ── */
 const connected = ref(false)
 const connecting = ref(false)
-const wsStatus = computed(() => {
-  if (connecting.value) return 'connecting'
-  if (connected.value) return 'connected'
-  return 'disconnected'
-})
-const statusLabel = computed(() => {
-  if (connecting.value) return '连接中'
-  if (connected.value) return '已连接'
-  return '未连接'
-})
+const wsStatus = computed(() =>
+  connecting.value
+    ? 'connecting'
+    : connected.value
+      ? 'connected'
+      : 'disconnected',
+)
+const statusLabel = computed(() =>
+  connecting.value ? '连接中' : connected.value ? '已连接' : '未连接',
+)
 
 /* ── 消息模板 ── */
 const msgTemplates = [
@@ -310,6 +328,13 @@ const msgTemplates = [
   { label: 'Hello Text', format: 'text', msg: 'Hello, WebSocket!' },
 ]
 
+/* ── 折叠判断：格式化后超过 3 行则折叠 ── */
+const LONG_THRESHOLD = 3
+function isLong(content) {
+  const formatted = formatMsgContent(content)
+  return formatted.split('\n').length > LONG_THRESHOLD
+}
+
 /* ── 连接 ── */
 function connect() {
   if (!wsUrl.value || connected.value) return
@@ -317,27 +342,23 @@ function connect() {
   try {
     const protocols = wsProtocol.value ? [wsProtocol.value] : undefined
     ws = new WebSocket(wsUrl.value, protocols)
-
     ws.onopen = () => {
       connected.value = true
       connecting.value = false
       addSystemMsg(`✓ 已连接到 ${wsUrl.value}`)
     }
-
     ws.onmessage = (e) => {
       addMessage(
         'received',
         typeof e.data === 'string' ? e.data : '[Binary Data]',
       )
     }
-
     ws.onclose = (e) => {
       connected.value = false
       connecting.value = false
       addSystemMsg(`✗ 连接关闭 (code: ${e.code})`)
       stopAutoSend()
     }
-
     ws.onerror = () => {
       connecting.value = false
       addSystemMsg('✗ 连接错误')
@@ -370,7 +391,6 @@ watch(autoSend, (val) => {
   if (val) startAutoSend()
   else stopAutoSend()
 })
-
 function startAutoSend() {
   autoTimer = setInterval(() => {
     if (connected.value) send()
@@ -381,29 +401,19 @@ function stopAutoSend() {
   autoTimer = null
 }
 
-/* ── 消息处理与触底控制 ── */
-function scrollToBottom() {
-  if (!autoScroll.value || !msgListRef.value) return
-  nextTick(() => {
-    // 使用 scrollTop 直接赋值比 'smooth' 平滑滚动在超高频并发下性能更强，不易掉帧卡顿
-    msgListRef.value.scrollTop = msgListRef.value.scrollHeight
-  })
-}
-
+/* ── 消息处理 ── */
 function addMessage(direction, content) {
   const now = new Date()
   const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}.${String(now.getMilliseconds()).padStart(3, '0')}`
   const bytes = new TextEncoder().encode(content).length
   const size = bytes < 1024 ? `${bytes}B` : `${(bytes / 1024).toFixed(1)}KB`
-
-  messages.value.push({ direction, content, time, size })
-
-  // 限制最大渲染数，防止海量堆积撑爆浏览器内存
-  if (messages.value.length > 400) {
-    messages.value.shift()
-  }
-
-  scrollToBottom()
+  messages.value.push({ direction, content, time, size, expanded: false })
+  if (messages.value.length > 500) messages.value.shift()
+  if (autoScroll.value)
+    nextTick(() => {
+      if (msgListRef.value)
+        msgListRef.value.scrollTop = msgListRef.value.scrollHeight
+    })
 }
 
 function addSystemMsg(text) {
@@ -412,8 +422,7 @@ function addSystemMsg(text) {
 
 function formatMsgContent(content) {
   try {
-    const obj = JSON.parse(content)
-    return JSON.stringify(obj, null, 2)
+    return JSON.stringify(JSON.parse(content), null, 2)
   } catch {
     return content
   }
@@ -447,21 +456,24 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss" scoped>
+/* ══ 整体布局 ══ */
 .ws-layout {
   display: flex;
   gap: 12px;
   flex: 1;
-  height: 100%; /* 确保布局占满整个容器高度 */
   min-height: 0;
-  overflow: hidden;
+  overflow: hidden; /* 关键：裁剪子列超出内容 */
 }
+
+/* ── 左侧：固定宽度，配置区自身滚动 ── */
 .ws-left {
-  width: 480px; /* 同步加宽，给长链接提供足够的视觉纵深 */
+  width: 340px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
+  overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -470,13 +482,177 @@ onBeforeUnmount(() => {
     border-radius: 2px;
   }
 }
+
+/* ── 右侧：占满剩余高度，不超出 ── */
 .ws-right {
   flex: 1;
   min-width: 0;
+  min-height: 0; /* 关键 */
   display: flex;
   flex-direction: column;
-  height: 100%; /* 强行铺满高度 */
-  overflow: hidden; /* 切断外部任何形式的溢出 */
+  overflow: hidden; /* 关键 */
+}
+
+/* ── 消息卡片：撑满右侧 ── */
+.msg-card {
+  flex: 1;
+  min-height: 0; /* 关键 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 空状态 ── */
+.msg-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--el-text-color-placeholder, #c0c4cc);
+  font-size: 12px;
+  p {
+    margin: 0;
+  }
+}
+
+/* ── 消息列表：唯一滚动容器 ── */
+.msg-list {
+  flex: 1;
+  min-height: 0; /* 关键 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+  }
+}
+
+/* ── 消息条目 ── */
+.msg-item {
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  flex-shrink: 0; /* 防止被 flex 压缩 */
+  &.sent {
+    border-color: #bfdbfe;
+  }
+  &.received {
+    border-color: #bbf7d0;
+  }
+  &.system {
+    border-color: var(--el-border-color-lighter, #ebeef5);
+    opacity: 0.7;
+  }
+}
+
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px;
+  min-height: 26px;
+  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  .sent & {
+    background: #eff6ff;
+  }
+  .received & {
+    background: #f0fdf4;
+  }
+  .system & {
+    background: var(--el-fill-color-lighter, #fafafa);
+  }
+}
+
+.msg-dir-icon {
+  font-size: 11px;
+  font-weight: 700;
+  .sent & {
+    color: #2563eb;
+  }
+  .received & {
+    color: #16a34a;
+  }
+  .system & {
+    color: var(--el-text-color-secondary, #909399);
+  }
+}
+.msg-time {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--el-text-color-placeholder, #c0c4cc);
+}
+.msg-type-badge {
+  font-size: 9px;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 3px;
+  &.sent {
+    background: #dbeafe;
+    color: #2563eb;
+  }
+  &.received {
+    background: #dcfce7;
+    color: #16a34a;
+  }
+  &.system {
+    background: var(--el-fill-color, #f0f2f5);
+    color: var(--el-text-color-secondary, #909399);
+  }
+}
+.msg-size {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--el-text-color-placeholder, #c0c4cc);
+}
+
+/* ── 消息体：折叠控制 ── */
+.msg-body {
+  position: relative;
+}
+
+.msg-content {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--el-text-color-primary, #303133);
+  background: var(--el-bg-color, #fff);
+  overflow: hidden;
+
+  /* 折叠态：最多 3 行 */
+  &.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.expand-btn {
+  display: block;
+  width: 100%;
+  padding: 3px 10px;
+  border: none;
+  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--el-fill-color-lighter, #fafafa);
+  font-size: 10px;
+  color: var(--el-color-primary, #409eff);
+  cursor: pointer;
+  text-align: center;
+  &:hover {
+    background: var(--el-color-primary-light-9, #ecf5ff);
+  }
 }
 
 /* ── Connection Status ── */
@@ -575,7 +751,6 @@ onBeforeUnmount(() => {
   line-height: 1.5;
 }
 
-/* ── Send ── */
 .send-textarea {
   width: 100%;
   min-height: 90px;
@@ -628,7 +803,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ── Templates ── */
 .tpl-grid {
   padding: 10px 12px;
   display: flex;
@@ -650,127 +824,12 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ── Messages ── */
-.msg-card {
-  flex: 1;
-  min-height: 0; /* flex容器在空间不足时向下缩小的必备法则 */
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
 .msg-count {
   font-size: 11px;
   color: var(--el-text-color-placeholder, #c0c4cc);
   font-family: monospace;
 }
-.msg-list {
-  flex: 1;
-  overflow-y: auto; /* 必须激活独立的局部纵向滚动条 */
-  padding: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  background: var(--el-bg-color, #fff);
-  &::-webkit-scrollbar {
-    width: 5px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 3px;
-  }
-}
-.msg-empty {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-  font-size: 12px;
-  p {
-    margin: 0;
-  }
-}
-.msg-item {
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
-  flex-shrink: 0; /* 防止子项自己被压缩变形 */
-  &.sent {
-    border-color: #bfdbfe;
-  }
-  &.received {
-    border-color: #bbf7d0;
-  }
-  &.system {
-    border-color: var(--el-border-color-lighter, #ebeef5);
-    opacity: 0.8;
-  }
-}
-.msg-meta {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 10px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-  .sent & {
-    background: #eff6ff;
-  }
-  .received & {
-    background: #f0fdf4;
-  }
-}
-.msg-dir-icon {
-  font-size: 12px;
-  font-weight: 700;
-  .sent & {
-    color: #2563eb;
-  }
-  .received & {
-    color: #16a34a;
-  }
-}
-.msg-time {
-  font-size: 10px;
-  font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-}
-.msg-type-badge {
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1px 6px;
-  border-radius: 3px;
-  &.sent {
-    background: #dbeafe;
-    color: #2563eb;
-  }
-  &.received {
-    background: #dcfce7;
-    color: #16a34a;
-  }
-  &.system {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-secondary, #909399);
-  }
-}
-.msg-size {
-  font-size: 10px;
-  font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-}
-.msg-content {
-  margin: 0;
-  padding: 8px 10px;
-  font-size: 11px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-all;
-  color: var(--el-text-color-primary, #303133);
-  max-height: 260px; /* 适当调高内部独立滚动的阈值，给海量JSON提供空间 */
-  overflow-y: auto;
-}
+
 .copy-mini {
   margin-left: auto;
   display: inline-flex;

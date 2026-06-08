@@ -27,7 +27,6 @@
                 </button>
               </div>
             </div>
-
             <div class="field-row">
               <label class="field-label">地址</label>
               <input
@@ -37,7 +36,6 @@
                 :disabled="connected"
               />
             </div>
-
             <div class="field-row">
               <label class="field-label">端口</label>
               <input
@@ -54,7 +52,6 @@
                 :disabled="connected"
               />
             </div>
-
             <div class="field-row">
               <label class="field-label">Client ID</label>
               <input
@@ -81,7 +78,6 @@
                 </svg>
               </button>
             </div>
-
             <div class="field-row">
               <label class="field-label">用户名</label>
               <input
@@ -91,7 +87,6 @@
                 :disabled="connected"
               />
             </div>
-
             <div class="field-row">
               <label class="field-label">密码</label>
               <input
@@ -103,7 +98,6 @@
               />
             </div>
 
-            <!-- 高级选项折叠 -->
             <div class="collapse-trigger" @click="showAdvanced = !showAdvanced">
               <svg
                 width="11"
@@ -350,14 +344,12 @@
             <span class="card-label">消息记录</span>
             <span class="msg-count">{{ messages.length }} 条</span>
             <div class="card-actions">
-              <div class="field-row" style="gap: 6px">
-                <input
-                  class="field-input"
-                  style="width: 140px; height: 26px; font-size: 11px"
-                  v-model="filterTopic"
-                  placeholder="过滤 Topic..."
-                />
-              </div>
+              <input
+                class="field-input"
+                style="width: 140px; height: 26px; font-size: 11px"
+                v-model="filterTopic"
+                placeholder="过滤 Topic..."
+              />
               <label class="radio-label" style="font-size: 11px">
                 <input type="checkbox" v-model="autoScroll" />自动滚动
               </label>
@@ -368,23 +360,26 @@
             </div>
           </div>
 
-          <div class="msg-list" ref="msgListRef">
-            <div v-if="filteredMessages.length === 0" class="msg-empty">
-              <svg
-                width="40"
-                height="40"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="0.8"
-                opacity="0.2"
-              >
-                <path
-                  d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
-                />
-              </svg>
-              <p>{{ connected ? '等待消息...' : '连接后开始接收消息' }}</p>
-            </div>
+          <!-- 空状态 -->
+          <div v-if="filteredMessages.length === 0" class="msg-empty">
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="0.8"
+              opacity="0.2"
+            >
+              <path
+                d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"
+              />
+            </svg>
+            <p>{{ connected ? '等待消息...' : '连接后开始接收消息' }}</p>
+          </div>
+
+          <!-- 消息列表 — 关键：这里是唯一的滚动容器 -->
+          <div v-else class="msg-list" ref="msgListRef">
             <div
               v-for="(msg, i) in filteredMessages"
               :key="i"
@@ -417,9 +412,21 @@
                   </svg>
                 </button>
               </div>
-              <pre class="msg-content mono">{{
-                formatPayload(msg.payload)
-              }}</pre>
+              <!-- payload 折叠：超过3行时折叠 -->
+              <div class="msg-body">
+                <pre
+                  class="msg-content mono"
+                  :class="{ collapsed: !msg.expanded && isLong(msg.payload) }"
+                  >{{ formatPayload(msg.payload) }}</pre
+                >
+                <button
+                  v-if="isLong(msg.payload)"
+                  class="expand-btn"
+                  @click="msg.expanded = !msg.expanded"
+                >
+                  {{ msg.expanded ? '收起 ▲' : '展开 ▼' }}
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -479,12 +486,23 @@ const filterTopic = ref('')
 const autoScroll = ref(true)
 const msgListRef = ref(null)
 
+// 超过 3 行的 payload 默认折叠
+const LONG_THRESHOLD = 3
+function isLong(payload) {
+  try {
+    const formatted = JSON.stringify(JSON.parse(payload), null, 2)
+    return formatted.split('\n').length > LONG_THRESHOLD
+  } catch {
+    return payload.split('\n').length > LONG_THRESHOLD
+  }
+}
+
 const filteredMessages = computed(() => {
   if (!filterTopic.value) return messages.value
   return messages.value.filter((m) => m.topic?.includes(filterTopic.value))
 })
 
-/* ── MQTT 客户端（使用 MQTT.js over WebSocket） ── */
+/* ── MQTT 客户端 ── */
 let client = null
 
 function genClientId() {
@@ -508,46 +526,39 @@ async function connect() {
   addSystemMsg(
     `正在连接 ${protocol.value}://${brokerHost.value}:${brokerPort.value}${brokerPath.value}...`,
   )
-
   try {
     const mqtt = await loadMqttLib()
-
-    // 构建连接 URL
-    const wsProtocol =
+    const wsProto =
       protocol.value === 'mqtt'
         ? 'ws'
         : protocol.value === 'mqtts'
           ? 'wss'
           : protocol.value
-    const url = `${wsProtocol}://${brokerHost.value}:${brokerPort.value}${brokerPath.value}`
-
+    const url = `${wsProto}://${brokerHost.value}:${brokerPort.value}${brokerPath.value}`
     const opts = {
       clientId: clientId.value,
       keepalive: keepAlive.value,
       clean: cleanSession.value,
-      reconnectPeriod: 0, // 不自动重连，手动控制
+      reconnectPeriod: 0,
       connectTimeout: 10000,
       protocolVersion: mqttVersion.value === '5.0' ? 5 : 4,
     }
     if (mqttUser.value) opts.username = mqttUser.value
     if (mqttPass.value) opts.password = mqttPass.value
-    if (willTopic.value) {
+    if (willTopic.value)
       opts.will = {
         topic: willTopic.value,
         payload: willMsg.value,
         qos: 0,
         retain: false,
       }
-    }
 
     client = mqtt.connect(url, opts)
-
     client.on('connect', () => {
       connected.value = true
       connecting.value = false
       addSystemMsg(`✓ 已连接到 ${brokerHost.value}:${brokerPort.value}`)
     })
-
     client.on('message', (topic, payload, packet) => {
       addMessage(
         'received',
@@ -557,18 +568,15 @@ async function connect() {
         packet.retain,
       )
     })
-
     client.on('error', (err) => {
       connecting.value = false
       addSystemMsg(`✗ 错误: ${err.message}`)
     })
-
     client.on('close', () => {
       connected.value = false
       connecting.value = false
       addSystemMsg('✗ 连接已关闭')
     })
-
     client.on('offline', () => {
       addSystemMsg('⚠ 离线')
     })
@@ -628,7 +636,7 @@ function publish() {
   )
 }
 
-/* ── 消息 ── */
+/* ── 消息记录 ── */
 function addMessage(direction, topic, payload, qos = 0, isRetained = false) {
   const now = new Date()
   const time = `${String(now.getHours()).padStart(2, '0')}:${String(now.getMinutes()).padStart(2, '0')}:${String(now.getSeconds()).padStart(2, '0')}`
@@ -639,6 +647,7 @@ function addMessage(direction, topic, payload, qos = 0, isRetained = false) {
     qos,
     retained: isRetained,
     time,
+    expanded: false,
   })
   if (messages.value.length > 500) messages.value.shift()
   if (autoScroll.value)
@@ -687,20 +696,24 @@ onBeforeUnmount(() => {
 </style>
 
 <style lang="scss" scoped>
+/* ══ 整体布局 ══ */
 .mqtt-layout {
   display: flex;
   gap: 12px;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
+  overflow: hidden; /* 关键：让子列的 overflow 生效 */
 }
+
+/* ── 左侧：固定宽度，内容超出时自身滚动 ── */
 .mqtt-left {
   width: 360px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
-  overflow-y: auto;
+  overflow-y: auto; /* 左侧配置区自己滚 */
+  overflow-x: hidden;
   &::-webkit-scrollbar {
     width: 4px;
   }
@@ -709,14 +722,169 @@ onBeforeUnmount(() => {
     border-radius: 2px;
   }
 }
+
+/* ── 右侧：占满剩余高度，不超出 ── */
 .mqtt-right {
   flex: 1;
   min-width: 0;
+  min-height: 0; /* 关键：配合父级 flex 限高 */
   display: flex;
   flex-direction: column;
+  overflow: hidden; /* 关键：裁剪超出内容 */
 }
 
-/* ── Shared with WsClient ── */
+/* ── 消息卡片：撑满右侧 ── */
+.msg-card {
+  flex: 1;
+  min-height: 0; /* 关键：flex 子项必须设 min-height:0 才能被父级裁剪 */
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* ── 空状态 ── */
+.msg-empty {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--el-text-color-placeholder, #c0c4cc);
+  font-size: 12px;
+  p {
+    margin: 0;
+  }
+}
+
+/* ── 消息列表：唯一的滚动容器，占满卡片剩余空间 ── */
+.msg-list {
+  flex: 1;
+  min-height: 0; /* 关键 */
+  overflow-y: auto; /* 只在这里滚动 */
+  overflow-x: hidden;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  &::-webkit-scrollbar {
+    width: 5px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+  }
+}
+
+/* ── 消息条目：高度由内容决定，但通过折叠控制 ── */
+.msg-item {
+  border-radius: 8px;
+  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  overflow: hidden;
+  flex-shrink: 0; /* 每条消息不被压缩 */
+  &.published {
+    border-color: #bfdbfe;
+  }
+  &.received {
+    border-color: #bbf7d0;
+  }
+  &.system {
+    border-color: var(--el-border-color-lighter, #ebeef5);
+    opacity: 0.65;
+  }
+}
+
+.msg-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  min-height: 28px;
+  .published & {
+    background: #eff6ff;
+  }
+  .received & {
+    background: #f0fdf4;
+  }
+  .system & {
+    background: var(--el-fill-color-lighter, #fafafa);
+  }
+}
+
+.msg-dir-icon {
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+  .published & {
+    color: #2563eb;
+  }
+  .received & {
+    color: #16a34a;
+  }
+  .system & {
+    color: var(--el-text-color-secondary, #909399);
+  }
+}
+.msg-topic-tag {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--el-color-primary, #409eff);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+  min-width: 0;
+}
+.msg-time {
+  font-size: 10px;
+  font-family: monospace;
+  color: var(--el-text-color-placeholder, #c0c4cc);
+  flex-shrink: 0;
+}
+
+/* ── 消息体：折叠控制，防止单条撑破布局 ── */
+.msg-body {
+  position: relative;
+}
+
+.msg-content {
+  margin: 0;
+  padding: 6px 10px;
+  font-size: 11px;
+  line-height: 1.55;
+  white-space: pre-wrap;
+  word-break: break-all;
+  color: var(--el-text-color-primary, #303133);
+  background: var(--el-bg-color, #fff);
+  overflow: hidden;
+
+  /* 默认折叠：最多显示 3 行 */
+  &.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+.expand-btn {
+  display: block;
+  width: 100%;
+  padding: 3px 10px;
+  border: none;
+  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--el-fill-color-lighter, #fafafa);
+  font-size: 10px;
+  color: var(--el-color-primary, #409eff);
+  cursor: pointer;
+  text-align: center;
+  &:hover {
+    background: var(--el-color-primary-light-9, #ecf5ff);
+  }
+}
+
+/* ── 状态指示 ── */
 .conn-status-dot {
   width: 8px;
   height: 8px;
@@ -794,7 +962,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ── Collapse ── */
 .collapse-trigger {
   display: flex;
   align-items: center;
@@ -812,7 +979,6 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ── Subscriptions ── */
 .sub-list {
   display: flex;
   flex-direction: column;
@@ -836,7 +1002,6 @@ onBeforeUnmount(() => {
   white-space: nowrap;
 }
 
-/* ── QoS / Retain ── */
 .qos-badge {
   font-size: 9px;
   font-weight: 700;
@@ -856,7 +1021,6 @@ onBeforeUnmount(() => {
   flex-shrink: 0;
 }
 
-/* ── Send ── */
 .send-textarea {
   width: 100%;
   min-height: 80px;
@@ -908,118 +1072,12 @@ onBeforeUnmount(() => {
   }
 }
 
-/* ── Messages ── */
-.msg-card {
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-}
 .msg-count {
   font-size: 11px;
   color: var(--el-text-color-placeholder, #c0c4cc);
   font-family: monospace;
 }
-.msg-list {
-  flex: 1;
-  overflow-y: auto;
-  padding: 8px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.08);
-    border-radius: 2px;
-  }
-}
-.msg-empty {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-  font-size: 12px;
-  p {
-    margin: 0;
-  }
-}
-.msg-item {
-  border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
-  &.published {
-    border-color: #bfdbfe;
-  }
-  &.received {
-    border-color: #bbf7d0;
-  }
-  &.system {
-    border-color: var(--el-border-color-lighter, #ebeef5);
-    opacity: 0.7;
-  }
-}
-.msg-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 5px 10px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-  .published & {
-    background: #eff6ff;
-  }
-  .received & {
-    background: #f0fdf4;
-  }
-  .system & {
-    background: var(--el-fill-color-lighter, #fafafa);
-  }
-}
-.msg-dir-icon {
-  font-size: 12px;
-  font-weight: 700;
-  flex-shrink: 0;
-  .published & {
-    color: #2563eb;
-  }
-  .received & {
-    color: #16a34a;
-  }
-  .system & {
-    color: var(--el-text-color-secondary, #909399);
-  }
-}
-.msg-topic-tag {
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--el-color-primary, #409eff);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  flex: 1;
-}
-.msg-time {
-  font-size: 10px;
-  font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-  flex-shrink: 0;
-}
-.msg-content {
-  margin: 0;
-  padding: 8px 10px;
-  font-size: 11px;
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-break: break-all;
-  color: var(--el-text-color-primary, #303133);
-  max-height: 160px;
-  overflow-y: auto;
-}
+
 .copy-mini {
   margin-left: auto;
   display: inline-flex;
