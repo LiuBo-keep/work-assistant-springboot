@@ -5,6 +5,16 @@ server:
     key-store: classpath:localhost+2.p12
     key-store-password: changeit
     key-store-type: PKCS12
+  tomcat:
+    threads:
+      max: 200
+    accept-count: 100
+    max-connections: 2000
+    connection-timeout: 5s
+    keep-alive-timeout: 5000
+    max-keep-alive-requests: 100
+    max-http-form-post-size: 2MB
+  max-http-request-header-size: 60KB
 
 spring:
   application:
@@ -16,6 +26,10 @@ spring:
     username: postgres
     password: 123456
     url: jdbc:postgresql://localhost:5432/work-assistant
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 10MB
 logging:
   file:
     name: logs/app.log

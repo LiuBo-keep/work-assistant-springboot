@@ -8,14 +8,14 @@ import com.work.assistant.common.hrms.CheckInType;
 import com.work.assistant.common.utils.DateUtils;
 import com.work.assistant.external.hrms.HrmsRestManager;
 import com.work.assistant.external.hrms.metadata.HrmsCardRecordResponse;
-
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
-
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
@@ -25,6 +25,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 public class HrmsCardRecordPullManager {
+
+  private static final ReentrantLock lock = new ReentrantLock();
 
   /**
    * 下班阙值时间
@@ -60,12 +62,12 @@ public class HrmsCardRecordPullManager {
     }
   }
 
-  /**
-   * 通用拉取逻辑
-   */
-  private void pull(CheckInType checkInType) {
+
+  public void pull(CheckInType checkInType) {
 
     try {
+      lock.lock();
+      TimeUnit.SECONDS.sleep(30);
       HrmsNotifyConfig config = getEnableConfig();
       if (config == null || Boolean.FALSE.equals(config.getEnabled())) {
         log.warn("hrms notify config not enabled");
@@ -102,8 +104,10 @@ public class HrmsCardRecordPullManager {
       }
 
       if (CheckInType.CHECK_OUT_AT_WORK.equals(checkInType)) {
-        HrmsCardRecord hrmsCardRecord = hrmsCardRecordRepository.findByClockInDateAndClockInType(LocalDate.now(), CheckInType.CHECK_IN_AT_WORK);
-        if (ObjectUtils.isNotEmpty(hrmsCardRecord) && sameMinute(hrmsCardRecord.getClockInTime(), record.getClockInTime())) {
+        HrmsCardRecord hrmsCardRecord =
+            hrmsCardRecordRepository.findByClockInDateAndClockInType(LocalDate.now(), CheckInType.CHECK_IN_AT_WORK);
+        if (ObjectUtils.isNotEmpty(hrmsCardRecord) &&
+            sameMinute(hrmsCardRecord.getClockInTime(), record.getClockInTime())) {
           return;
         }
       }
@@ -116,6 +120,8 @@ public class HrmsCardRecordPullManager {
 
     } catch (Exception e) {
       log.error("pull hrms card record error", e);
+    } finally {
+      lock.unlock();
     }
   }
 
