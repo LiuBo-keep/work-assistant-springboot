@@ -118,7 +118,8 @@ const menuItems = ref([
   {
     icon: Notebook, index: 'efficiency-record', title: '效率记录',
     subs: [
-      {icon: Wallet, index: '/efficiency-record/notes', title: '工作笔记'}
+      {icon: Wallet, index: '/efficiency-record/notes', title: '工作笔记'},
+      {icon: Wallet, index: '/efficiency-record/work-to-do', title: '待办任务'}
     ]
   },
   {
