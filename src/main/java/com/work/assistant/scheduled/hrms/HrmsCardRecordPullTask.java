@@ -2,7 +2,6 @@ package com.work.assistant.scheduled.hrms;
 
 import com.work.assistant.scheduled.hrms.job.HrmsCardRecordPullJob;
 import java.time.LocalTime;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -78,7 +77,7 @@ public class HrmsCardRecordPullTask {
    * pullMorning/pullAfternoon 内部必须具备幂等控制
    * 否则高频执行会产生重复数据
    */
-  @Scheduled(fixedDelay = 2, timeUnit = TimeUnit.MINUTES)
+  @Scheduled(cron = "0 */5 * * * MON-FRI")
   public void execute() {
 
     LocalTime now = LocalTime.now();

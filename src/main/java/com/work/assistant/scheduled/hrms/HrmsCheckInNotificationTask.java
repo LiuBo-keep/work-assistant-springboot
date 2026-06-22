@@ -2,7 +2,6 @@ package com.work.assistant.scheduled.hrms;
 
 import com.work.assistant.scheduled.hrms.job.HrmsCheckInNotificationJob;
 import java.time.LocalTime;
-import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -133,7 +132,7 @@ public class HrmsCheckInNotificationTask {
    *   <li>记录完整错误日志便于后续排查。</li>
    * </ul>
    */
-  @Scheduled(fixedDelay = 2, timeUnit = TimeUnit.MINUTES)
+  @Scheduled(cron = "0 */5 * * * MON-FRI")
   public void execute() {
 
     LocalTime now = LocalTime.now();

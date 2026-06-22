@@ -6,14 +6,14 @@
       <div class="header-left">
         <div class="header-icon">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <circle cx="12" cy="12" r="10"/>
-            <line x1="2" y1="12" x2="22" y2="12"/>
-            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            <circle cx="12" cy="12" r="10" />
+            <line x1="2" y1="12" x2="22" y2="12" />
+            <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
           </svg>
         </div>
         <div>
           <h2 class="header-title">网络工具集</h2>
-          <p class="header-sub">HTTP 客户端 · WebSocket 调试 · MQTT 客户端</p>
+          <p class="header-sub">HTTP 客户端 · WebSocket 调试 · MQTT 客户端 · 并发压测</p>
         </div>
       </div>
     </div>
@@ -21,30 +21,32 @@
     <!-- ===== Tool Tabs ===== -->
     <div class="tool-tabs">
       <button
-          v-for="tab in tabs" :key="tab.key"
-          class="tool-tab" :class="{ active: activeTab === tab.key }"
-          @click="activeTab = tab.key"
+        v-for="tab in tabs" :key="tab.key"
+        class="tool-tab" :class="{ active: activeTab === tab.key }"
+        @click="activeTab = tab.key"
       >
-        <span class="tab-icon" v-html="tab.icon"/>
+        <span class="tab-icon" v-html="tab.icon" />
         {{ tab.label }}
       </button>
     </div>
 
     <!-- ===== Tool Panels ===== -->
     <div class="tool-body">
-      <HttpClient v-if="activeTab === 'http'"/>
-      <WsClient v-if="activeTab === 'ws'"/>
-      <MqttClient v-if="activeTab === 'mqtt'"/>
+      <HttpClient v-if="activeTab === 'http'" />
+      <WsClient v-if="activeTab === 'ws'" />
+      <MqttClient v-if="activeTab === 'mqtt'" />
+      <StressTest v-if="activeTab === 'stress'" />
     </div>
 
   </div>
 </template>
 
 <script setup>
-import {ref} from 'vue'
+import { ref } from 'vue'
 import HttpClient from '@/views/tool-box/network-tools/components/httpClient.vue'
 import WsClient from '@/views/tool-box/network-tools/components/wsClient.vue'
 import MqttClient from '@/views/tool-box/network-tools/components/mqttClient.vue'
+import StressTest from '@/views/tool-box/network-tools/components/stressTest.vue'
 
 const activeTab = ref('http')
 
@@ -55,22 +57,29 @@ const tabs = [
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <line x1="22" y1="2" x2="11" y2="13"/>
       <polygon points="22 2 15 22 11 13 2 9 22 2"/>
-    </svg>`,
+    </svg>`
   },
   {
     key: 'ws',
     label: 'WebSocket',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M5 12h14M12 5l7 7-7 7"/>
-    </svg>`,
+    </svg>`
   },
   {
     key: 'mqtt',
     label: 'MQTT',
     icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
       <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/>
-    </svg>`,
+    </svg>`
   },
+  {
+    key: 'stress',
+    label: '并发压测',
+    icon: `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+    </svg>`
+  }
 ]
 </script>
 

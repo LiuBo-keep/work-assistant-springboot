@@ -5,7 +5,7 @@
 
     <groupId>com.work.assistant</groupId>
     <artifactId>work-assistant</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <name>work-assistant</name>
 
     <description>工作助手</description>
