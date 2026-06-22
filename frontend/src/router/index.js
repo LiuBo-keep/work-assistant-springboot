@@ -75,6 +75,11 @@ const routes = [
         meta: { title: '待办任务', active: '/efficiency-record/work-to-do', auth: true }
       },
       {
+        path: '/efficiency-record/reminder',
+        component: () => import('../views/efficiency-record/reminder/reminder.vue'),
+        meta: { title: '待办任务', active: '/efficiency-record/reminder', auth: true }
+      },
+      {
         path: '/tool-box/json',
         component: () => import('../views/tool-box/json/jsonFormatter.vue'),
         meta: { title: 'JSON 工具', active: '/tool-box/json', auth: true }
