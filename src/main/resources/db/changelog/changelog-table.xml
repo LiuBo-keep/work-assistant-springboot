@@ -33,4 +33,50 @@
             <column name="version_num" type="INTEGER"/>
         </createTable>
     </changeSet>
+
+    <!-- 工具收藏 - 分类表 -->
+    <changeSet id="202611271600" author="aidan.liu">
+        <createTable tableName="tool_category">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tool_category_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_order" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <addUniqueConstraint tableName="tool_category"
+                             columnNames="name"
+                             constraintName="uk_tool_category_name"/>
+    </changeSet>
+
+    <!-- 工具收藏 - 收藏表 -->
+    <changeSet id="202611271601" author="aidan.liu">
+        <createTable tableName="tool_favorite">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tool_favorite_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="icon" type="VARCHAR(2048)"/>
+            <column name="description" type="VARCHAR(512)"/>
+            <column name="category_id" type="VARCHAR(255)"/>
+            <column name="sort_order" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="click_count" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="tool_favorite"
+                                 baseColumnNames="category_id"
+                                 constraintName="fk_tool_favorite_category"
+                                 referencedTableName="tool_category"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
 </databaseChangeLog>

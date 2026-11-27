@@ -248,8 +248,8 @@ async function copyValue() {
   background: #f5f7fa;
 
   &:hover {
-    background: #ecf5ff;
-    color: #409eff;
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
   }
 }
 
@@ -269,7 +269,7 @@ async function copyValue() {
   transition: opacity 0.15s, color 0.15s;
 
   &:hover {
-    color: #409eff;
+    color: var(--brand-primary);
   }
 }
 </style>

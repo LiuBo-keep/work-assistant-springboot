@@ -231,7 +231,7 @@ const separators = [
 const types = reactive([
   {
     key: 'email', name: '电子邮箱', checked: true,
-    color: '#409eff',
+    color: 'var(--brand-primary)',
     icon: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>`,
     example: 'user@example.com'
   },
@@ -273,7 +273,7 @@ const types = reactive([
   },
   {
     key: 'sha1', name: 'SHA-1 哈希', checked: false,
-    color: '#d35400',
+    color: 'var(--color-warning)',
     icon: `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
     example: 'aaf4c61d...dce13da9'
   },
@@ -618,7 +618,7 @@ function clearSelect() {
   padding: 20px 24px;
   box-sizing: border-box;
   gap: 16px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
 }
 
@@ -640,7 +640,7 @@ function clearSelect() {
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -652,13 +652,13 @@ function clearSelect() {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .header-sub {
   margin: 2px 0 0;
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .header-right {
@@ -678,15 +678,15 @@ function clearSelect() {
   transition: all .2s;
 
   &.status-neutral {
-    background: var(--el-fill-color, #f0f2f5);
-    border-color: var(--el-border-color, #dcdfe6);
-    color: var(--el-text-color-secondary, #909399);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
   }
 
   &.status-valid {
-    background: #f0fdf4;
-    border-color: #86efac;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    border-color: var(--color-success);
+    color: var(--color-success);
   }
 }
 
@@ -696,12 +696,12 @@ function clearSelect() {
   border-radius: 50%;
 
   .status-neutral & {
-    background: var(--el-text-color-placeholder, #c0c4cc);
+    background: var(--color-text-placeholder);
   }
 
   .status-valid & {
-    background: #16a34a;
-    box-shadow: 0 0 0 2px #86efac;
+    background: var(--color-success);
+    box-shadow: 0 0 0 2px var(--color-success);
   }
 }
 
@@ -746,9 +746,9 @@ function clearSelect() {
 
 /* ── Card Base ── */
 .card {
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -760,7 +760,7 @@ function clearSelect() {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -769,7 +769,7 @@ function clearSelect() {
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   flex: 1;
 }
 
@@ -795,7 +795,7 @@ function clearSelect() {
 
 .cfg-label {
   font-size: 12px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   white-space: nowrap;
 }
 
@@ -804,7 +804,7 @@ function clearSelect() {
   display: flex;
   align-items: center;
   gap: 0;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   overflow: hidden;
 }
@@ -813,9 +813,9 @@ function clearSelect() {
   width: 28px;
   height: 28px;
   border: none;
-  background: var(--el-fill-color-light, #f5f7fa);
+  background: var(--color-bg-hover);
   font-size: 16px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
   line-height: 1;
@@ -824,8 +824,8 @@ function clearSelect() {
   justify-content: center;
 
   &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
   }
 }
 
@@ -833,13 +833,13 @@ function clearSelect() {
   width: 44px;
   height: 28px;
   border: none;
-  border-left: 1px solid var(--el-border-color, #dcdfe6);
-  border-right: 1px solid var(--el-border-color, #dcdfe6);
+  border-left: 1px solid var(--color-border);
+  border-right: 1px solid var(--color-border);
   text-align: center;
   font-size: 13px;
   font-weight: 600;
-  color: var(--el-text-color-primary, #303133);
-  background: var(--el-bg-color, #fff);
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
   outline: none;
   -moz-appearance: textfield;
 
@@ -851,7 +851,7 @@ function clearSelect() {
 /* ── Seg Control ── */
 .seg-ctrl {
   display: flex;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   overflow: hidden;
 
@@ -862,22 +862,22 @@ function clearSelect() {
     background: transparent;
     font-size: 11px;
     font-weight: 500;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--color-text-regular);
     cursor: pointer;
     transition: all .15s;
     white-space: nowrap;
-    border-right: 1px solid var(--el-border-color, #dcdfe6);
+    border-right: 1px solid var(--color-border);
 
     &:last-child {
       border-right: none;
     }
 
     &:hover {
-      background: var(--el-fill-color-light, #f5f7fa);
+      background: var(--color-bg-hover);
     }
 
     &.active {
-      background: var(--el-color-primary, #409eff);
+      background: var(--brand-primary);
       color: #fff;
     }
   }
@@ -909,18 +909,18 @@ function clearSelect() {
   padding: 9px 14px;
   cursor: pointer;
   transition: background .12s;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 
   &:last-child {
     border-bottom: none;
   }
 
   &:hover {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
   }
 
   &.checked {
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    background: var(--brand-primary-soft);
   }
 }
 
@@ -928,17 +928,17 @@ function clearSelect() {
   width: 16px;
   height: 16px;
   border-radius: 4px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition: all .15s;
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
 
   .checked & {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #fff;
   }
 }
@@ -963,12 +963,12 @@ function clearSelect() {
 .type-name {
   font-size: 12px;
   font-weight: 500;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .type-example {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-family: monospace;
   white-space: nowrap;
   overflow: hidden;
@@ -985,7 +985,7 @@ function clearSelect() {
   padding: 11px 0;
   border-radius: 10px;
   border: none;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -994,7 +994,7 @@ function clearSelect() {
   flex-shrink: 0;
 
   &:hover:not(:disabled) {
-    background: var(--el-color-primary-dark-2, #337ecc);
+    background: var(--brand-primary-hover);
     box-shadow: 0 4px 14px rgba(64, 158, 255, .4);
     transform: translateY(-1px);
   }
@@ -1012,29 +1012,29 @@ function clearSelect() {
   gap: 5px;
   padding: 4px 10px;
   border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 
   &.danger:hover {
-    border-color: #fca5a5;
-    color: #dc2626;
-    background: #fff1f2;
+    border-color: var(--color-danger);
+    color: var(--color-danger);
+    background: var(--color-danger-soft);
   }
 
   &.accent {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
     font-weight: 600;
   }
 
@@ -1067,13 +1067,13 @@ function clearSelect() {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .empty-sub {
   margin: 0;
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 /* ── Result Toolbar ── */
@@ -1087,7 +1087,7 @@ function clearSelect() {
 
 .result-summary {
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .toolbar-right {
@@ -1117,9 +1117,9 @@ function clearSelect() {
 
 /* ── Result Card ── */
 .result-card {
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   overflow: hidden;
   flex-shrink: 0;
 }
@@ -1129,8 +1129,8 @@ function clearSelect() {
   align-items: center;
   gap: 8px;
   padding: 9px 12px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-  background: var(--el-fill-color-lighter, #fafafa);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg-hover);
 }
 
 .rc-icon {
@@ -1146,13 +1146,13 @@ function clearSelect() {
 .rc-name {
   font-size: 12px;
   font-weight: 600;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   flex: 1;
 }
 
 .rc-count {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-family: monospace;
 }
 
@@ -1172,7 +1172,7 @@ function clearSelect() {
   align-items: center;
   gap: 10px;
   padding: 7px 12px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   cursor: pointer;
   transition: background .12s;
   position: relative;
@@ -1182,7 +1182,7 @@ function clearSelect() {
   }
 
   &:hover {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
 
     .item-copy-icon {
       opacity: 1;
@@ -1190,14 +1190,14 @@ function clearSelect() {
   }
 
   &.item-copied {
-    background: #f0fdf4;
+    background: var(--color-success-soft);
   }
 }
 
 .item-idx {
   font-size: 10px;
   font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   width: 18px;
   flex-shrink: 0;
 }
@@ -1206,20 +1206,64 @@ function clearSelect() {
   flex: 1;
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   word-break: break-all;
   line-height: 1.5;
 }
 
 .item-copy-icon {
   flex-shrink: 0;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   opacity: 0;
   transition: opacity .15s;
 }
 
 .item-ok-icon {
   flex-shrink: 0;
-  color: #16a34a;
+  color: var(--color-success);
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .rand-page {
+    padding: 12px;
+    gap: 12px;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .header-sub {
+    display: none;
+  }
+
+  .header-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .header-title {
+    font-size: 15px;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .col {
+    &.col-left {
+      width: 100%;
+      flex-shrink: 0;
+      overflow: visible;
+    }
+
+    &.col-right {
+      width: 100%;
+      flex: none;
+    }
+  }
 }
 </style>

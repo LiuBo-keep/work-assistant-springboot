@@ -79,7 +79,7 @@
                 </button>
               </div>
             </div>
-            <p class="field-label" style="color:var(--el-text-color-placeholder)">点击生成按钮，在右侧查看密钥对</p>
+            <p class="field-label" style="color:var(--color-text-placeholder)">点击生成按钮，在右侧查看密钥对</p>
           </template>
           <div v-if="cryptoAlgo !== 'rsa'" class="field-row"
                style="flex-direction:column;align-items:flex-start;gap:6px">

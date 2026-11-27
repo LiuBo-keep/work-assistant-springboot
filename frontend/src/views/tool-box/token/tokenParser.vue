@@ -547,7 +547,7 @@ const tokenInput = ref(null)
   padding: 20px 24px;
   box-sizing: border-box;
   gap: 16px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
 }
 
@@ -569,7 +569,7 @@ const tokenInput = ref(null)
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -581,13 +581,13 @@ const tokenInput = ref(null)
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .header-sub {
   margin: 2px 0 0;
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 /* ── Status Badge ── */
@@ -603,21 +603,21 @@ const tokenInput = ref(null)
   transition: all .2s;
 
   &.status-neutral {
-    background: var(--el-fill-color, #f0f2f5);
-    border-color: var(--el-border-color, #dcdfe6);
-    color: var(--el-text-color-secondary, #909399);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border);
+    color: var(--color-text-secondary);
   }
 
   &.status-valid {
-    background: #f0fdf4;
-    border-color: #86efac;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    border-color: var(--color-success);
+    color: var(--color-success);
   }
 
   &.status-error {
-    background: #fff1f2;
-    border-color: #fca5a5;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
   }
 }
 
@@ -627,17 +627,17 @@ const tokenInput = ref(null)
   border-radius: 50%;
 
   .status-neutral & {
-    background: var(--el-text-color-placeholder, #c0c4cc);
+    background: var(--color-text-placeholder);
   }
 
   .status-valid & {
-    background: #16a34a;
-    box-shadow: 0 0 0 2px #86efac;
+    background: var(--color-success);
+    box-shadow: 0 0 0 2px var(--color-success);
   }
 
   .status-error & {
-    background: #dc2626;
-    box-shadow: 0 0 0 2px #fca5a5;
+    background: var(--color-danger);
+    box-shadow: 0 0 0 2px var(--color-danger);
   }
 }
 
@@ -679,9 +679,9 @@ const tokenInput = ref(null)
 
 /* ── Card ── */
 .card {
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -697,7 +697,7 @@ const tokenInput = ref(null)
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -705,13 +705,13 @@ const tokenInput = ref(null)
   font-size: 11px;
   font-weight: 700;
   letter-spacing: .08em;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
 }
 
 .card-sub {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   flex: 1;
 }
 
@@ -732,13 +732,13 @@ const tokenInput = ref(null)
 }
 
 .tag-header {
-  background: #fef3c7;
-  color: #d97706;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
 }
 
 .tag-payload {
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--color-success-soft);
+  color: var(--color-success);
 }
 
 .tag-signature {
@@ -767,14 +767,14 @@ const tokenInput = ref(null)
   font-size: 12.5px;
   line-height: 1.7;
   color: transparent;
-  caret-color: var(--el-text-color-primary, #303133);
+  caret-color: var(--color-text-primary);
   background: transparent;
   z-index: 2;
   word-break: break-all;
   overflow-y: auto;
 
   &::placeholder {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 
   &::-webkit-scrollbar {
@@ -803,12 +803,12 @@ const tokenInput = ref(null)
 
 /* Part Colors — 与 jwt.io 一致 */
 .part-header {
-  color: #d97706;
+  color: var(--color-warning);
   font-weight: 600;
 }
 
 .part-payload {
-  color: #16a34a;
+  color: var(--color-success);
   font-weight: 600;
 }
 
@@ -818,7 +818,7 @@ const tokenInput = ref(null)
 }
 
 .part-dot {
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 /* ── Buttons ── */
@@ -828,22 +828,22 @@ const tokenInput = ref(null)
   gap: 5px;
   padding: 4px 10px;
   border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
   }
 
   &.accent {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
     font-weight: 600;
   }
 }
@@ -855,16 +855,16 @@ const tokenInput = ref(null)
   margin-left: auto;
   padding: 3px 8px;
   border-radius: 5px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    color: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
   }
 }
 
@@ -883,25 +883,25 @@ const tokenInput = ref(null)
 .json-empty {
   padding: 18px 14px;
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-style: italic;
 }
 
 :deep(.json-viewer-root) {
   .jv-bracket {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 
   .jv-key {
-    color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
   }
 
   .jv-str {
-    color: #16a34a;
+    color: var(--color-success);
   }
 
   .jv-num {
-    color: #d97706;
+    color: var(--color-warning);
   }
 
   .jv-bool {
@@ -910,16 +910,16 @@ const tokenInput = ref(null)
   }
 
   .jv-null {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
     font-style: italic;
   }
 
   .jv-colon {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 
   .jv-comma {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 
   .jv-line {
@@ -935,7 +935,7 @@ const tokenInput = ref(null)
 .time-fields {
   margin-top: 10px;
   padding-top: 10px;
-  border-top: 1px dashed var(--el-border-color-lighter, #ebeef5);
+  border-top: 1px dashed var(--color-border-light);
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -951,7 +951,7 @@ const tokenInput = ref(null)
 .time-key {
   font-family: 'Menlo', 'Monaco', monospace;
   font-weight: 700;
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   min-width: 32px;
 }
 
@@ -963,18 +963,18 @@ const tokenInput = ref(null)
 
 .time-ts {
   font-family: monospace;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .time-human {
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
 
   &.expired {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 
   &.valid {
-    color: #16a34a;
+    color: var(--color-success);
   }
 }
 
@@ -987,13 +987,13 @@ const tokenInput = ref(null)
   font-weight: 700;
 
   &.badge-expired {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
 
   &.badge-valid {
-    background: #f0fdf4;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    color: var(--color-success);
   }
 }
 
@@ -1009,18 +1009,18 @@ const tokenInput = ref(null)
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 11.5px;
   line-height: 1.8;
-  background: var(--el-fill-color-light, #f5f7fa);
+  background: var(--color-bg-hover);
   border-radius: 8px;
   padding: 10px 14px;
   word-break: break-all;
 }
 
 .formula-fn {
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .formula-sep {
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 .formula-part {
@@ -1038,11 +1038,11 @@ const tokenInput = ref(null)
   align-items: center;
   gap: 6px;
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   cursor: pointer;
 
   input[type="checkbox"] {
-    accent-color: var(--el-color-primary, #409eff);
+    accent-color: var(--brand-primary);
     cursor: pointer;
   }
 }
@@ -1057,22 +1057,22 @@ const tokenInput = ref(null)
   width: 100%;
   padding: 8px 36px 8px 10px;
   box-sizing: border-box;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   font-size: 12.5px;
   font-family: 'Menlo', 'Monaco', monospace;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
   outline: none;
   transition: border-color .18s;
 
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 
   &::placeholder {
     font-family: inherit;
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
@@ -1082,13 +1082,13 @@ const tokenInput = ref(null)
   border: none;
   background: transparent;
   cursor: pointer;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   padding: 2px;
   display: flex;
   align-items: center;
 
   &:hover {
-    color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
   }
 }
 
@@ -1105,34 +1105,34 @@ const tokenInput = ref(null)
   transition: all .2s;
 
   &.verify-valid {
-    background: #f0fdf4;
-    border-color: #86efac;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    border-color: var(--color-success);
+    color: var(--color-success);
   }
 
   &.verify-invalid {
-    background: #fff1f2;
-    border-color: #fca5a5;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    border-color: var(--color-danger);
+    color: var(--color-danger);
   }
 
   &.verify-warn {
-    background: #fffbeb;
-    border-color: #fcd34d;
-    color: #d97706;
+    background: var(--color-warning-soft);
+    border-color: var(--color-warning);
+    color: var(--color-warning);
   }
 
   &.verify-idle {
-    background: var(--el-fill-color-light, #f5f7fa);
-    border-color: var(--el-border-color-lighter, #ebeef5);
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    background: var(--color-bg-hover);
+    border-color: var(--color-border-light);
+    color: var(--color-text-placeholder);
     font-weight: 400;
   }
 
   &.verify-info {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
     font-weight: 400;
   }
 }
@@ -1144,9 +1144,9 @@ const tokenInput = ref(null)
   gap: 8px;
   padding: 9px 14px;
   border-radius: 8px;
-  background: #fff1f2;
-  border: 1.5px solid #fca5a5;
-  color: #dc2626;
+  background: var(--color-danger-soft);
+  border: 1.5px solid var(--color-danger);
+  color: var(--color-danger);
   font-size: 12px;
   flex-shrink: 0;
 }
@@ -1158,5 +1158,58 @@ const tokenInput = ref(null)
 .err-slide-enter-from, .err-slide-leave-to {
   opacity: 0;
   transform: translateY(6px);
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .jwt-page {
+    padding: 12px;
+    gap: 12px;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .header-sub {
+    display: none;
+  }
+
+  .header-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .header-title {
+    font-size: 15px;
+  }
+
+  .main-layout {
+    flex-direction: column;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .col {
+    &.col-left {
+      width: 100%;
+      flex-shrink: 0;
+      min-height: 220px;
+    }
+
+    &.col-right {
+      width: 100%;
+      flex: none;
+      overflow: visible;
+    }
+  }
+
+  .col-left .card {
+    min-height: 220px;
+  }
+
+  .token-textarea {
+    min-height: 160px;
+  }
 }
 </style>

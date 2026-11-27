@@ -70,8 +70,8 @@ const urlParts = ref([])
 const urlParams = ref([])
 
 const URL_COLORS = {
-  protocol: '#409eff', hostname: '#67c23a', port: '#e6a23c',
-  pathname: '#9b59b6', hash: '#f56c6c', username: '#1abc9c'
+  protocol: '#378add', hostname: 'var(--color-success)', port: 'var(--color-warning)',
+  pathname: '#9b59b6', hash: 'var(--color-danger)', username: '#0e9384'
 }
 
 function parseUrl() {

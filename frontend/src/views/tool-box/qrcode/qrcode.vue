@@ -750,7 +750,7 @@ onMounted(() => {
   padding: 20px 24px;
   box-sizing: border-box;
   gap: 16px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
 }
 
 /* ── Mode Tabs ── */
@@ -766,22 +766,22 @@ onMounted(() => {
   gap: 7px;
   padding: 8px 20px;
   border-radius: 8px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-secondary, #909399);
+  border: 1.5px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.18s ease;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
   }
 
   &.active {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #fff;
     box-shadow: 0 2px 8px rgba(64, 158, 255, 0.35);
   }
@@ -798,9 +798,9 @@ onMounted(() => {
 
 /* ── Panel ── */
 .panel {
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -827,11 +827,11 @@ onMounted(() => {
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   text-transform: uppercase;
   letter-spacing: 0.06em;
   padding-bottom: 10px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 /* ── Form ── */
@@ -843,7 +843,7 @@ onMounted(() => {
   label {
     font-size: 12px;
     font-weight: 500;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--color-text-regular);
     display: flex;
     align-items: center;
     gap: 6px;
@@ -860,8 +860,8 @@ onMounted(() => {
 .val-badge {
   font-size: 11px;
   padding: 1px 6px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
   border-radius: 4px;
   font-weight: 600;
   font-family: monospace;
@@ -870,32 +870,32 @@ onMounted(() => {
 .input-text {
   width: 100%;
   padding: 8px 10px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 6px;
   font-size: 13px;
   resize: none;
   box-sizing: border-box;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
   transition: border-color 0.18s;
   font-family: inherit;
 
   &:focus {
     outline: none;
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 
 input[type="range"] {
   width: 100%;
-  accent-color: var(--el-color-primary, #409eff);
+  accent-color: var(--brand-primary);
   cursor: pointer;
 }
 
 /* ── Segment control ── */
 .seg-ctrl {
   display: flex;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 6px;
   overflow: hidden;
 
@@ -906,15 +906,15 @@ input[type="range"] {
     background: transparent;
     font-size: 12px;
     font-weight: 600;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--color-text-regular);
     cursor: pointer;
     transition: all 0.15s;
-    border-right: 1px solid var(--el-border-color, #dcdfe6);
+    border-right: 1px solid var(--color-border);
 
     &:last-child { border-right: none; }
-    &:hover { background: var(--el-fill-color-light, #f5f7fa); }
+    &:hover { background: var(--color-bg-hover); }
     &.active {
-      background: var(--el-color-primary, #409eff);
+      background: var(--brand-primary);
       color: #fff;
     }
   }
@@ -929,7 +929,7 @@ input[type="range"] {
   input[type="color"] {
     width: 36px;
     height: 30px;
-    border: 1.5px solid var(--el-border-color, #dcdfe6);
+    border: 1.5px solid var(--color-border);
     border-radius: 6px;
     padding: 2px;
     cursor: pointer;
@@ -940,7 +940,7 @@ input[type="range"] {
 .color-hex {
   font-size: 12px;
   font-family: monospace;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 /* ── Upload Zone ── */
@@ -951,38 +951,38 @@ input[type="range"] {
   justify-content: center;
   gap: 6px;
   padding: 16px;
-  border: 1.5px dashed var(--el-border-color, #dcdfe6);
+  border: 1.5px dashed var(--color-border);
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.18s;
   position: relative;
   min-height: 80px;
-  background: var(--el-fill-color-lighter, #fafafa);
+  background: var(--color-bg-hover);
 
   &.tall { min-height: 100px; }
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 
   &.has-file {
     border-style: solid;
-    border-color: var(--el-color-success, #67c23a);
+    border-color: var(--color-success);
   }
 
   span {
     font-size: 12px;
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
     text-align: center;
   }
 
   .upload-hint {
     font-size: 11px;
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 
-  svg { color: var(--el-text-color-placeholder, #c0c4cc); }
+  svg { color: var(--color-text-placeholder); }
 }
 
 .logo-preview {
@@ -1001,7 +1001,7 @@ input[type="range"] {
 
 .logo-filename {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   max-width: 160px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1016,7 +1016,7 @@ input[type="range"] {
   height: 20px;
   border-radius: 50%;
   border: none;
-  background: var(--el-color-danger, #f56c6c);
+  background: var(--color-danger);
   color: #fff;
   font-size: 11px;
   cursor: pointer;
@@ -1035,7 +1035,7 @@ input[type="range"] {
   padding: 10px 0;
   border-radius: 8px;
   border: none;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -1044,7 +1044,7 @@ input[type="range"] {
   margin-top: auto;
 
   &:hover:not(:disabled) {
-    background: var(--el-color-primary-dark-2, #337ecc);
+    background: var(--brand-primary-hover);
     box-shadow: 0 3px 10px rgba(64, 158, 255, 0.4);
     transform: translateY(-1px);
   }
@@ -1061,11 +1061,11 @@ input[type="range"] {
   align-items: flex-start;
   gap: 7px;
   padding: 10px 12px;
-  background: var(--el-color-warning-light-9, #fdf6ec);
-  border: 1px solid var(--el-color-warning-light-5, #f5dab1);
+  background: var(--color-warning-soft);
+  border: 1px solid var(--color-warning);
   border-radius: 8px;
   font-size: 12px;
-  color: var(--el-color-warning-dark-2, #b88230);
+  color: var(--color-warning);
   line-height: 1.5;
 
   svg { flex-shrink: 0; margin-top: 1px; }
@@ -1079,8 +1079,8 @@ input[type="range"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1.5px dashed var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1.5px dashed var(--color-border-light);
   border-radius: 10px;
   min-height: 280px;
   overflow: hidden;
@@ -1103,7 +1103,7 @@ input[type="range"] {
 
   p {
     font-size: 13px;
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
     margin: 0;
     white-space: nowrap;
   }
@@ -1153,7 +1153,7 @@ input[type="range"] {
   -webkit-user-drag: none;
 
   &:hover {
-    outline: 2px dashed var(--el-color-primary, #409eff);
+    outline: 2px dashed var(--brand-primary);
     outline-offset: 2px;
   }
 }
@@ -1173,7 +1173,7 @@ input[type="range"] {
   padding: 8px 18px;
   border-radius: 7px;
   border: none;
-  background: var(--el-color-success, #67c23a);
+  background: var(--color-success);
   color: #fff;
   font-size: 13px;
   font-weight: 600;
@@ -1181,21 +1181,21 @@ input[type="range"] {
   transition: all 0.18s;
 
   &:hover {
-    background: var(--el-color-success-dark-2, #529b2e);
+    background: var(--color-success-dark);
     transform: translateY(-1px);
     box-shadow: 0 3px 10px rgba(103, 194, 58, 0.4);
   }
 
   &.secondary {
     background: transparent;
-    border: 1.5px solid var(--el-border-color, #dcdfe6);
-    color: var(--el-text-color-regular, #606266);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-regular);
 
     &:hover {
-      border-color: var(--el-color-primary, #409eff);
-      color: var(--el-color-primary, #409eff);
+      border-color: var(--brand-primary);
+      color: var(--brand-primary);
       box-shadow: none;
-      background: var(--el-color-primary-light-9, #ecf5ff);
+      background: var(--brand-primary-soft);
     }
   }
 }
@@ -1203,6 +1203,42 @@ input[type="range"] {
 .pos-hint {
   font-size: 11px;
   font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .qr-page {
+    padding: 12px;
+    gap: 12px;
+    overflow-y: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  .mode-tabs {
+    flex-wrap: wrap;
+  }
+
+  .mode-tab {
+    padding: 7px 14px;
+    font-size: 12px;
+  }
+
+  .workspace {
+    flex-direction: column;
+    gap: 12px;
+    overflow: visible;
+  }
+
+  .settings-panel {
+    width: 100%;
+    flex-shrink: 0;
+  }
+
+  .preview-panel {
+    width: 100%;
+    flex: none;
+  }
 }
 </style>

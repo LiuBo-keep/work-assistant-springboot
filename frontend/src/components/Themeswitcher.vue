@@ -115,6 +115,9 @@ function applyTheme() {
   document.documentElement.style.setProperty('--theme-accent', t.accent)
   document.documentElement.style.setProperty('--theme-mode', colorMode.value)
 
+  // 切换 html.dark，触发 Element Plus 深色变量 + main.css 的 html.dark 变量
+  document.documentElement.classList.toggle('dark', colorMode.value === 'dark')
+
   // 通知其他组件（Header背景、Sidebar激活色等）
   bus.emit('theme-change', { bg, accent: t.accent, mode: colorMode.value })
 

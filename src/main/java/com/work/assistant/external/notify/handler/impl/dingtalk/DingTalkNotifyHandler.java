@@ -68,9 +68,18 @@ public class DingTalkNotifyHandler implements NotifyHandler {
           retrofitClientResponseHelper.processResponse(responseCall, "sendDingTalk");
       log.info("【钉钉推送通知】请求信息:[{}],响应信息:[{}]", dingTalkSendRequest.toString(),
           dingTalkSendResponse.toString());
-    } catch (Exception e) {
 
+      boolean success = dingTalkSendResponse != null && dingTalkSendResponse.getErrCode() == 0;
+      return NotifyResponse.builder()
+          .success(success)
+          .message(dingTalkSendResponse == null ? "empty response" : dingTalkSendResponse.getErrMsg())
+          .build();
+    } catch (Exception e) {
+      log.error("【钉钉推送通知】发送失败", e);
+      return NotifyResponse.builder()
+          .success(false)
+          .message(e.getMessage())
+          .build();
     }
-    return NotifyResponse.builder().success(true).build();
   }
 }

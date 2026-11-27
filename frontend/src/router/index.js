@@ -119,6 +119,11 @@ const routes = [
         path: '/tool-box/network-tools',
         component: () => import('../views/tool-box/network-tools/networkTools.vue'),
         meta: { title: '网络工具集', active: '/tool-box/network-tools', auth: true }
+      },
+      {
+        path: '/tool-box/favorite',
+        component: () => import('../views/tool-box/favorite/favorite.vue'),
+        meta: { title: '工具收藏', active: '/tool-box/favorite', auth: true }
       }
     ]
   },

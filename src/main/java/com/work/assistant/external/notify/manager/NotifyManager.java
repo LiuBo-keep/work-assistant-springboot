@@ -26,9 +26,11 @@ public class NotifyManager {
   public NotifyManager(List<NotifyHandler> handlers) {
 
     this.handlerMap = handlers.stream()
+        .filter(handler -> handler != null && handler.getNotifyType() != null)
         .collect(Collectors.toMap(
             NotifyHandler::getNotifyType,
-            Function.identity()
+            Function.identity(),
+            (existing, replacement) -> existing
         ));
 
     log.info("notify handler init success, handlers={}",
