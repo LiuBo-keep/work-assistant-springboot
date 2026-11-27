@@ -83,7 +83,10 @@ import {
   Monitor,
   Connection,
   Suitcase,
-  Star
+  Star,
+  Odometer,
+  TrendCharts,
+  Coin
 } from '@element-plus/icons-vue'
 import bus from '../utils/bus'
 import pkg from '../../package.json'
@@ -187,6 +190,21 @@ const menuGroups = ref([
           { icon: Monitor, index: '/tool-box/dev-utils', title: '开发者工具集' },
           { icon: Connection, index: '/tool-box/network-tools', title: '网络工具集' },
           { icon: Star, index: '/tool-box/favorite', title: '工具收藏' }
+        ]
+      }
+    ]
+  },
+  {
+    title: '系统',
+    items: [
+      {
+        icon: Odometer, index: 'monitor', title: '系统监控',
+        subs: [
+          { icon: DataAnalysis, index: '/monitor/overview', title: '系统概览' },
+          { icon: TrendCharts, index: '/monitor/trend', title: '资源趋势' },
+          { icon: Connection, index: '/monitor/threads', title: '线程监控' },
+          { icon: AlarmClock, index: '/monitor/tasks', title: '定时任务' },
+          { icon: Coin, index: '/monitor/database', title: '数据库监控' }
         ]
       }
     ]

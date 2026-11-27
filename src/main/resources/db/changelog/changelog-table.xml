@@ -105,4 +105,43 @@
             <column name="owner"/>
         </createIndex>
     </changeSet>
+
+    <!-- 系统监控 - 定时任务执行记录表 -->
+    <changeSet id="202611272330" author="work-assistant">
+        <createTable tableName="task_run_log">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_run_log_pkey"/>
+            </column>
+            <column name="task_name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="duration_ms" type="BIGINT"/>
+            <column name="status" type="VARCHAR(16)"/>
+            <column name="error_msg" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="task_run_log" indexName="idx_task_run_log_start_time">
+            <column name="start_time"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 系统监控 - 指标快照表 -->
+    <changeSet id="202611272331" author="work-assistant">
+        <createTable tableName="metric_snapshot">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="metric_snapshot_pkey"/>
+            </column>
+            <column name="metric_name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metric_value" type="DOUBLE"/>
+            <column name="captured_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="metric_snapshot" indexName="idx_metric_snapshot_name_time">
+            <column name="metric_name"/>
+            <column name="captured_at"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

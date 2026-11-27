@@ -124,6 +124,35 @@ const routes = [
         path: '/tool-box/favorite',
         component: () => import('../views/tool-box/favorite/favorite.vue'),
         meta: { title: '工具收藏', active: '/tool-box/favorite', auth: true }
+      },
+      {
+        path: '/monitor',
+        redirect: '/monitor/overview'
+      },
+      {
+        path: '/monitor/overview',
+        component: () => import('../views/monitor/overview.vue'),
+        meta: { title: '系统概览', active: '/monitor/overview', auth: true }
+      },
+      {
+        path: '/monitor/trend',
+        component: () => import('../views/monitor/trend.vue'),
+        meta: { title: '资源趋势', active: '/monitor/trend', auth: true }
+      },
+      {
+        path: '/monitor/threads',
+        component: () => import('../views/monitor/threads.vue'),
+        meta: { title: '线程监控', active: '/monitor/threads', auth: true }
+      },
+      {
+        path: '/monitor/tasks',
+        component: () => import('../views/monitor/tasks.vue'),
+        meta: { title: '定时任务', active: '/monitor/tasks', auth: true }
+      },
+      {
+        path: '/monitor/database',
+        component: () => import('../views/monitor/database.vue'),
+        meta: { title: '数据库监控', active: '/monitor/database', auth: true }
       }
     ]
   },

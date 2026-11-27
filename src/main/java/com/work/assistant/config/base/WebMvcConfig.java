@@ -25,18 +25,18 @@ public class WebMvcConfig
       InterceptorRegistry registry) {
 
     // 全局限流：最外层，先于鉴权执行。
+    // 注意：/actuator/** 不再放行，纳入限流范围，防止匿名高频拉取指标。
     registry.addInterceptor(rateLimitInterceptor)
         .addPathPatterns("/**")
         .excludePathPatterns(
-            "/actuator/**",
             "/error");
 
     // 鉴权：放行登录接口与静态资源，其余接口需携带有效令牌。
+    // /actuator/** 需要鉴权，避免系统运行指标被匿名访问。
     registry.addInterceptor(authInterceptor)
         .addPathPatterns("/**")
         .excludePathPatterns(
             "/api/v1/token",
-            "/actuator/**",
             "/error",
             "/favicon.ico",
             "/index.html",
