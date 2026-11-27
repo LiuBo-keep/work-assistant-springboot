@@ -1,67 +1,6 @@
 <template>
   <div class="page-wrap">
 
-    <!-- 锁屏层：未解锁时显示 -->
-    <div v-if="!unlocked" class="lock-screen">
-      <div class="lock-card">
-        <div class="lock-icon">
-          <el-icon :size="32">
-            <Lock />
-          </el-icon>
-        </div>
-        <h3 class="lock-title">{{ hasVault ? '密码库已锁定' : '设置主密码' }}</h3>
-        <p class="lock-desc">
-          {{ hasVault ? '输入主密码解锁密码库' : '首次使用，请设置一个主密码来保护你的密码库' }}
-        </p>
-
-        <el-form @submit.prevent="handleUnlock" style="width:100%">
-          <el-form-item>
-            <el-input
-              v-model="masterPwd"
-              type="password"
-              show-password
-              placeholder="输入主密码"
-              size="default"
-              :prefix-icon="Key"
-              v-focus
-              @keydown.enter="handleUnlock"
-            />
-          </el-form-item>
-
-          <!-- 首次设置：确认主密码 -->
-          <el-form-item v-if="!hasVault">
-            <el-input
-              v-model="masterPwdConfirm"
-              type="password"
-              show-password
-              placeholder="再次确认主密码"
-              size="default"
-              :prefix-icon="Key"
-              @keydown.enter="handleUnlock"
-            />
-          </el-form-item>
-
-          <el-button
-            type="primary"
-            style="width:100%"
-            size="default"
-            :loading="unlocking"
-            @click="handleUnlock"
-          >
-            {{ hasVault ? '解锁' : '创建密码库' }}
-          </el-button>
-        </el-form>
-
-        <!-- 导入备份（已有 vault 时显示） -->
-        <div v-if="hasVault" class="lock-footer">
-          <span class="lock-link" @click="showImport = true">从备份文件恢复</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- 已解锁：密码列表 -->
-    <template v-else>
-
       <!-- ① 搜索区 -->
       <div class="search-card">
         <div class="search-grid">
@@ -93,9 +32,6 @@
         </div>
         <div class="search-footer">
           <el-button size="small" :icon="Refresh" @click="reset">重置</el-button>
-          <el-button size="small" :icon="Download" @click="exportVault">导出备份</el-button>
-          <el-button size="small" :icon="Upload" @click="showImport = true">导入备份</el-button>
-          <el-button size="small" :icon="Lock2" @click="lockVault">锁定</el-button>
           <el-button size="small" type="primary" :icon="Plus" @click="openAdd">新增密码</el-button>
         </div>
       </div>
@@ -199,55 +135,8 @@
         </div>
       </div>
 
-    </template>
-
     <!-- 新增/编辑弹窗 -->
     <AddAndEdit ref="dialogRef" @saved="doSearch" />
-
-    <!-- 导入备份弹窗 -->
-    <el-dialog
-      v-model="showImport"
-      title="从备份文件恢复"
-      width="420px"
-      :close-on-click-modal="false"
-    >
-      <div class="import-wrap">
-        <el-upload
-          :auto-upload="false"
-          :show-file-list="false"
-          accept=".json"
-          :on-change="onFileSelect"
-        >
-          <el-button :icon="Upload" size="small">选择备份文件 (.json)</el-button>
-        </el-upload>
-        <p v-if="importFileName" class="import-file-name">{{ importFileName }}</p>
-        <el-input
-          v-model="importPwd"
-          type="password"
-          show-password
-          placeholder="备份文件的主密码"
-          size="small"
-          style="margin-top:12px"
-        />
-        <p class="import-warn">
-          <el-icon>
-            <WarningFilled />
-          </el-icon>
-          导入将覆盖当前所有密码数据，请谨慎操作
-        </p>
-      </div>
-      <template #footer>
-        <el-button size="small" @click="showImport = false">取消</el-button>
-        <el-button
-          size="small"
-          type="primary"
-          :loading="importing"
-          :disabled="!importFileText || !importPwd"
-          @click="doImport"
-        >确认导入
-        </el-button>
-      </template>
-    </el-dialog>
 
   </div>
 </template>
@@ -256,20 +145,11 @@
 import { ref, onMounted } from 'vue'
 import {
   Search, Refresh, Plus, Edit, Delete,
-  Lock, View, Hide, CopyDocument,
-  Key, Download, Upload, WarningFilled, Link
+  Lock, View, Hide, CopyDocument, Link
 } from '@element-plus/icons-vue'
-import { Lock as Lock2 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import passwordService from '@/services/password/password.service'
 import AddAndEdit from './components/AddAndEdit.vue'
-
-/* ---- 锁屏状态 ---- */
-const unlocked = ref(false)
-const hasVault = ref(false)
-const masterPwd = ref('')
-const masterPwdConfirm = ref('')
-const unlocking = ref(false)
 
 /* ---- 列表状态 ---- */
 const loading = ref(false)
@@ -278,53 +158,7 @@ const keyword = ref('')
 const filterCategory = ref('')
 const tableData = ref([])
 
-/* ---- 导入状态 ---- */
-const showImport = ref(false)
-const importFileName = ref('')
-const importFileText = ref('')
-const importPwd = ref('')
-const importing = ref(false)
-
 const categories = ['工作', '开发', '数据库', '社交', '金融', '其他']
-
-/* ---- 主密码解锁 ---- */
-async function handleUnlock() {
-  if (!masterPwd.value.trim()) return ElMessage.warning('请输入主密码')
-
-  if (!hasVault.value) {
-    // 首次设置
-    if (masterPwd.value !== masterPwdConfirm.value) {
-      return ElMessage.error('两次输入的主密码不一致')
-    }
-    if (masterPwd.value.length < 6) {
-      return ElMessage.warning('主密码至少 6 位')
-    }
-    unlocking.value = true
-    const res = await passwordService.setupMasterPassword(masterPwd.value)
-    unlocking.value = false
-    if (res.code !== 200) return ElMessage.error(res.error || '设置失败')
-    ElMessage.success('密码库创建成功')
-    hasVault.value = true
-    unlocked.value = true
-    await doSearch()
-  } else {
-    // 解锁
-    unlocking.value = true
-    const res = await passwordService.unlock(masterPwd.value)
-    unlocking.value = false
-    if (res.code !== 200) return ElMessage.error(res.error || '主密码错误')
-    unlocked.value = true
-    masterPwd.value = ''
-    await doSearch()
-  }
-}
-
-function lockVault() {
-  passwordService.lock()
-  unlocked.value = false
-  tableData.value = []
-  masterPwd.value = ''
-}
 
 /* ---- 分类 tag ---- */
 function categoryType(cat) {
@@ -335,9 +169,14 @@ function categoryType(cat) {
 /* ---- 搜索 ---- */
 async function doSearch() {
   loading.value = true
-  const raw = await passwordService.search({ keyword: keyword.value, category: filterCategory.value })
-  tableData.value = raw.map(item => ({ ...item, _show: false }))
-  loading.value = false
+  try {
+    const raw = await passwordService.search({ keyword: keyword.value, category: filterCategory.value })
+    tableData.value = raw.map(item => ({ ...item, _show: false }))
+  } catch (e) {
+    ElMessage.error(e.message || '加载失败')
+  } finally {
+    loading.value = false
+  }
 }
 
 async function reset() {
@@ -369,54 +208,15 @@ function openEdit(row) {
   dialogRef.value?.open(row)
 }
 
-function remove(row) {
-  passwordService.remove(row.id)
+async function remove(row) {
+  const res = await passwordService.remove(row.id)
+  if (res.code !== 200) return ElMessage.error('删除失败')
   ElMessage.success('已删除')
   doSearch()
 }
 
-/* ---- 导出 ---- */
-function exportVault() {
-  const res = passwordService.exportBackup()
-  if (res.code === 200) ElMessage.success('备份文件已下载')
-  else ElMessage.error(res.error || '导出失败')
-}
-
-/* ---- 导入 ---- */
-function onFileSelect(file) {
-  importFileName.value = file.name
-  const reader = new FileReader()
-  reader.onload = e => {
-    importFileText.value = e.target.result
-  }
-  reader.readAsText(file.raw)
-}
-
-async function doImport() {
-  if (!importFileText.value || !importPwd.value) return
-  importing.value = true
-  const res = await passwordService.importBackup(importFileText.value, importPwd.value)
-  importing.value = false
-  if (res.code !== 200) return ElMessage.error(res.error || '导入失败')
-  showImport.value = false
-  importFileName.value = ''
-  importFileText.value = ''
-  importPwd.value = ''
-  hasVault.value = true
-  unlocked.value = true
-  ElMessage.success('导入成功')
-  await doSearch()
-}
-
 /* ---- 初始化 ---- */
-onMounted(() => {
-  hasVault.value = passwordService.hasVault()
-  // 如果已解锁（同页面内刷新除外），自动加载
-  if (passwordService.isUnlocked()) {
-    unlocked.value = true
-    doSearch()
-  }
-})
+onMounted(doSearch)
 </script>
 
 <style lang="scss" scoped>
@@ -428,68 +228,6 @@ onMounted(() => {
   background: var(--color-bg-page);
   min-height: 100%;
   box-sizing: border-box;
-}
-
-/* ===== 锁屏层 ===== */
-.lock-screen {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: calc(100vh - 120px);
-}
-
-.lock-card {
-  background: var(--color-bg-card);
-  border: 1px solid var(--color-border-light);
-  border-radius: var(--radius-lg);
-  padding: 36px 32px 28px;
-  width: 360px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  box-shadow: var(--shadow-md);
-}
-
-.lock-icon {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  background: var(--brand-primary-fade);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--brand-primary);
-  margin-bottom: 4px;
-}
-
-.lock-title {
-  font-size: 16px;
-  font-weight: 500;
-  color: var(--color-text-primary);
-  margin: 0;
-}
-
-.lock-desc {
-  font-size: 12px;
-  color: var(--color-text-secondary);
-  text-align: center;
-  line-height: 1.6;
-  margin: 0;
-}
-
-.lock-footer {
-  margin-top: 4px;
-}
-
-.lock-link {
-  font-size: 12px;
-  color: var(--brand-primary);
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
 }
 
 /* ===== 搜索卡 ===== */
@@ -674,33 +412,6 @@ onMounted(() => {
 
   p {
     font-size: 13px;
-  }
-}
-
-/* ===== 导入弹窗 ===== */
-.import-wrap {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
-}
-
-.import-file-name {
-  font-size: 12px;
-  color: var(--brand-primary);
-  margin: 8px 0 0;
-  font-family: monospace;
-}
-
-.import-warn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  font-size: 12px;
-  color: #e6a23c;
-  margin-top: 12px;
-
-  .el-icon {
-    font-size: 14px;
   }
 }
 </style>

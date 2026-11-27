@@ -31,3 +31,7 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### 运行时数据（RSA 私钥等敏感文件，勿提交） ###
+/data/
+logs/

@@ -79,4 +79,30 @@
                                  referencedColumnNames="id"
                                  onDelete="SET NULL"/>
     </changeSet>
+
+    <!-- 密码本条目表 -->
+    <changeSet id="202611272200" author="work-assistant">
+        <createTable tableName="password_entry">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="password_entry_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category" type="VARCHAR(64)"/>
+            <column name="account" type="VARCHAR(255)"/>
+            <column name="password" type="TEXT"/>
+            <column name="url" type="VARCHAR(2048)"/>
+            <column name="remark" type="VARCHAR(512)"/>
+            <column name="owner" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="password_entry" indexName="idx_password_entry_owner">
+            <column name="owner"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>

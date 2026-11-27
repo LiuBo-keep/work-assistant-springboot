@@ -25,7 +25,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 123456
-    url: jdbc:postgresql://localhost:5432/work-assistant
+    url: jdbc:postgresql://49.232.206.117:5432/work-assistant-test
   servlet:
     multipart:
       max-file-size: 5MB
@@ -39,4 +39,11 @@ logging:
       max-history: 30
       total-size-cap: 5GB
       file-name-pattern: /data/logs/myapp/app-%d{yyyy-MM-dd}.%i.log
+
+# 工作助手自定义配置
+work:
+  assistant:
+    rsa:
+      # RSA 密钥对存储目录（密码传输加解密用，首次启动自动生成，务必妥善保管）
+      key-dir: ./data/rsa
 
