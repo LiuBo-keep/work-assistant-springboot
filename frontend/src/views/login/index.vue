@@ -1,206 +1,321 @@
 <template>
-  <el-container class="login-container">
-    <div class="login-main">
-      <el-form
-        :model="loginForm"
-        label-position="top"
-        @keydown.enter.prevent="login"
-      >
-        <el-form-item label="用户名">
-          <el-input
-            v-model="loginForm.userName"
-            placeholder="用户名"
-            clearable
-          >
-            <template #prefix>
-              <el-icon>
-                <User />
-              </el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
+  <div class="login-container">
+    <!-- 左侧品牌区 -->
+    <div class="login-brand">
+      <div class="brand-inner">
+        <div class="brand-logo">
+          <el-icon :size="28"><Suitcase /></el-icon>
+        </div>
+        <h1 class="brand-title">工作助手</h1>
+        <p class="brand-slogan">考勤 · 通知 · 效率，一站式工作台</p>
 
-        <el-form-item label="密码">
-          <el-input
-            v-model="loginForm.password"
-            type="password"
-            placeholder="密码"
-            show-password
-            clearable
-          >
-            <template #prefix>
-              <el-icon>
-                <Lock />
-              </el-icon>
-            </template>
-          </el-input>
-        </el-form-item>
+        <ul class="brand-features">
+          <li>
+            <el-icon><CircleCheckFilled /></el-icon>
+            <span>考勤打卡自动同步</span>
+          </li>
+          <li>
+            <el-icon><CircleCheckFilled /></el-icon>
+            <span>未打卡智能提醒</span>
+          </li>
+          <li>
+            <el-icon><CircleCheckFilled /></el-icon>
+            <span>效率工具随手可用</span>
+          </li>
+        </ul>
+      </div>
+    </div>
 
-        <el-form-item>
+    <!-- 右侧登录区 -->
+    <div class="login-panel">
+      <div class="login-card">
+        <div class="card-head">
+          <h2 class="card-title">欢迎回来</h2>
+          <p class="card-sub">请登录你的账号继续使用</p>
+        </div>
+
+        <el-form
+          ref="loginFormRef"
+          :model="loginForm"
+          :rules="rules"
+          label-position="top"
+          @keydown.enter.prevent="login"
+        >
+          <el-form-item prop="userName" label="用户名">
+            <el-input
+              v-model="loginForm.userName"
+              placeholder="请输入用户名"
+              size="large"
+              clearable
+            >
+              <template #prefix>
+                <el-icon><User /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+
+          <el-form-item prop="password" label="密码">
+            <el-input
+              v-model="loginForm.password"
+              type="password"
+              placeholder="请输入密码"
+              size="large"
+              show-password
+              clearable
+            >
+              <template #prefix>
+                <el-icon><Lock /></el-icon>
+              </template>
+            </el-input>
+          </el-form-item>
+
           <el-button
             type="primary"
+            size="large"
             :loading="loading"
             :disabled="disableLogin"
             class="login-btn"
             @click="login"
           >
-            登录
+            {{ loading ? '登录中…' : '登 录' }}
           </el-button>
-        </el-form-item>
-      </el-form>
+        </el-form>
+
+        <div class="card-footer">
+          <span>工作助手 v{{ version }}</span>
+        </div>
+      </div>
     </div>
-  </el-container>
+  </div>
 </template>
 
-<script>
-import { User, Lock } from '@element-plus/icons-vue'
+<script setup>
+import { reactive, ref, computed } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+import dayjs from 'dayjs'
+import { User, Lock, Suitcase, CircleCheckFilled } from '@element-plus/icons-vue'
 import { ElNotification } from 'element-plus'
 
 import browser from '../../store/persistent/browser'
 import userService from '@/services/user/user.service.js'
+import pkg from '../../../package.json'
 
-export default {
-  name: 'Login',
+const route = useRoute()
+const router = useRouter()
 
-  components: {
-    User,
-    Lock
-  },
+const loginFormRef = ref()
+const loading = ref(false)
+const version = pkg.version
 
-  data() {
-    return {
-      loginForm: {
-        userName: '',
-        password: ''
-      },
+const loginForm = reactive({
+  userName: '',
+  password: ''
+})
 
-      loading: false
+const rules = {
+  userName: [{ required: true, message: '请输入用户名', trigger: 'blur' }],
+  password: [{ required: true, message: '请输入密码', trigger: 'blur' }]
+}
+
+const disableLogin = computed(() => !loginForm.userName || !loginForm.password)
+
+async function login() {
+  if (disableLogin.value) return
+
+  try {
+    loading.value = true
+    const response = await userService.login({
+      userName: loginForm.userName,
+      password: loginForm.password
+    })
+
+    if (response.code !== 200) {
+      ElNotification.error({ message: response.error })
+      return
     }
-  },
 
-  computed: {
-    disableLogin() {
-      return !this.loginForm.userName || !this.loginForm.password
-    }
-  },
+    browser.setUsername(loginForm.userName)
+    browser.setAccessToken(response.data.token)
+    browser.setcCurrentTime(dayjs().format('YYYY-MM-DDTHH:mm:ss'))
 
-  methods: {
-    async login() {
-      if (this.disableLogin) {
-        return
-      }
-
-      try {
-        this.loading = true
-
-        const response = await userService.login({
-          userName: this.loginForm.userName,
-          password: this.loginForm.password
-        })
-
-        if (response.code !== 200) {
-          ElNotification.error({
-            message: response.error
-          })
-
-          return
-        }
-
-        browser.setUsername(this.loginForm.userName)
-
-        browser.setAccessToken(response.data.token)
-
-        const currentTime = this.$util.nowDatetime()
-
-        browser.setcCurrentTime(currentTime)
-
-        const redirect = this.$route.query.redirect || '/'
-
-        this.$router.push({
-          path: decodeURIComponent(redirect)
-        })
-      } catch (e) {
-        console.error(e)
-
-        ElNotification.error({
-          message: e.message || '登录失败'
-        })
-      } finally {
-        this.loading = false
-      }
-    }
+    const redirect = route.query.redirect || '/'
+    router.push({ path: decodeURIComponent(redirect) })
+  } catch (e) {
+    console.error(e)
+    ElNotification.error({ message: e.message || '登录失败' })
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <style lang="scss" scoped>
-:deep(.el-form-item__label) {
-  height: 20px;
-  line-height: 20px;
-}
-
 .login-container {
   width: 100%;
   height: 100vh;
-
+  display: flex;
+  background: var(--color-bg-page);
   overflow: hidden;
+  transition: background var(--transition-base);
+}
 
+/* ===== 左侧品牌区 ===== */
+.login-brand {
+  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-
+  padding: 48px;
+  background: linear-gradient(150deg, #1e2d3d 0%, #2a4660 55%, #378add 130%);
   position: relative;
-
-  background: url('@/assets/images/login-bg.jpg') no-repeat center center;
-
-  background-size: cover;
-}
-
-.login-main {
-  width: 450px;
-
-  padding: 25px 48px;
-
   overflow: hidden;
 
-  border-radius: 6px;
+  &::before {
+    content: '';
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.08) 0%, transparent 70%);
+  }
 
-  background-color: #ffffff;
-
-  box-shadow: 0 1px 4px rgb(0 0 0 / 50%);
+  &::after {
+    content: '';
+    position: absolute;
+    left: -80px;
+    bottom: -80px;
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.05) 0%, transparent 70%);
+  }
 }
 
-:deep(.el-button) {
+.brand-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 420px;
+}
+
+.brand-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  margin-bottom: 28px;
+}
+
+.brand-title {
+  font-size: 34px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
+}
+
+.brand-slogan {
+  font-size: 15px;
+  color: rgba(255, 255, 255, 0.65);
+  margin-bottom: 40px;
+}
+
+.brand-features {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 14px;
+
+    .el-icon {
+      color: #67c23a;
+      font-size: 18px;
+    }
+  }
+}
+
+/* ===== 右侧登录区 ===== */
+.login-panel {
+  width: 520px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 48px;
+  background: var(--color-bg-page);
+  transition: background var(--transition-base);
+}
+
+.login-card {
   width: 100%;
-
-  font-size: 16px;
-
-  background-color: #1e90ff;
+  max-width: 380px;
+  background: var(--color-bg-card);
+  border-radius: var(--radius-lg);
+  padding: 40px 36px;
+  box-shadow: var(--shadow-lg);
+  transition: background var(--transition-base);
 }
 
-.login-logo {
-  width: 84px;
+.card-head {
+  margin-bottom: 32px;
+
+  .card-title {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--color-text-primary);
+    margin-bottom: 8px;
+  }
+
+  .card-sub {
+    font-size: 14px;
+    color: var(--color-text-secondary);
+  }
+}
+
+.login-btn {
+  width: 100%;
   height: 44px;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  margin-top: 4px;
+  border-radius: var(--radius-md);
+  background: var(--brand-primary);
+  border-color: var(--brand-primary);
+
+  &:hover {
+    background: var(--brand-primary-hover);
+    border-color: var(--brand-primary-hover);
+  }
 }
 
-a {
-  font-size: 13px;
+.card-footer {
+  margin-top: 24px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--color-text-placeholder);
 }
 
-a:link,
-a:visited,
-a:hover,
-a:active {
-  color: #0c3c6b;
-}
+/* ===== 响应式 ===== */
+@media screen and (max-width: 860px) {
+  .login-brand {
+    display: none;
+  }
 
-.footer {
-  margin-top: 20px;
-
-  font-size: 11px;
-}
-
-:deep(.el-form) {
-  margin-top: 30px;
+  .login-panel {
+    width: 100%;
+  }
 }
 </style>

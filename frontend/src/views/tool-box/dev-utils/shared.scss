@@ -6,7 +6,7 @@
   padding: 20px 24px 16px;
   box-sizing: border-box;
   gap: 12px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
 }
 
@@ -28,7 +28,7 @@
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,13 +40,13 @@
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .header-sub {
   margin: 2px 0 0;
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 /* ── Tool Tabs ── */
@@ -54,7 +54,7 @@
   display: flex;
   gap: 6px;
   flex-shrink: 0;
-  border-bottom: 2px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 2px solid var(--color-border-light);
   padding-bottom: 0;
 }
 
@@ -67,7 +67,7 @@
   background: transparent;
   font-size: 13px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all .18s;
   border-bottom: 2px solid transparent;
@@ -80,15 +80,15 @@
   }
 
   &:hover {
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 
   &.active {
-    color: var(--el-color-primary, #409eff);
-    border-bottom-color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
     font-weight: 600;
-    background: var(--el-bg-color, #fff);
+    background: var(--color-bg-card);
   }
 }
 
@@ -117,9 +117,9 @@
 
 /* ── Card ── */
 .card {
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 12px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -130,7 +130,7 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -139,13 +139,13 @@
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   flex: 1;
 }
 
 .card-sub {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 .card-actions {
@@ -208,7 +208,7 @@
 .field-label {
   font-size: 11px;
   font-weight: 600;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   min-width: 64px;
   flex-shrink: 0;
 }
@@ -216,17 +216,17 @@
 .field-input {
   height: 32px;
   padding: 0 10px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   font-size: 12px;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
   outline: none;
   transition: border-color .15s;
   box-sizing: border-box;
 
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 
   &.mono {
@@ -258,7 +258,7 @@ textarea.field-input {
 /* ── Seg Control ── */
 .seg-ctrl {
   display: flex;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   overflow: hidden;
   flex-shrink: 0;
@@ -269,22 +269,22 @@ textarea.field-input {
     background: transparent;
     font-size: 11px;
     font-weight: 500;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--color-text-regular);
     cursor: pointer;
     transition: all .15s;
     white-space: nowrap;
-    border-right: 1px solid var(--el-border-color, #dcdfe6);
+    border-right: 1px solid var(--color-border);
 
     &:last-child {
       border-right: none;
     }
 
     &:hover {
-      background: var(--el-fill-color-light, #f5f7fa);
+      background: var(--color-bg-hover);
     }
 
     &.active {
-      background: var(--el-color-primary, #409eff);
+      background: var(--brand-primary);
       color: #fff;
     }
   }
@@ -297,17 +297,17 @@ textarea.field-input {
   gap: 5px;
   padding: 5px 12px;
   border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 
   &.sm {
@@ -321,9 +321,9 @@ textarea.field-input {
   }
 
   &.accent {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
     font-weight: 600;
   }
 }
@@ -336,17 +336,17 @@ textarea.field-input {
   width: 20px;
   height: 20px;
   border-radius: 4px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   background: transparent;
   cursor: pointer;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   transition: all .15s;
   flex-shrink: 0;
 
   &:hover {
-    color: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 }
 
@@ -362,13 +362,13 @@ textarea.field-input {
   align-items: center;
   padding: 7px 10px;
   border-radius: 8px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-light);
 }
 
 .rg-label {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   min-width: 80px;
   flex-shrink: 0;
 }
@@ -393,11 +393,11 @@ textarea.field-input {
 
 .result-err {
   font-size: 12px;
-  color: #dc2626;
-  background: #fff1f2;
+  color: var(--color-danger);
+  background: var(--color-danger-soft);
   padding: 8px 10px;
   border-radius: 7px;
-  border: 1px solid #fca5a5;
+  border: 1px solid rgba(220, 38, 38, .25);
 }
 
 /* ── Timezone Grid ── */
@@ -413,7 +413,7 @@ textarea.field-input {
   align-items: center;
   justify-content: space-between;
   padding: 8px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 
   &:last-child {
     border-bottom: none;
@@ -422,12 +422,12 @@ textarea.field-input {
 
 .tz-name {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .tz-time {
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 /* ── Cron ── */
@@ -445,9 +445,9 @@ textarea.field-input {
   align-items: center;
   gap: 4px;
   padding: 10px 8px;
-  border: 1.5px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1.5px solid var(--color-border-light);
   border-radius: 10px;
-  background: var(--el-fill-color-lighter, #fafafa);
+  background: var(--color-bg-hover);
 }
 
 .cf-val {
@@ -456,23 +456,23 @@ textarea.field-input {
   letter-spacing: .04em;
 
   &.cf-valid {
-    color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
   }
 
   &.cf-invalid {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 }
 
 .cf-name {
   font-size: 11px;
   font-weight: 600;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .cf-desc {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   text-align: center;
 }
 
@@ -481,12 +481,12 @@ textarea.field-input {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  border: 1px solid var(--el-color-primary-light-5, #a0cfff);
+  background: var(--brand-primary-soft);
+  border: 1px solid var(--brand-primary);
   border-radius: 8px;
   font-size: 13px;
   font-weight: 500;
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
 }
 
 .cron-next {
@@ -496,7 +496,7 @@ textarea.field-input {
 .next-title {
   font-size: 11px;
   font-weight: 600;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   margin-bottom: 6px;
 }
 
@@ -512,16 +512,16 @@ textarea.field-input {
   gap: 10px;
   padding: 6px 10px;
   border-radius: 7px;
-  background: var(--el-fill-color-lighter, #fafafa);
+  background: var(--color-bg-hover);
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .next-idx {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--el-color-primary-light-7, #79bbff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 10px;
   font-weight: 700;
@@ -541,7 +541,7 @@ textarea.field-input {
 .regex-slash {
   font-size: 20px;
   font-weight: 300;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-family: monospace;
 }
 
@@ -554,25 +554,25 @@ textarea.field-input {
 .tpl-btn {
   padding: 3px 10px;
   border-radius: 5px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  background: var(--el-fill-color-lighter, #fafafa);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-hover);
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 }
 
 .regex-preview {
   padding: 10px 12px;
   border-radius: 8px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-light);
   font-family: 'Menlo', 'Monaco', monospace;
   font-size: 12px;
   line-height: 1.7;
@@ -582,8 +582,8 @@ textarea.field-input {
 }
 
 :deep(mark.rx-match) {
-  background: #fde68a;
-  color: #92400e;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
   border-radius: 2px;
   padding: 0 1px;
 }
@@ -593,8 +593,8 @@ textarea.field-input {
   border-radius: 5px;
   font-size: 11px;
   font-weight: 600;
-  background: #dcfce7;
-  color: #16a34a;
+  background: var(--color-success-soft);
+  color: var(--color-success);
 }
 
 .no-match-badge {
@@ -602,8 +602,8 @@ textarea.field-input {
   border-radius: 5px;
   font-size: 11px;
   font-weight: 600;
-  background: #fee2e2;
-  color: #dc2626;
+  background: var(--color-danger-soft);
+  color: var(--color-danger);
 }
 
 .match-list {
@@ -629,16 +629,16 @@ textarea.field-input {
   gap: 8px;
   padding: 6px 10px;
   border-radius: 7px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-light);
 }
 
 .match-idx {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  background: #fde68a;
-  color: #92400e;
+  background: var(--color-warning-soft);
+  color: var(--color-warning);
   font-size: 10px;
   font-weight: 700;
   display: flex;
@@ -656,13 +656,13 @@ textarea.field-input {
 
 .match-val {
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   word-break: break-all;
 }
 
 .match-pos {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 .match-groups {
@@ -675,8 +675,8 @@ textarea.field-input {
 .group-item {
   font-size: 10px;
   padding: 1px 6px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
   border-radius: 4px;
 }
 
@@ -699,7 +699,7 @@ textarea.field-input {
   display: flex;
   align-items: center;
   padding: 7px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 
   &:last-child {
     border-bottom: none;
@@ -708,7 +708,7 @@ textarea.field-input {
 
 .up-key {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   min-width: 56px;
   flex-shrink: 0;
 }
@@ -733,7 +733,7 @@ textarea.field-input {
   font-size: 12px;
   flex: 1;
   word-break: break-all;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .count-badge {
@@ -741,8 +741,8 @@ textarea.field-input {
   border-radius: 5px;
   font-size: 11px;
   font-weight: 600;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
 }
 
 .param-table {
@@ -753,7 +753,7 @@ textarea.field-input {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   padding: 7px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   font-size: 12px;
   gap: 10px;
 }
@@ -763,8 +763,8 @@ textarea.field-input {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: .06em;
-  color: var(--el-text-color-placeholder, #c0c4cc);
-  background: var(--el-fill-color-lighter, #fafafa);
+  color: var(--color-text-placeholder);
+  background: var(--color-bg-hover);
 }
 
 .pt-row:last-child {
@@ -772,16 +772,16 @@ textarea.field-input {
 }
 
 .pt-key {
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   font-weight: 600;
 }
 
 .pt-raw {
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .pt-decoded {
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 /* ── Radix ── */
@@ -794,8 +794,8 @@ textarea.field-input {
 .rx-item {
   padding: 10px 12px;
   border-radius: 9px;
-  border: 1.5px solid var(--el-border-color-lighter, #ebeef5);
-  background: var(--el-fill-color-lighter, #fafafa);
+  border: 1.5px solid var(--color-border-light);
+  background: var(--color-bg-hover);
 }
 
 .rx-header {
@@ -808,14 +808,14 @@ textarea.field-input {
 .rx-label {
   font-size: 11px;
   font-weight: 600;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .rx-base {
   font-size: 10px;
   padding: 1px 6px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-soft);
+  color: var(--brand-primary);
   border-radius: 4px;
   font-weight: 700;
 }
@@ -829,7 +829,7 @@ textarea.field-input {
 .rx-val {
   font-size: 14px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   flex: 1;
   word-break: break-all;
 }
@@ -846,18 +846,18 @@ textarea.field-input {
   border-radius: 4px;
   font-family: monospace;
   font-size: 11px;
-  background: var(--el-fill-color, #f0f2f5);
-  color: var(--el-text-color-secondary, #909399);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
 
   &.bit-one {
-    background: var(--el-color-primary-light-8, #d9ecff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-soft);
+    color: var(--brand-primary);
   }
 }
 
 .empty-hint-sm {
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   text-align: center;
   padding: 20px;
 }
@@ -874,38 +874,38 @@ textarea.field-input {
   gap: 3px;
   padding: 8px 10px;
   border-radius: 8px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-light);
 }
 
 .bi-label {
   font-size: 10px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .bi-val {
   font-size: 13px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 /* ── SQL 高亮 ── */
 :deep(.sql-kw) {
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   font-weight: 700;
 }
 
 :deep(.sql-str) {
-  color: #16a34a;
+  color: var(--color-success);
 }
 
 :deep(.sql-comment) {
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-style: italic;
 }
 
 :deep(.sql-id) {
-  color: #d97706;
+  color: var(--color-warning);
 }
 
 /* ── code-pre ── */
@@ -915,8 +915,8 @@ textarea.field-input {
   font-family: 'Menlo', 'Monaco', 'Courier New', monospace;
   font-size: 12px;
   line-height: 1.7;
-  color: var(--el-text-color-primary, #303133);
-  background: var(--el-fill-color-lighter, #fafafa);
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
   white-space: pre-wrap;
   word-break: break-all;
   overflow-y: auto;
@@ -934,11 +934,11 @@ textarea.field-input {
   transition: all .15s;
 
   &.primary {
-    background: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
     color: #fff;
 
     &:hover:not(:disabled) {
-      background: var(--el-color-primary-dark-2, #337ecc);
+      background: var(--brand-primary-hover);
     }
 
     &:disabled {
@@ -948,13 +948,13 @@ textarea.field-input {
   }
 
   &.neutral {
-    background: var(--el-fill-color, #f0f2f5);
-    border: 1.5px solid var(--el-border-color, #dcdfe6);
-    color: var(--el-text-color-regular, #606266);
+    background: var(--color-bg-hover);
+    border: 1.5px solid var(--color-border);
+    color: var(--color-text-regular);
 
     &:hover:not(:disabled) {
-      border-color: var(--el-color-primary, #409eff);
-      color: var(--el-color-primary, #409eff);
+      border-color: var(--brand-primary);
+      color: var(--brand-primary);
     }
 
     &:disabled {
@@ -966,7 +966,7 @@ textarea.field-input {
 
 .loading-text {
   font-size: 11px;
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
 }
 
 /* ── 中间件选择 ── */
@@ -994,25 +994,25 @@ textarea.field-input {
   gap: 10px;
   padding: 9px 12px;
   border-radius: 8px;
-  border: 1.5px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1.5px solid var(--color-border-light);
   background: transparent;
   cursor: pointer;
   transition: all .15s;
   text-align: left;
 
   &:hover {
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 
   &.active {
-    border-color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 }
 
 .mw-icon {
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   display: flex;
   align-items: center;
   flex-shrink: 0;
@@ -1021,7 +1021,7 @@ textarea.field-input {
 .mw-name {
   font-size: 13px;
   font-weight: 600;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   flex: 1;
 }
 
@@ -1029,8 +1029,8 @@ textarea.field-input {
   font-size: 10px;
   padding: 1px 7px;
   border-radius: 4px;
-  background: var(--el-fill-color, #f0f2f5);
-  color: var(--el-text-color-secondary, #909399);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
 }
 
 .flex1 {
@@ -1039,7 +1039,7 @@ textarea.field-input {
 
 .divider-line {
   height: 1px;
-  background: var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-border-light);
 }
 
 /* select input */
@@ -1116,8 +1116,8 @@ select.field-input {
   font-family: 'Menlo', 'Monaco', 'Cascadia Code', 'Consolas', monospace;
   font-size: 12px;
   line-height: 1.75;
-  color: var(--el-text-color-primary, #303133);
-  background: var(--el-fill-color-lighter, #fafafa);
+  color: var(--color-text-primary);
+  background: var(--color-bg-hover);
   white-space: pre;
   overflow: auto;
   min-height: 0;
@@ -1140,9 +1140,9 @@ select.field-input {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-size: 12px;
-  background: var(--el-fill-color-lighter, #fafafa);
+  background: var(--color-bg-hover);
 }
 
 /* two-col 在 config tab 下撑满高度 */
@@ -1161,4 +1161,50 @@ select.field-input {
   flex-direction: column;
   height: 100%;
   overflow: hidden;
+}
+
+/* ══════════════════════════════════════
+   移动端适配（全局）
+   ══════════════════════════════════════ */
+@media screen and (max-width: 768px) {
+  /* 双栏改纵向堆叠 */
+  .two-col {
+    flex-direction: column;
+    gap: 10px;
+
+    > .card {
+      flex: none;
+      width: 100%;
+      min-width: 0;
+    }
+  }
+
+  /* config 左侧中间件卡片取消固定宽度，纵向堆叠 */
+  .two-col.cfg-col {
+    flex-direction: column;
+    align-items: stretch;
+
+    > .card:first-child {
+      width: 100% !important;
+      flex: none;
+      height: auto;
+      max-height: 280px;
+    }
+  }
+
+  .cfg-right-col {
+    width: 100%;
+    flex: none;
+  }
+
+  /* seg 分段控件允许横向滚动 */
+  .seg-ctrl {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+
+  /* 表单行允许换行 */
+  .field-row {
+    flex-wrap: wrap;
+  }
 }

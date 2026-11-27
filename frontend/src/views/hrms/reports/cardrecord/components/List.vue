@@ -37,6 +37,8 @@
               size="small"
               :icon="Promotion"
               :loading="syncing"
+              type="primary"
+              plain
               class="btn-sync"
               @click="syncToday"
             >
@@ -62,15 +64,23 @@
         </div>
       </div>
 
-      <el-table :data="tableData" stripe size="small" style="width:100%">
+      <el-table :data="tableData" stripe size="small" style="width:100%" class="card-table">
         <el-table-column type="index" label="序号" width="60" align="center" />
-        <el-table-column prop="clockInType" label="打卡类型" width="90" align="center">
+        <el-table-column prop="clockInType" label="打卡类型" width="100" align="center">
           <template #default="{ row }">
-            <el-tag v-if="row.clockInType === 'CHECK_IN_AT_WORK'" size="small" effect="plain">上班</el-tag>
-            <el-tag v-else size="small" effect="plain" type="success">下班</el-tag>
+            <span v-if="row.clockInType === 'CHECK_IN_AT_WORK'" class="type-badge type-in">
+              <el-icon :size="12"><Sunrise /></el-icon>上班
+            </span>
+            <span v-else class="type-badge type-out">
+              <el-icon :size="12"><Sunset /></el-icon>下班
+            </span>
           </template>
         </el-table-column>
-        <el-table-column prop="employeeId" label="员工号" />
+        <el-table-column prop="employeeId" label="员工号">
+          <template #default="{ row }">
+            <span class="mono-cell">{{ row.employeeId || '—' }}</span>
+          </template>
+        </el-table-column>
         <el-table-column prop="cnName" label="中文名">
           <template #default="{ row }">
             <span class="name-cell">{{ row.cnName }}</span>
@@ -78,10 +88,21 @@
         </el-table-column>
         <el-table-column prop="enName" label="英文名">
           <template #default="{ row }">
-            <span class="en-cell">{{ row.enName }}</span>
+            <span class="en-cell">{{ row.enName || '—' }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="clockInTime" label="刷卡时间" />
+        <el-table-column prop="clockInTime" label="刷卡时间">
+          <template #default="{ row }">
+            <span class="time-cell">{{ row.clockInTime }}</span>
+          </template>
+        </el-table-column>
+        <template #empty>
+          <div class="table-empty">
+            <el-icon :size="40"><DataBoard /></el-icon>
+            <p class="empty-title">暂无打卡记录</p>
+            <p class="empty-sub">调整筛选条件，或点击右上角「同步今日打卡」拉取最新数据</p>
+          </div>
+        </template>
       </el-table>
 
       <!-- ③ 分页条 -->
@@ -104,7 +125,7 @@
 
 <script setup>
 import { ref, reactive, onMounted } from 'vue'
-import { Search, Refresh, Grid, Promotion, Clock } from '@element-plus/icons-vue'
+import { Search, Refresh, Grid, Promotion, Clock, Sunrise, Sunset, DataBoard } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import reportsService from '@/services/hrms/reports/reports.service.js'
 import notify from '@/utils/notify'
@@ -219,31 +240,32 @@ onMounted(() => getCardRecords(1))
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px;
-  background: #f5f7fa;
+  padding: 16px;
+  background: var(--color-bg-page);
   min-height: 100%;
   box-sizing: border-box;
 }
 
 /* ===== 搜索卡 ===== */
 .search-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
-  padding: 14px 16px 10px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  padding: 16px 18px 12px;
+  box-shadow: var(--shadow-sm);
 }
 
 .search-grid {
   display: grid;
   grid-template-columns: 160px 1fr;
-  gap: 8px;
-  margin-bottom: 10px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .search-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 
   .el-input, .el-select, .el-date-editor {
     width: 100% !important;
@@ -251,8 +273,9 @@ onMounted(() => getCardRecords(1))
 }
 
 .field-label {
-  font-size: 11px;
-  color: #909399;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
   letter-spacing: 0.03em;
 }
 
@@ -260,41 +283,90 @@ onMounted(() => getCardRecords(1))
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  gap: 6px;
-  padding-top: 10px;
-  border-top: 1px solid #f0f0f0;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--color-border-light);
 }
 
 /* 分隔竖线 */
 .footer-divider {
   width: 1px;
   height: 18px;
-  background: #e4e7ed;
+  background: var(--color-border);
   margin: 0 2px;
 }
 
 /* 同步按钮 */
 .btn-sync {
-  background: #f0faf6 !important;
-  border-color: #b3dece !important;
-  color: #0f6e56 !important;
+  /* 使用品牌蓝的 plain 样式，与「搜索」主按钮同族但弱化，保持协调 */
+}
 
-  &:hover {
-    background: #0f6e56 !important;
-    border-color: #0f6e56 !important;
-    color: #fff !important;
+/* 打卡类型徽章 */
+.type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1.6;
+
+  &.type-in {
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
   }
 
-  &.is-loading {
-    opacity: 0.75;
+  &.type-out {
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
   }
+}
+
+.mono-cell {
+  font-family: 'SF Mono', 'JetBrains Mono', Consolas, Menlo, monospace;
+  font-size: 12px;
+  color: var(--color-text-regular);
+}
+
+.time-cell {
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-regular);
+}
+
+/* 空状态 */
+.table-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 48px 0;
+
+  .el-icon {
+    color: var(--color-border);
+  }
+}
+
+.empty-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
+  margin: 0;
+}
+
+.empty-sub {
+  font-size: 12px;
+  color: var(--color-text-placeholder);
+  margin: 0;
 }
 
 /* ===== 数据表卡 ===== */
 .table-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -304,8 +376,8 @@ onMounted(() => getCardRecords(1))
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -318,14 +390,14 @@ onMounted(() => getCardRecords(1))
 .table-title {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #303133;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
 
   .el-icon {
-    font-size: 14px;
-    color: #909399;
+    font-size: 15px;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -335,24 +407,36 @@ onMounted(() => getCardRecords(1))
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: #b8bfc8;
+  color: var(--color-text-placeholder);
 }
 
 .table-meta {
   font-size: 12px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 }
 
 :deep(.el-table th.el-table__cell) {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.03em;
-  background: #fafafa !important;
-  color: #909399;
+  background: var(--color-bg-hover) !important;
+  color: var(--color-text-secondary);
   font-weight: 500;
+  height: 42px;
 }
 
 :deep(.el-table td.el-table__cell) {
   font-size: 12px;
+  padding: 9px 0;
+}
+
+/* 斑马纹 */
+.card-table :deep(.el-table__body tr.el-table__row--striped td.el-table__cell) {
+  background: var(--color-bg-hover);
+}
+
+/* hover 高亮 */
+.card-table :deep(.el-table__body tr:hover > td.el-table__cell) {
+  background: var(--brand-primary-fade) !important;
 }
 
 :deep(.el-table__body),
@@ -363,19 +447,19 @@ onMounted(() => getCardRecords(1))
 
 .name-cell {
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 .en-cell {
-  color: #909399;
+  color: var(--color-text-secondary);
   font-size: 12px;
 }
 
 .pagination-bar {
   display: flex;
   justify-content: flex-end;
-  padding: 10px 14px;
-  border-top: 1px solid #f0f0f0;
+  padding: 12px 16px;
+  border-top: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 </style>

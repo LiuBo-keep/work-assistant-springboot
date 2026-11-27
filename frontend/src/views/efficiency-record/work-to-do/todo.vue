@@ -7,26 +7,18 @@
       <!-- 顶部 -->
       <div class="sb-head">
         <span class="sb-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="9 11 12 14 22 4" />
-            <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-          </svg>
-          待办任务
+          <el-icon :size="14"><Checked /></el-icon>待办任务
         </span>
-        <button class="icon-btn-sm" @click="openAdd" title="新建任务">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
+        <el-tooltip content="新建任务" placement="top">
+          <button class="icon-btn-sm" @click="openAdd">
+            <el-icon :size="14"><Plus /></el-icon>
+          </button>
+        </el-tooltip>
       </div>
 
       <!-- 搜索 -->
       <div class="sb-search">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="8" />
-          <line x1="21" y1="21" x2="16.65" y2="16.65" />
-        </svg>
+        <el-icon :size="13"><Search /></el-icon>
         <input class="search-input" v-model="keyword" placeholder="搜索任务..." />
         <button v-if="keyword" class="search-clear" @click="keyword = ''">✕</button>
       </div>
@@ -53,7 +45,7 @@
           class="filter-item" :class="{ active: activePriority === p.key }"
           @click="activePriority = p.key"
         >
-          <span class="priority-flag" :style="{ color: p.color }">⚑</span>
+          <el-icon :size="13" class="priority-flag" :style="{ color: p.color }"><Top /></el-icon>
           <span class="filter-name">{{ p.label }}</span>
           <span class="filter-count">{{ countByPriority(p.key) }}</span>
         </div>
@@ -100,33 +92,28 @@
           <span class="result-count">{{ filteredTodos.length }} 个任务</span>
           <div class="sort-ctrl">
             <label class="sort-label">排序</label>
-            <select class="sort-select" v-model="sortBy">
-              <option value="createdAt">创建时间</option>
-              <option value="dueDate">截止日期</option>
-              <option value="priority">优先级</option>
-              <option value="title">标题</option>
-            </select>
-            <button class="sort-dir-btn" @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'"
-                    :title="sortDir === 'asc' ? '升序' : '降序'">
-              {{ sortDir === 'asc' ? '↑' : '↓' }}
-            </button>
+            <el-select v-model="sortBy" class="sort-select" size="small">
+              <el-option label="创建时间" value="createdAt" />
+              <el-option label="截止日期" value="dueDate" />
+              <el-option label="优先级" value="priority" />
+              <el-option label="标题" value="title" />
+            </el-select>
+            <el-button
+              class="sort-dir-btn"
+              size="small"
+              circle
+              @click="sortDir = sortDir === 'asc' ? 'desc' : 'asc'"
+              :title="sortDir === 'asc' ? '升序' : '降序'"
+            >
+              <el-icon><Top v-if="sortDir === 'asc'" /><Bottom v-else /></el-icon>
+            </el-button>
           </div>
         </div>
         <div class="toolbar-right">
-          <button class="toolbar-btn" @click="clearDone" v-if="todos.some(t => t.done)" title="清除已完成">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <polyline points="3 6 5 6 21 6" />
-              <path d="M19 6l-1 14H6L5 6" />
-            </svg>
+          <el-button size="small" :icon="Delete" v-if="todos.some(t => t.done)" @click="clearDone">
             清除已完成
-          </button>
-          <button class="toolbar-btn primary" @click="openAdd">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            新建任务
-          </button>
+          </el-button>
+          <el-button size="small" type="primary" :icon="Plus" @click="openAdd">新建任务</el-button>
         </div>
       </div>
 
@@ -141,17 +128,14 @@
           <!-- 完成勾选 -->
           <div class="todo-check" @click.stop="toggleDone(todo)">
             <div class="check-circle" :class="{ checked: todo.done }">
-              <svg v-if="todo.done" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="3">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
+              <el-icon v-if="todo.done" :size="11"><Check /></el-icon>
             </div>
           </div>
 
           <!-- 主体 -->
           <div class="todo-body">
             <div class="todo-title-row">
-              <span class="priority-flag sm" :style="{ color: getPriorityColor(todo.priority) }">⚑</span>
+              <el-icon :size="13" class="priority-flag sm" :style="{ color: getPriorityColor(todo.priority) }"><Top /></el-icon>
               <span class="todo-title" :class="{ done: todo.done }">{{ todo.title }}</span>
               <div class="todo-tags">
                 <span class="tag-badge" v-for="tag in todo.tags" :key="tag">{{ tag }}</span>
@@ -160,11 +144,7 @@
             <div class="todo-desc" v-if="todo.desc">{{ todo.desc }}</div>
             <div class="todo-meta">
               <span v-if="todo.dueDate" class="due-date" :class="{ expired: isExpired(todo) && !todo.done }">
-                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect
-                  x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2"
-                                                                                                          x2="8"
-                                                                                                          y2="6" /><line
-                  x1="3" y1="10" x2="21" y2="10" /></svg>
+                <el-icon :size="11"><Calendar /></el-icon>
                 {{ formatDate(todo.dueDate) }}
                 <span v-if="isExpired(todo) && !todo.done" class="expired-badge">逾期</span>
               </span>
@@ -174,30 +154,23 @@
 
           <!-- 操作 -->
           <div class="todo-actions" @click.stop>
-            <button class="action-icon-btn" @click="openEdit(todo)" title="编辑">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-            </button>
-            <button class="action-icon-btn danger" @click="removeTodo(todo.id)" title="删除">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6l-1 14H6L5 6" />
-                <path d="M10 11v6M14 11v6M9 6V4h6v2" />
-              </svg>
-            </button>
+            <el-tooltip content="编辑" placement="top">
+              <button class="action-icon-btn" @click="openEdit(todo)">
+                <el-icon :size="13"><Edit /></el-icon>
+              </button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top">
+              <button class="action-icon-btn danger" @click="removeTodo(todo.id)">
+                <el-icon :size="13"><Delete /></el-icon>
+              </button>
+            </el-tooltip>
           </div>
         </div>
       </div>
 
       <!-- 空状态 -->
       <div class="todo-empty" v-else>
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"
-             opacity="0.2">
-          <polyline points="9 11 12 14 22 4" />
-          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
-        </svg>
+        <el-icon :size="56" class="empty-svg"><Checked /></el-icon>
         <p class="empty-title">
           {{ keyword || activeStatus !== 'all' || activePriority !== 'all' ? '没有符合条件的任务' : '还没有任何任务'
           }}</p>
@@ -209,73 +182,67 @@
     </div>
 
     <!-- ===== 新建/编辑 弹窗 ===== -->
-    <Transition name="modal">
-      <div class="modal-mask" v-if="showForm" @click.self="closeForm">
-        <div class="modal-box">
-          <div class="modal-header">
-            <span class="modal-title">{{ editingId ? '编辑任务' : '新建任务' }}</span>
-            <button class="modal-close" @click="closeForm">✕</button>
-          </div>
-          <div class="modal-body">
-            <div class="form-group">
-              <label class="form-label required">任务标题</label>
-              <input class="form-input" v-model="form.title" placeholder="任务名称..." maxlength="100"
-                     ref="titleInputRef" />
+    <el-dialog
+      v-model="showForm"
+      :title="editingId ? '编辑任务' : '新建任务'"
+      width="500px"
+      :close-on-click-modal="false"
+      @closed="onDialogClosed"
+    >
+      <el-form label-position="top">
+        <el-form-item label="任务标题" required>
+          <el-input v-model="form.title" placeholder="任务名称..." maxlength="100" ref="titleInputRef" @keydown.enter="saveForm" />
+        </el-form-item>
+        <el-form-item label="描述">
+          <el-input v-model="form.desc" type="textarea" :rows="3" placeholder="任务描述（可选）..." />
+        </el-form-item>
+        <div class="form-row">
+          <el-form-item label="优先级" class="form-col">
+            <div class="priority-picker">
+              <button
+                v-for="p in priorities" :key="p.key"
+                class="priority-btn" :class="{ active: form.priority === p.key }"
+                :style="form.priority === p.key ? { background: p.soft, borderColor: p.color, color: p.color } : {}"
+                @click="form.priority = p.key"
+              >
+                <el-icon :size="13"><Top /></el-icon> {{ p.label }}
+              </button>
             </div>
-            <div class="form-group">
-              <label class="form-label">描述</label>
-              <textarea class="form-textarea" v-model="form.desc" placeholder="任务描述（可选）..." rows="3" />
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">优先级</label>
-                <div class="priority-picker">
-                  <button
-                    v-for="p in priorities" :key="p.key"
-                    class="priority-btn" :class="{ active: form.priority === p.key }"
-                    :style="form.priority === p.key ? { background: p.color + '22', borderColor: p.color, color: p.color } : {}"
-                    @click="form.priority = p.key"
-                  >
-                    <span>⚑</span> {{ p.label }}
-                  </button>
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">截止日期</label>
-                <input class="form-input" type="date" v-model="form.dueDate" />
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">标签</label>
-              <div class="tag-input-wrap">
-                <span class="tag-badge removable" v-for="(tag, i) in form.tags" :key="tag">
-                  {{ tag }}<button @click="form.tags.splice(i, 1)">✕</button>
-                </span>
-                <input
-                  class="tag-input"
-                  v-model="tagInput"
-                  placeholder="输入标签后按 Enter"
-                  @keydown.enter.prevent="addTag"
-                  @keydown.backspace="tagInput === '' && form.tags.length && form.tags.pop()"
-                />
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button class="modal-btn cancel" @click="closeForm">取消</button>
-            <button class="modal-btn confirm" @click="saveForm" :disabled="!form.title.trim()">
-              {{ editingId ? '保存修改' : '创建任务' }}
-            </button>
-          </div>
+          </el-form-item>
+          <el-form-item label="截止日期" class="form-col">
+            <el-date-picker v-model="form.dueDate" type="date" value-format="YYYY-MM-DD" placeholder="选择日期" style="width:100%" />
+          </el-form-item>
         </div>
-      </div>
-    </Transition>
+        <el-form-item label="标签">
+          <div class="tag-input-wrap">
+            <el-tag
+              v-for="(tag, i) in form.tags" :key="tag"
+              closable size="small" @close="form.tags.splice(i, 1)"
+            >{{ tag }}</el-tag>
+            <input
+              class="tag-input"
+              v-model="tagInput"
+              placeholder="输入标签后按 Enter"
+              @keydown.enter.prevent="addTag"
+              @keydown.backspace="tagInput === '' && form.tags.length && form.tags.pop()"
+            />
+          </div>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="showForm = false">取消</el-button>
+        <el-button type="primary" :disabled="!form.title.trim()" @click="saveForm">
+          {{ editingId ? '保存修改' : '创建任务' }}
+        </el-button>
+      </template>
+    </el-dialog>
 
   </div>
 </template>
 
 <script setup>
 import { ref, computed, nextTick, watch } from 'vue'
+import { Plus, Search, Check, Checked, Delete, Edit, Top, Bottom, Calendar } from '@element-plus/icons-vue'
 
 /* ============================================================
    持久化：localStorage
@@ -321,23 +288,23 @@ const form = ref({ title: '', desc: '', priority: 'medium', dueDate: '', tags: [
    常量
    ============================================================ */
 const priorities = [
-  { key: 'high', label: '高', color: '#dc2626' },
-  { key: 'medium', label: '中', color: '#d97706' },
-  { key: 'low', label: '低', color: '#16a34a' }
+  { key: 'high', label: '高', color: 'var(--color-danger)', soft: 'var(--color-danger-soft)' },
+  { key: 'medium', label: '中', color: 'var(--color-warning)', soft: 'var(--color-warning-soft)' },
+  { key: 'low', label: '低', color: 'var(--color-success)', soft: 'var(--color-success-soft)' }
 ]
 
 const statusFilters = [
-  { key: 'all', label: '全部', color: '#909399' },
-  { key: 'todo', label: '待完成', color: '#409eff' },
-  { key: 'done', label: '已完成', color: '#16a34a' },
-  { key: 'expired', label: '已逾期', color: '#dc2626' }
+  { key: 'all', label: '全部', color: 'var(--color-text-secondary)' },
+  { key: 'todo', label: '待完成', color: 'var(--brand-primary)' },
+  { key: 'done', label: '已完成', color: 'var(--color-success)' },
+  { key: 'expired', label: '已逾期', color: 'var(--color-danger)' }
 ]
 
 const priorityFilters = [
-  { key: 'all', label: '全部优先级', color: '#909399' },
-  { key: 'high', label: '高', color: '#dc2626' },
-  { key: 'medium', label: '中', color: '#d97706' },
-  { key: 'low', label: '低', color: '#16a34a' }
+  { key: 'all', label: '全部优先级', color: 'var(--color-text-secondary)' },
+  { key: 'high', label: '高', color: 'var(--color-danger)' },
+  { key: 'medium', label: '中', color: 'var(--color-warning)' },
+  { key: 'low', label: '低', color: 'var(--color-success)' }
 ]
 
 /* ============================================================
@@ -415,7 +382,7 @@ function formatDate(dateStr, relative = false) {
 }
 
 function getPriorityColor(priority) {
-  return priorities.find(p => p.key === priority)?.color || '#909399'
+  return priorities.find(p => p.key === priority)?.color || 'var(--color-text-secondary)'
 }
 
 function countByStatus(key) {
@@ -479,6 +446,11 @@ function closeForm() {
   editingId.value = null
 }
 
+function onDialogClosed() {
+  editingId.value = null
+  tagInput.value = ''
+}
+
 function addTag() {
   const t = tagInput.value.trim()
   if (t && !form.value.tags.includes(t)) form.value.tags.push(t)
@@ -515,7 +487,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 .todo-layout {
   display: flex;
   height: 100%;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
 }
 
@@ -523,8 +495,8 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 .todo-sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: var(--el-bg-color, #fff);
-  border-right: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -554,7 +526,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .icon-btn-sm {
@@ -567,12 +539,12 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   transition: all .15s;
 
   &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
   }
 }
 
@@ -583,12 +555,12 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   gap: 6px;
   margin: 0 10px 8px;
   padding: 6px 8px;
-  background: var(--el-fill-color-lighter, #fafafa);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-hover);
+  border: 1px solid var(--color-border-light);
   border-radius: 7px;
 
   &:focus-within {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 
@@ -598,10 +570,10 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   background: transparent;
   outline: none;
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 
   &::placeholder {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
@@ -610,17 +582,17 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   background: transparent;
   cursor: pointer;
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 
   &:hover {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 }
 
 /* 筛选分区 */
 .filter-section {
   padding: 8px 10px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .filter-label {
@@ -628,7 +600,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   margin-bottom: 4px;
   padding-left: 4px;
 }
@@ -642,15 +614,15 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   cursor: pointer;
   transition: background .12s;
   font-size: 12px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
 
   &:hover {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
   }
 
   &.active {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
     font-weight: 600;
   }
 }
@@ -677,11 +649,11 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 8px;
-  background: var(--el-fill-color, #f0f2f5);
-  color: var(--el-text-color-secondary, #909399);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
 
   .active & {
-    background: var(--el-color-primary-light-7, #79bbff);
+    background: var(--brand-primary);
     color: #fff;
   }
 }
@@ -698,20 +670,20 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   padding: 2px 8px;
   border-radius: 10px;
   font-size: 11px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-secondary, #909399);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
   }
 
   &.active {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #fff;
   }
 }
@@ -723,7 +695,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   justify-content: space-around;
   padding: 14px 10px;
   margin-top: auto;
-  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .stat-item {
@@ -737,26 +709,26 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   font-size: 20px;
   font-weight: 700;
   font-family: monospace;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 
   &.done {
-    color: #16a34a;
+    color: var(--color-success);
   }
 
   &.expired {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 }
 
 .stat-lbl {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 .stat-divider {
   width: 1px;
   height: 28px;
-  background: var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-border-light);
 }
 
 /* ══ 右侧主区域 ══ */
@@ -774,8 +746,8 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-  background: var(--el-bg-color, #fff);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg-card);
   flex-shrink: 0;
 }
 
@@ -793,7 +765,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 
 .result-count {
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .sort-ctrl {
@@ -804,67 +776,21 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 
 .sort-label {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .sort-select {
-  height: 26px;
-  padding: 0 6px;
-  border-radius: 5px;
-  font-size: 11px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-regular, #606266);
-  outline: none;
-  cursor: pointer;
+  width: 110px;
 }
 
 .sort-dir-btn {
-  width: 24px;
-  height: 24px;
-  border-radius: 5px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--el-text-color-regular, #606266);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: var(--color-text-regular);
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-  }
-}
-
-.toolbar-btn {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  padding: 5px 12px;
-  border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  background: transparent;
-  font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
-  cursor: pointer;
-
-  &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
-  }
-
-  &.primary {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
-    color: #fff;
-
-    &:hover {
-      background: var(--el-color-primary-dark-2, #337ecc);
-    }
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
   }
 }
 
@@ -893,21 +819,21 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   align-items: flex-start;
   gap: 10px;
   padding: 12px 14px;
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 10px;
-  border: 1.5px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1.5px solid var(--color-border-light);
   cursor: pointer;
   transition: all .15s;
   flex-shrink: 0;
 
   &:hover {
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    box-shadow: 0 2px 8px rgba(64, 158, 255, .1);
+    border-color: var(--brand-primary-soft);
+    box-shadow: var(--shadow-sm);
   }
 
   &.selected {
-    border-color: var(--el-color-primary, #409eff);
-    box-shadow: 0 2px 12px rgba(64, 158, 255, .15);
+    border-color: var(--brand-primary);
+    box-shadow: var(--shadow-md);
   }
 
   &.done {
@@ -915,8 +841,8 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   }
 
   &.expired:not(.done) {
-    border-color: #fca5a5;
-    background: #fff5f5;
+    border-color: var(--color-danger-soft);
+    background: var(--color-danger-soft);
   }
 }
 
@@ -930,7 +856,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 2px solid var(--el-border-color, #dcdfe6);
+  border: 2px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -938,12 +864,12 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   cursor: pointer;
 
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 
   &.checked {
-    background: var(--el-color-success, #67c23a);
-    border-color: var(--el-color-success, #67c23a);
+    background: var(--color-success);
+    border-color: var(--color-success);
     color: #fff;
   }
 }
@@ -972,13 +898,13 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 .todo-title {
   font-size: 13px;
   font-weight: 500;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   flex: 1;
   word-break: break-all;
 
   &.done {
     text-decoration: line-through;
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
@@ -992,8 +918,8 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   font-size: 10px;
   padding: 1px 7px;
   border-radius: 8px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-fade);
+  color: var(--brand-primary);
 
   &.removable {
     display: flex;
@@ -1014,7 +940,7 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 
 .todo-desc {
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1031,10 +957,10 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 
   &.expired {
-    color: #dc2626;
+    color: var(--color-danger);
     font-weight: 600;
   }
 }
@@ -1042,15 +968,15 @@ watch(todos, (v) => saveTodos(v), { deep: true })
 .expired-badge {
   padding: 0 5px;
   border-radius: 4px;
-  background: #fca5a5;
-  color: #7f1d1d;
+  background: var(--color-danger);
+  color: #fff;
   font-size: 9px;
   font-weight: 700;
 }
 
 .created-at {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 /* 操作按钮 */
@@ -1077,17 +1003,17 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   transition: all .15s;
 
   &:hover {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-primary, #303133);
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
   }
 
   &.danger:hover {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
 }
 
@@ -1101,151 +1027,39 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   gap: 10px;
 }
 
+.empty-svg {
+  color: var(--color-border);
+  opacity: .5;
+}
+
 .empty-title {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .empty-sub {
   margin: 0;
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
-/* ══ 弹窗 ══ */
-.modal-mask {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.modal-box {
-  width: 500px;
-  max-width: 94vw;
-  background: var(--el-bg-color, #fff);
-  border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-}
-
-.modal-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
-}
-
-.modal-close {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--el-text-color-secondary, #909399);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-primary, #303133);
-  }
-}
-
-.modal-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow-y: auto;
-  max-height: 65vh;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, .08);
-    border-radius: 2px;
-  }
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 14px 20px;
-  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
-}
-
+/* ══ 弹窗表单 ══ */
 .form-row {
   display: flex;
   gap: 14px;
 
-  .form-group {
+  .form-col {
     flex: 1;
   }
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--el-text-color-regular, #606266);
-
-  &.required::after {
-    content: ' *';
-    color: #dc2626;
-  }
-}
-
-.form-input, .form-textarea {
-  padding: 8px 10px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
-  border-radius: 7px;
-  font-size: 13px;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
-  outline: none;
-  transition: border-color .15s;
-  font-family: inherit;
-
-  &:focus {
-    border-color: var(--el-color-primary, #409eff);
-  }
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 72px;
 }
 
 /* 优先级选择 */
 .priority-picker {
   display: flex;
   gap: 7px;
+  width: 100%;
 }
 
 .priority-btn {
@@ -1256,16 +1070,16 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   gap: 5px;
   padding: 6px 0;
   border-radius: 7px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   background: transparent;
   font-size: 12px;
   font-weight: 500;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-text-color-secondary, #909399);
+    border-color: var(--color-text-secondary);
   }
 
   &.active {
@@ -1280,13 +1094,15 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   align-items: center;
   gap: 5px;
   padding: 6px 8px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
-  border-radius: 7px;
-  min-height: 38px;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  min-height: 32px;
   cursor: text;
+  width: 100%;
+  box-sizing: border-box;
 
   &:focus-within {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 
@@ -1295,59 +1111,48 @@ watch(todos, (v) => saveTodos(v), { deep: true })
   outline: none;
   background: transparent;
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
   min-width: 80px;
   flex: 1;
 
   &::placeholder {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
-/* 弹窗按钮 */
-.modal-btn {
-  padding: 8px 22px;
-  border-radius: 8px;
-  border: none;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .15s;
-
-  &.cancel {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-regular, #606266);
-
-    &:hover {
-      background: var(--el-fill-color-dark, #e6e8eb);
-    }
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .todo-layout {
+    flex-direction: column;
   }
 
-  &.confirm {
-    background: var(--el-color-primary, #409eff);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      background: var(--el-color-primary-dark-2, #337ecc);
-    }
-
-    &:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
+  .todo-sidebar {
+    width: 100%;
+    flex-shrink: 0;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-light);
+    overflow-x: auto;
+    overflow-y: hidden;
   }
-}
 
-/* 弹窗动画 */
-.modal-enter-active, .modal-leave-active {
-  transition: all .2s ease;
-}
+  .todo-main {
+    flex: 1;
+    min-height: 0;
+  }
 
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
+  .main-toolbar {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
 
-  .modal-box {
-    transform: scale(.94) translateY(-10px);
+  .todo-list {
+    padding: 10px;
+  }
+
+  .todo-item {
+    padding: 10px 12px;
   }
 }
 </style>

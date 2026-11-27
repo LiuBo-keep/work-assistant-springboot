@@ -9,9 +9,7 @@ import com.work.assistant.external.notify.enums.NotifyType;
 import com.work.assistant.external.notify.manager.NotifyManager;
 import com.work.assistant.external.notify.model.NotifyRequest;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -72,8 +70,8 @@ public class HrmsCheckInNotificationJob {
 
     try {
 
-      HrmsNotifyConfig config = getEnableConfig();
-      if (config == null || Boolean.FALSE.equals(config.getEnabled())) {
+      HrmsNotifyConfig config = hrmsNotifyConfigRepository.findEnabledConfig();
+      if (config == null) {
         log.warn("hrms notify config not enabled");
         return;
       }
@@ -169,21 +167,5 @@ public class HrmsCheckInNotificationJob {
     }
 
     return builder.toString();
-  }
-
-  /**
-   * 获取启用配置
-   */
-  private HrmsNotifyConfig getEnableConfig() {
-
-    List<HrmsNotifyConfig> configs = hrmsNotifyConfigRepository.findAll();
-    if (CollectionUtils.isEmpty(configs)) {
-      return null;
-    }
-    HrmsNotifyConfig config = configs.getFirst();
-    if (Boolean.FALSE.equals(config.getEnabled())) {
-      return null;
-    }
-    return config;
   }
 }

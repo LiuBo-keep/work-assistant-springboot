@@ -424,8 +424,8 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 12px;
-  padding: 12px;
-  background: #f5f7fa;
+  padding: 16px;
+  background: var(--color-bg-page);
   min-height: 100%;
   box-sizing: border-box;
 }
@@ -439,39 +439,40 @@ onMounted(() => {
 }
 
 .lock-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 12px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-lg);
   padding: 36px 32px 28px;
   width: 360px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 12px;
+  box-shadow: var(--shadow-md);
 }
 
 .lock-icon {
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: #e6f1fb;
+  background: var(--brand-primary-fade);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #185fa5;
+  color: var(--brand-primary);
   margin-bottom: 4px;
 }
 
 .lock-title {
   font-size: 16px;
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .lock-desc {
   font-size: 12px;
-  color: #909399;
+  color: var(--color-text-secondary);
   text-align: center;
   line-height: 1.6;
   margin: 0;
@@ -483,7 +484,7 @@ onMounted(() => {
 
 .lock-link {
   font-size: 12px;
-  color: #409eff;
+  color: var(--brand-primary);
   cursor: pointer;
 
   &:hover {
@@ -493,10 +494,11 @@ onMounted(() => {
 
 /* ===== 搜索卡 ===== */
 .search-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   padding: 14px 16px 10px;
+  box-shadow: var(--shadow-sm);
 }
 
 .search-grid {
@@ -519,7 +521,7 @@ onMounted(() => {
 .search-field {
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: 6px;
 
   .el-input, .el-select {
     width: 100% !important;
@@ -527,8 +529,9 @@ onMounted(() => {
 }
 
 .field-label {
-  font-size: 11px;
-  color: #909399;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--color-text-secondary);
   letter-spacing: 0.03em;
 }
 
@@ -537,14 +540,15 @@ onMounted(() => {
   justify-content: flex-end;
   gap: 6px;
   padding-top: 10px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-border-light);
 }
 
 /* ===== 表格卡 ===== */
 .table-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -552,34 +556,34 @@ onMounted(() => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 10px 14px;
-  border-bottom: 1px solid #f0f0f0;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .table-title {
   display: flex;
   align-items: center;
-  gap: 5px;
-  font-size: 13px;
-  font-weight: 500;
-  color: #303133;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-primary);
 
   .el-icon {
-    font-size: 14px;
-    color: #909399;
+    font-size: 15px;
+    color: var(--color-text-secondary);
   }
 }
 
 .table-meta {
   font-size: 12px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 }
 
 :deep(.el-table th.el-table__cell) {
-  font-size: 11px;
+  font-size: 12px;
   letter-spacing: 0.03em;
-  background: #fafafa !important;
-  color: #909399;
+  background: var(--color-bg-hover) !important;
+  color: var(--color-text-secondary);
   font-weight: 500;
 }
 
@@ -595,18 +599,18 @@ onMounted(() => {
 
 .name-cell {
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 .mono-cell {
   font-family: monospace;
   font-size: 11px;
-  color: #606266;
+  color: var(--color-text-regular);
 }
 
 .muted {
   font-size: 12px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 }
 
 /* 网站地址链接 */
@@ -615,7 +619,7 @@ onMounted(() => {
   align-items: center;
   gap: 4px;
   font-size: 12px;
-  color: #409eff;
+  color: var(--brand-primary);
   text-decoration: none;
   max-width: 100%;
 
@@ -640,7 +644,7 @@ onMounted(() => {
   font-family: monospace;
   font-size: 12px;
   letter-spacing: 1px;
-  color: #606266;
+  color: var(--color-text-regular);
   flex: 1;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -649,13 +653,13 @@ onMounted(() => {
 
 .pwd-action {
   font-size: 14px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
   cursor: pointer;
   flex-shrink: 0;
   transition: color 0.15s;
 
   &:hover {
-    color: #409eff;
+    color: var(--brand-primary);
   }
 }
 
@@ -666,7 +670,7 @@ onMounted(() => {
   justify-content: center;
   gap: 10px;
   padding: 48px 0;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 
   p {
     font-size: 13px;
@@ -682,7 +686,7 @@ onMounted(() => {
 
 .import-file-name {
   font-size: 12px;
-  color: #409eff;
+  color: var(--brand-primary);
   margin: 8px 0 0;
   font-family: monospace;
 }

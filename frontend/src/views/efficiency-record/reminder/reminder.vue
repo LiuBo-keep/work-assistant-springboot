@@ -6,26 +6,18 @@
 
       <div class="sb-head">
         <span class="sb-title">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-            <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-          </svg>
-          定时提醒
+          <el-icon :size="14"><Bell /></el-icon>定时提醒
         </span>
-        <button class="icon-btn-sm" @click="openAdd" title="新建提醒">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <line x1="12" y1="5" x2="12" y2="19" />
-            <line x1="5" y1="12" x2="19" y2="12" />
-          </svg>
-        </button>
+        <el-tooltip content="新建提醒" placement="top">
+          <button class="icon-btn-sm" @click="openAdd">
+            <el-icon :size="14"><Plus /></el-icon>
+          </button>
+        </el-tooltip>
       </div>
 
       <!-- 通知权限状态 -->
       <div class="perm-card" :class="permClass">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
+        <el-icon :size="14"><Bell /></el-icon>
         <div class="perm-text">
           <span class="perm-title">{{ permTitle }}</span>
           <span class="perm-sub">{{ permSub }}</span>
@@ -41,7 +33,7 @@
           class="filter-item" :class="{ active: activeCategory === c.key }"
           @click="activeCategory = c.key"
         >
-          <span class="filter-icon" v-html="c.icon" />
+          <span class="filter-icon"><el-icon :size="12"><component :is="c.icon" /></el-icon></span>
           <span class="filter-name">{{ c.label }}</span>
           <span class="filter-count">{{ countByCategory(c.key) }}</span>
         </div>
@@ -83,13 +75,7 @@
       <div class="main-toolbar">
         <span class="result-count">{{ filteredReminders.length }} 个提醒</span>
         <div class="toolbar-right">
-          <button class="toolbar-btn primary" @click="openAdd">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-              <line x1="12" y1="5" x2="12" y2="19" />
-              <line x1="5" y1="12" x2="19" y2="12" />
-            </svg>
-            新建提醒
-          </button>
+          <el-button type="primary" size="small" :icon="Plus" @click="openAdd">新建提醒</el-button>
         </div>
       </div>
 
@@ -106,8 +92,8 @@
 
           <!-- 图标 -->
           <div class="r-icon"
-               :style="{ background: getCategory(r.category).color + '18', color: getCategory(r.category).color }">
-            <span v-html="getCategory(r.category).icon" />
+               :style="{ background: getCategory(r.category).soft, color: getCategory(r.category).color }">
+            <el-icon :size="16"><component :is="getCategory(r.category).icon" /></el-icon>
           </div>
 
           <!-- 主体 -->
@@ -115,17 +101,14 @@
             <div class="r-title-row">
               <span class="r-title" :class="{ disabled: !r.enabled }">{{ r.title }}</span>
               <span class="r-category-badge"
-                    :style="{ background: getCategory(r.category).color + '18', color: getCategory(r.category).color }">{{ getCategory(r.category).label
+                    :style="{ background: getCategory(r.category).soft, color: getCategory(r.category).color }">{{ getCategory(r.category).label
                 }}</span>
             </div>
 
             <div class="r-time-row">
               <!-- 一次性 -->
               <template v-if="r.repeatType === 'once'">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <circle cx="12" cy="12" r="10" />
-                  <polyline points="12 6 12 12 16 14" />
-                </svg>
+                <el-icon :size="11"><Clock /></el-icon>
                 <span>{{ formatDateTime(r.datetime) }}</span>
                 <span v-if="r.enabled" class="countdown"
                       :class="{ soon: getCountdownMs(r) < 3600000 }">{{ formatCountdown(r) }}</span>
@@ -133,20 +116,14 @@
 
               <!-- 每天 -->
               <template v-else-if="r.repeatType === 'daily'">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="23 4 23 10 17 10" />
-                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-                </svg>
+                <el-icon :size="11"><Refresh /></el-icon>
                 <span>每天 {{ r.time }}</span>
                 <span v-if="r.enabled" class="countdown">{{ formatCountdown(r) }}</span>
               </template>
 
               <!-- 每周 -->
               <template v-else-if="r.repeatType === 'weekly'">
-                <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="23 4 23 10 17 10" />
-                  <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
-                </svg>
+                <el-icon :size="11"><Refresh /></el-icon>
                 <span>{{ formatWeekdays(r.weekdays) }} {{ r.time }}</span>
                 <span v-if="r.enabled" class="countdown">{{ formatCountdown(r) }}</span>
               </template>
@@ -157,36 +134,28 @@
 
           <!-- 操作 -->
           <div class="r-actions">
-            <button class="action-icon-btn" @click="testNotify(r)" title="测试通知">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-            </button>
-            <button class="action-icon-btn" @click="openEdit(r)" title="编辑">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
-                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
-              </svg>
-            </button>
-            <button class="action-icon-btn danger" @click="removeReminder(r.id)" title="删除">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6" />
-                <path d="M19 6l-1 14H6L5 6" />
-                <path d="M10 11v6M14 11v6M9 6V4h6v2" />
-              </svg>
-            </button>
+            <el-tooltip content="测试通知" placement="top">
+              <button class="action-icon-btn" @click="testNotify(r)">
+                <el-icon :size="13"><Bell /></el-icon>
+              </button>
+            </el-tooltip>
+            <el-tooltip content="编辑" placement="top">
+              <button class="action-icon-btn" @click="openEdit(r)">
+                <el-icon :size="13"><Edit /></el-icon>
+              </button>
+            </el-tooltip>
+            <el-tooltip content="删除" placement="top">
+              <button class="action-icon-btn danger" @click="removeReminder(r.id)">
+                <el-icon :size="13"><Delete /></el-icon>
+              </button>
+            </el-tooltip>
           </div>
         </div>
       </div>
 
       <!-- 空状态 -->
       <div class="reminder-empty" v-else>
-        <svg width="56" height="56" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.8"
-             opacity="0.2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
+        <el-icon :size="56" class="empty-svg"><Bell /></el-icon>
         <p class="empty-title">{{ activeCategory !== 'all' || activeStatus !== 'all' ? '没有符合条件的提醒' : '还没有任何提醒'
           }}</p>
         <p class="empty-sub">{{ activeCategory !== 'all' || activeStatus !== 'all' ? '换个条件试试' : '点击右上角「新建提醒」开始'
@@ -196,95 +165,76 @@
     </div>
 
     <!-- ===== 新建/编辑 弹窗 ===== -->
-    <Transition name="modal">
-      <div class="modal-mask" v-if="showForm" @click.self="closeForm">
-        <div class="modal-box">
-          <div class="modal-header">
-            <span class="modal-title">{{ editingId ? '编辑提醒' : '新建提醒' }}</span>
-            <button class="modal-close" @click="closeForm">✕</button>
-          </div>
-          <div class="modal-body">
+    <el-dialog
+      v-model="showForm"
+      :title="editingId ? '编辑提醒' : '新建提醒'"
+      width="520px"
+      :close-on-click-modal="false"
+      @closed="onDialogClosed"
+    >
+      <el-form label-position="top">
+        <el-form-item label="提醒标题" required>
+          <el-input v-model="form.title" placeholder="例如：喝水时间" maxlength="50" ref="titleInputRef" @keydown.enter="saveForm" />
+        </el-form-item>
 
-            <div class="form-group">
-              <label class="form-label required">提醒标题</label>
-              <input class="form-input" v-model="form.title" placeholder="例如：喝水时间" maxlength="50"
-                     ref="titleInputRef" />
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">分类</label>
-              <div class="category-picker">
-                <button
-                  v-for="c in categories" :key="c.key"
-                  class="category-btn" :class="{ active: form.category === c.key }"
-                  :style="form.category === c.key ? { background: c.color + '18', borderColor: c.color, color: c.color } : {}"
-                  @click="form.category = c.key"
-                >
-                  <span v-html="c.icon" /> {{ c.label }}
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">重复方式</label>
-              <div class="seg-ctrl">
-                <button :class="{ active: form.repeatType === 'once' }" @click="form.repeatType = 'once'">仅一次
-                </button>
-                <button :class="{ active: form.repeatType === 'daily' }" @click="form.repeatType = 'daily'">每天
-                </button>
-                <button :class="{ active: form.repeatType === 'weekly' }" @click="form.repeatType = 'weekly'">每周
-                </button>
-              </div>
-            </div>
-
-            <!-- 仅一次：日期时间 -->
-            <div class="form-group" v-if="form.repeatType === 'once'">
-              <label class="form-label required">提醒时间</label>
-              <input class="form-input" type="datetime-local" v-model="form.datetime" />
-            </div>
-
-            <!-- 每天/每周：时间 -->
-            <div class="form-group" v-else>
-              <label class="form-label required">提醒时刻</label>
-              <input class="form-input" type="time" v-model="form.time" style="width:140px" />
-            </div>
-
-            <!-- 每周：星期选择 -->
-            <div class="form-group" v-if="form.repeatType === 'weekly'">
-              <label class="form-label required">重复星期</label>
-              <div class="weekday-picker">
-                <button
-                  v-for="(w, i) in weekdayNames" :key="i"
-                  class="weekday-btn" :class="{ active: form.weekdays.includes(i) }"
-                  @click="toggleWeekday(i)"
-                >{{ w }}
-                </button>
-              </div>
-            </div>
-
-            <div class="form-group">
-              <label class="form-label">备注</label>
-              <textarea class="form-textarea" v-model="form.desc" placeholder="提醒内容（可选）..." rows="2" />
-            </div>
-
-          </div>
-          <div class="modal-footer">
-            <button class="modal-btn cancel" @click="closeForm">取消</button>
-            <button class="modal-btn confirm" @click="saveForm" :disabled="!canSave">
-              {{ editingId ? '保存修改' : '创建提醒' }}
+        <el-form-item label="分类">
+          <div class="category-picker">
+            <button
+              v-for="c in categories" :key="c.key"
+              class="category-btn" :class="{ active: form.category === c.key }"
+              :style="form.category === c.key ? { background: c.soft, borderColor: c.color, color: c.color } : {}"
+              @click="form.category = c.key"
+            >
+              <el-icon :size="13"><component :is="c.icon" /></el-icon> {{ c.label }}
             </button>
           </div>
-        </div>
-      </div>
-    </Transition>
+        </el-form-item>
+
+        <el-form-item label="重复方式">
+          <div class="seg-ctrl">
+            <button :class="{ active: form.repeatType === 'once' }" @click="form.repeatType = 'once'">仅一次</button>
+            <button :class="{ active: form.repeatType === 'daily' }" @click="form.repeatType = 'daily'">每天</button>
+            <button :class="{ active: form.repeatType === 'weekly' }" @click="form.repeatType = 'weekly'">每周</button>
+          </div>
+        </el-form-item>
+
+        <!-- 仅一次：日期时间 -->
+        <el-form-item v-if="form.repeatType === 'once'" label="提醒时间" required>
+          <el-date-picker v-model="form.datetime" type="datetime" value-format="YYYY-MM-DDTHH:mm:ss" placeholder="选择日期时间" style="width:100%" />
+        </el-form-item>
+
+        <!-- 每天/每周：时间 -->
+        <el-form-item v-else label="提醒时刻" required>
+          <el-time-picker v-model="form.time" format="HH:mm" value-format="HH:mm" placeholder="选择时刻" style="width:140px" />
+        </el-form-item>
+
+        <!-- 每周：星期选择 -->
+        <el-form-item v-if="form.repeatType === 'weekly'" label="重复星期" required>
+          <div class="weekday-picker">
+            <button
+              v-for="(w, i) in weekdayNames" :key="i"
+              class="weekday-btn" :class="{ active: form.weekdays.includes(i) }"
+              @click="toggleWeekday(i)"
+            >{{ w }}</button>
+          </div>
+        </el-form-item>
+
+        <el-form-item label="备注">
+          <el-input v-model="form.desc" type="textarea" :rows="2" placeholder="提醒内容（可选）..." />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <el-button @click="showForm = false">取消</el-button>
+        <el-button type="primary" :disabled="!canSave" @click="saveForm">
+          {{ editingId ? '保存修改' : '创建提醒' }}
+        </el-button>
+      </template>
+    </el-dialog>
 
     <!-- ===== 弹出通知 Toast（权限被拒绝时的兜底） ===== -->
     <Transition name="toast">
       <div class="toast-notify" v-if="toastMsg">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-          <path d="M13.73 21a2 2 0 0 1-3.46 0" />
-        </svg>
+        <el-icon :size="16"><Bell /></el-icon>
         <div class="toast-text">
           <strong>{{ toastMsg.title }}</strong>
           <span v-if="toastMsg.body">{{ toastMsg.body }}</span>
@@ -297,6 +247,7 @@
 
 <script setup>
 import { ref, computed, nextTick, watch, onMounted, onBeforeUnmount } from 'vue'
+import { Plus, Bell, Clock, Refresh, Edit, Delete, Briefcase, CoffeeCup, Calendar, Coffee, More, Grid } from '@element-plus/icons-vue'
 
 /* ============================================================
    持久化
@@ -326,32 +277,37 @@ const categories = [
   {
     key: 'work',
     label: '上班',
-    color: '#409eff',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>`
+    color: 'var(--brand-primary)',
+    soft: 'var(--brand-primary-fade)',
+    icon: Briefcase
   },
   {
     key: 'water',
     label: '喝水',
-    color: '#06b6d4',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>`
+    color: 'var(--color-info)',
+    soft: 'var(--color-info-soft)',
+    icon: CoffeeCup
   },
   {
     key: 'meeting',
     label: '开会',
     color: '#9b59b6',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`
+    soft: 'rgba(155, 89, 182, 0.14)',
+    icon: Calendar
   },
   {
     key: 'rest',
     label: '休息',
-    color: '#16a34a',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`
+    color: 'var(--color-success)',
+    soft: 'var(--color-success-soft)',
+    icon: Coffee
   },
   {
     key: 'other',
     label: '其他',
-    color: '#909399',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>`
+    color: 'var(--color-text-secondary)',
+    soft: 'var(--color-bg-hover)',
+    icon: More
   }
 ]
 
@@ -359,15 +315,15 @@ const categoryFilters = [
   {
     key: 'all',
     label: '全部',
-    icon: `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>`
+    icon: Grid
   },
   ...categories
 ]
 
 const statusFilters = [
-  { key: 'all', label: '全部', color: '#909399' },
-  { key: 'enabled', label: '已启用', color: '#16a34a' },
-  { key: 'disabled', label: '已停用', color: '#909399' }
+  { key: 'all', label: '全部', color: 'var(--color-text-secondary)' },
+  { key: 'enabled', label: '已启用', color: 'var(--color-success)' },
+  { key: 'disabled', label: '已停用', color: 'var(--color-text-secondary)' }
 ]
 
 const weekdayNames = ['周日', '周一', '周二', '周三', '周四', '周五', '周六']
@@ -652,6 +608,10 @@ function closeForm() {
   editingId.value = null
 }
 
+function onDialogClosed() {
+  editingId.value = null
+}
+
 function toggleWeekday(day) {
   const idx = form.value.weekdays.indexOf(day)
   if (idx >= 0) form.value.weekdays.splice(idx, 1)
@@ -711,7 +671,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 .reminder-layout {
   display: flex;
   height: 100%;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
   position: relative;
 }
@@ -720,8 +680,8 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 .reminder-sidebar {
   width: 220px;
   flex-shrink: 0;
-  background: var(--el-bg-color, #fff);
-  border-right: 1px solid var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -750,7 +710,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   gap: 6px;
   font-size: 13px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .icon-btn-sm {
@@ -763,12 +723,12 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   transition: all .15s;
 
   &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
   }
 }
 
@@ -783,21 +743,21 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   border: 1.5px solid;
 
   &.perm-granted {
-    background: #f0fdf4;
-    border-color: #86efac;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    border-color: rgba(22, 163, 74, .3);
+    color: var(--color-success);
   }
 
   &.perm-denied {
-    background: #fff1f2;
-    border-color: #fca5a5;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    border-color: rgba(220, 38, 38, .3);
+    color: var(--color-danger);
   }
 
   &.perm-default {
-    background: #fffbeb;
-    border-color: #fcd34d;
-    color: #d97706;
+    background: var(--color-warning-soft);
+    border-color: rgba(217, 119, 6, .3);
+    color: var(--color-warning);
   }
 }
 
@@ -825,21 +785,22 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   padding: 4px 10px;
   border-radius: 6px;
   border: none;
-  background: #d97706;
+  background: var(--color-warning);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
 
   &:hover {
-    background: #b45309;
+    background: var(--color-warning);
+    filter: brightness(0.92);
   }
 }
 
 /* 筛选 */
 .filter-section {
   padding: 8px 10px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .filter-label {
@@ -847,7 +808,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   font-weight: 700;
   letter-spacing: .08em;
   text-transform: uppercase;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   margin-bottom: 4px;
   padding-left: 4px;
 }
@@ -861,15 +822,15 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   cursor: pointer;
   transition: background .12s;
   font-size: 12px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
 
   &:hover {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
   }
 
   &.active {
-    background: var(--el-color-primary-light-9, #ecf5ff);
-    color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
     font-weight: 600;
   }
 }
@@ -897,11 +858,11 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   font-weight: 700;
   padding: 1px 5px;
   border-radius: 8px;
-  background: var(--el-fill-color, #f0f2f5);
-  color: var(--el-text-color-secondary, #909399);
+  background: var(--color-bg-hover);
+  color: var(--color-text-secondary);
 
   .active & {
-    background: var(--el-color-primary-light-7, #79bbff);
+    background: var(--brand-primary);
     color: #fff;
   }
 }
@@ -913,7 +874,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   justify-content: space-around;
   padding: 14px 10px;
   margin-top: auto;
-  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-top: 1px solid var(--color-border-light);
 }
 
 .stat-item {
@@ -927,22 +888,22 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   font-size: 20px;
   font-weight: 700;
   font-family: monospace;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 
   &.enabled {
-    color: #16a34a;
+    color: var(--color-success);
   }
 }
 
 .stat-lbl {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 .stat-divider {
   width: 1px;
   height: 28px;
-  background: var(--el-border-color-lighter, #ebeef5);
+  background: var(--color-border-light);
 }
 
 /* ══ 右侧主区域 ══ */
@@ -959,14 +920,14 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   align-items: center;
   justify-content: space-between;
   padding: 12px 20px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-  background: var(--el-bg-color, #fff);
+  border-bottom: 1px solid var(--color-border-light);
+  background: var(--color-bg-card);
   flex-shrink: 0;
 }
 
 .result-count {
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .toolbar-btn {
@@ -975,19 +936,19 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   gap: 5px;
   padding: 6px 14px;
   border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   background: transparent;
   font-size: 12px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
 
   &.primary {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #fff;
 
     &:hover {
-      background: var(--el-color-primary-dark-2, #337ecc);
+      background: var(--brand-primary-hover);
     }
   }
 }
@@ -1017,15 +978,15 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   align-items: center;
   gap: 12px;
   padding: 12px 14px;
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 10px;
-  border: 1.5px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1.5px solid var(--color-border-light);
   transition: all .15s;
   flex-shrink: 0;
 
   &:hover {
-    border-color: var(--el-color-primary-light-5, #a0cfff);
-    box-shadow: 0 2px 8px rgba(64, 158, 255, .08);
+    border-color: var(--brand-primary-soft);
+    box-shadow: var(--shadow-sm);
   }
 
   &.disabled {
@@ -1038,14 +999,14 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   width: 36px;
   height: 20px;
   border-radius: 10px;
-  background: var(--el-border-color, #dcdfe6);
+  background: var(--color-border);
   position: relative;
   cursor: pointer;
   transition: background .2s;
   flex-shrink: 0;
 
   &.on {
-    background: var(--el-color-success, #67c23a);
+    background: var(--color-success);
   }
 }
 
@@ -1094,10 +1055,10 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 .r-title {
   font-size: 13px;
   font-weight: 600;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 
   &.disabled {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
@@ -1113,7 +1074,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 
   svg {
     flex-shrink: 0;
@@ -1125,18 +1086,18 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   font-weight: 700;
   padding: 1px 7px;
   border-radius: 8px;
-  background: var(--el-color-primary-light-9, #ecf5ff);
-  color: var(--el-color-primary, #409eff);
+  background: var(--brand-primary-fade);
+  color: var(--brand-primary);
 
   &.soon {
-    background: #fef3c7;
-    color: #d97706;
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
   }
 }
 
 .r-desc {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -1165,17 +1126,17 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   transition: all .15s;
 
   &:hover {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-primary, #303133);
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
   }
 
   &.danger:hover {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
 }
 
@@ -1189,139 +1150,25 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   gap: 10px;
 }
 
+.empty-svg {
+  color: var(--color-border);
+  opacity: .5;
+}
+
 .empty-title {
   margin: 0;
   font-size: 14px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .empty-sub {
   margin: 0;
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
-/* ══ 弹窗 ══ */
-.modal-mask {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, .35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-}
-
-.modal-box {
-  width: 520px;
-  max-width: 94vw;
-  background: var(--el-bg-color, #fff);
-  border-radius: 14px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .2);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 20px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
-}
-
-.modal-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
-}
-
-.modal-close {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  border-radius: 6px;
-  font-size: 14px;
-  color: var(--el-text-color-secondary, #909399);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  &:hover {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-primary, #303133);
-  }
-}
-
-.modal-body {
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  overflow-y: auto;
-  max-height: 65vh;
-
-  &::-webkit-scrollbar {
-    width: 4px;
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, .08);
-    border-radius: 2px;
-  }
-}
-
-.modal-footer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  padding: 14px 20px;
-  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.form-label {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--el-text-color-regular, #606266);
-
-  &.required::after {
-    content: ' *';
-    color: #dc2626;
-  }
-}
-
-.form-input, .form-textarea {
-  padding: 8px 10px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
-  border-radius: 7px;
-  font-size: 13px;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
-  outline: none;
-  transition: border-color .15s;
-  font-family: inherit;
-
-  &:focus {
-    border-color: var(--el-color-primary, #409eff);
-  }
-}
-
-.form-textarea {
-  resize: vertical;
-  min-height: 56px;
-}
-
-/* 分类选择 */
+/* ══ 弹窗表单 ══ */
 .category-picker {
   display: flex;
   flex-wrap: wrap;
@@ -1334,16 +1181,16 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   gap: 5px;
   padding: 6px 12px;
   border-radius: 7px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   background: transparent;
   font-size: 12px;
   font-weight: 500;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-text-color-secondary, #909399);
+    border-color: var(--color-text-secondary);
   }
 
   &.active {
@@ -1354,7 +1201,7 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 /* 重复方式 */
 .seg-ctrl {
   display: flex;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   overflow: hidden;
   align-self: flex-start;
@@ -1365,21 +1212,21 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
     background: transparent;
     font-size: 12px;
     font-weight: 500;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--color-text-regular);
     cursor: pointer;
     transition: all .15s;
-    border-right: 1px solid var(--el-border-color, #dcdfe6);
+    border-right: 1px solid var(--color-border);
 
     &:last-child {
       border-right: none;
     }
 
     &:hover {
-      background: var(--el-fill-color-light, #f5f7fa);
+      background: var(--color-bg-hover);
     }
 
     &.active {
-      background: var(--el-color-primary, #409eff);
+      background: var(--brand-primary);
       color: #fff;
     }
   }
@@ -1395,68 +1242,22 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   width: 42px;
   height: 36px;
   border-radius: 8px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   background: transparent;
   font-size: 12px;
   font-weight: 600;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   transition: all .15s;
 
   &:hover {
-    border-color: var(--el-color-primary-light-5, #a0cfff);
+    border-color: var(--brand-primary-soft);
   }
 
   &.active {
-    background: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
+    border-color: var(--brand-primary);
     color: #fff;
-  }
-}
-
-/* 按钮 */
-.modal-btn {
-  padding: 8px 22px;
-  border-radius: 8px;
-  border: none;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all .15s;
-
-  &.cancel {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-regular, #606266);
-
-    &:hover {
-      background: var(--el-fill-color-dark, #e6e8eb);
-    }
-  }
-
-  &.confirm {
-    background: var(--el-color-primary, #409eff);
-    color: #fff;
-
-    &:hover:not(:disabled) {
-      background: var(--el-color-primary-dark-2, #337ecc);
-    }
-
-    &:disabled {
-      opacity: .4;
-      cursor: not-allowed;
-    }
-  }
-}
-
-.modal-enter-active, .modal-leave-active {
-  transition: all .2s ease;
-}
-
-.modal-enter-from, .modal-leave-to {
-  opacity: 0;
-
-  .modal-box {
-    transform: scale(.94) translateY(-10px);
   }
 }
 
@@ -1471,11 +1272,11 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
   gap: 10px;
   padding: 14px 16px;
   max-width: 320px;
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   border-radius: 10px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, .12);
-  color: var(--el-color-primary, #409eff);
+  border: 1px solid var(--color-border-light);
+  box-shadow: var(--shadow-lg);
+  color: var(--brand-primary);
 }
 
 .toast-text {
@@ -1486,12 +1287,12 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 
 .toast-text strong {
   font-size: 13px;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .toast-text span {
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 .toast-enter-active, .toast-leave-active {
@@ -1501,5 +1302,41 @@ watch(reminders, (v) => saveReminders(v), { deep: true })
 .toast-enter-from, .toast-leave-to {
   opacity: 0;
   transform: translateX(20px);
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .reminder-layout {
+    flex-direction: column;
+  }
+
+  .reminder-sidebar {
+    width: 100%;
+    flex-shrink: 0;
+    max-height: 200px;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border-light);
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .reminder-main {
+    flex: 1;
+    min-height: 0;
+  }
+
+  .main-toolbar {
+    padding: 10px 12px;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .reminder-list {
+    padding: 10px;
+  }
+
+  .reminder-card {
+    padding: 10px 12px;
+  }
 }
 </style>

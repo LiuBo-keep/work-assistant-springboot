@@ -714,23 +714,23 @@ function formatResponse() {
 .method-select {
   height: 34px;
   padding: 0 8px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   font-size: 12px;
   font-weight: 700;
-  background: var(--el-bg-color, #fff);
+  background: var(--color-bg-card);
   cursor: pointer;
   flex-shrink: 0;
   min-width: 90px;
   &.method-get {
-    color: #16a34a;
-    border-color: #86efac;
-    background: #f0fdf4;
+    color: var(--color-success);
+    border-color: var(--color-success);
+    background: var(--color-success-soft);
   }
   &.method-post {
-    color: #d97706;
-    border-color: #fcd34d;
-    background: #fffbeb;
+    color: var(--color-warning);
+    border-color: var(--color-warning);
+    background: var(--color-warning-soft);
   }
   &.method-put {
     color: #2563eb;
@@ -743,13 +743,13 @@ function formatResponse() {
     background: #f5f3ff;
   }
   &.method-delete {
-    color: #dc2626;
-    border-color: #fca5a5;
-    background: #fff1f2;
+    color: var(--color-danger);
+    border-color: var(--color-danger);
+    background: var(--color-danger-soft);
   }
   &.method-head,
   &.method-options {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 }
 
@@ -757,15 +757,15 @@ function formatResponse() {
   flex: 1;
   height: 34px;
   padding: 0 10px;
-  border: 1.5px solid var(--el-border-color, #dcdfe6);
+  border: 1.5px solid var(--color-border);
   border-radius: 7px;
   font-size: 12px;
-  color: var(--el-text-color-primary, #303133);
-  background: var(--el-bg-color, #fff);
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
   outline: none;
   transition: border-color 0.15s;
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 
@@ -777,7 +777,7 @@ function formatResponse() {
   padding: 0 16px;
   border: none;
   border-radius: 7px;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 12px;
   font-weight: 600;
@@ -785,7 +785,7 @@ function formatResponse() {
   transition: all 0.15s;
   flex-shrink: 0;
   &:hover:not(:disabled) {
-    background: var(--el-color-primary-dark-2, #337ecc);
+    background: var(--brand-primary-hover);
   }
   &:disabled {
     opacity: 0.45;
@@ -812,7 +812,7 @@ function formatResponse() {
   display: flex;
   gap: 0;
   padding: 0 8px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 .inner-tab {
@@ -824,17 +824,17 @@ function formatResponse() {
   background: transparent;
   font-size: 11px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all 0.15s;
   border-bottom: 2px solid transparent;
   margin-bottom: -1px;
   &:hover {
-    color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
   }
   &.active {
-    color: var(--el-color-primary, #409eff);
-    border-bottom-color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
     font-weight: 600;
   }
 }
@@ -845,7 +845,7 @@ function formatResponse() {
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 9px;
   font-weight: 700;
@@ -866,7 +866,7 @@ function formatResponse() {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 .kv-row {
   display: grid;
@@ -876,14 +876,14 @@ function formatResponse() {
 .kv-input {
   height: 28px;
   padding: 0 8px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   border-radius: 5px;
   font-size: 11px;
-  background: var(--el-bg-color, #fff);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-card);
+  color: var(--color-text-primary);
   outline: none;
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 .kv-del {
@@ -891,7 +891,7 @@ function formatResponse() {
   height: 28px;
   border: none;
   background: transparent;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   cursor: pointer;
   font-size: 11px;
   border-radius: 4px;
@@ -899,8 +899,8 @@ function formatResponse() {
   align-items: center;
   justify-content: center;
   &:hover {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
 }
 .kv-add {
@@ -908,13 +908,13 @@ function formatResponse() {
   margin-top: 2px;
   padding: 4px 10px;
   border-radius: 5px;
-  border: 1px dashed var(--el-border-color, #dcdfe6);
+  border: 1px dashed var(--color-border);
   background: transparent;
   font-size: 11px;
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   cursor: pointer;
   &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    background: var(--brand-primary-soft);
   }
 }
 
@@ -934,10 +934,10 @@ function formatResponse() {
   align-items: center;
   gap: 5px;
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   input[type='radio'] {
-    accent-color: var(--el-color-primary, #409eff);
+    accent-color: var(--brand-primary);
     cursor: pointer;
   }
 }
@@ -947,21 +947,21 @@ function formatResponse() {
   resize: vertical;
   padding: 8px 10px;
   box-sizing: border-box;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 11px;
   line-height: 1.6;
-  background: var(--el-fill-color-lighter, #fafafa);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
   outline: none;
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 .body-none {
   padding: 12px;
   font-size: 12px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   text-align: center;
 }
 
@@ -993,18 +993,18 @@ function formatResponse() {
   padding: 7px 12px;
   cursor: pointer;
   transition: background 0.12s;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   &:last-child {
     border-bottom: none;
   }
   &:hover {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
   }
 }
 .history-url {
   flex: 1;
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -1014,10 +1014,10 @@ function formatResponse() {
   font-weight: 700;
   font-family: monospace;
   &.ok {
-    color: #16a34a;
+    color: var(--color-success);
   }
   &.err {
-    color: #dc2626;
+    color: var(--color-danger);
   }
 }
 
@@ -1029,12 +1029,12 @@ function formatResponse() {
   border-radius: 4px;
   flex-shrink: 0;
   &.method-get {
-    background: #f0fdf4;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    color: var(--color-success);
   }
   &.method-post {
-    background: #fffbeb;
-    color: #d97706;
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
   }
   &.method-put {
     background: #eff6ff;
@@ -1045,13 +1045,13 @@ function formatResponse() {
     color: #7c3aed;
   }
   &.method-delete {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
   &.method-head,
   &.method-options {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-secondary, #909399);
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
   }
 }
 
@@ -1071,18 +1071,18 @@ function formatResponse() {
   align-items: center;
   justify-content: center;
   gap: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-size: 12px;
 }
 .resp-error {
-  color: #dc2626;
+  color: var(--color-danger);
 }
 .loading-spinner {
   width: 28px;
   height: 28px;
   border-radius: 50%;
-  border: 3px solid var(--el-border-color-lighter, #ebeef5);
-  border-top-color: var(--el-color-primary, #409eff);
+  border: 3px solid var(--color-border-light);
+  border-top-color: var(--brand-primary);
   animation: spin 0.7s linear infinite;
 }
 .resp-status-bar {
@@ -1090,7 +1090,7 @@ function formatResponse() {
   align-items: center;
   gap: 12px;
   padding: 8px 14px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 .status-code {
@@ -1100,25 +1100,25 @@ function formatResponse() {
   padding: 2px 10px;
   border-radius: 6px;
   &.status-2xx {
-    background: #dcfce7;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    color: var(--color-success);
   }
   &.status-3xx {
     background: #dbeafe;
     color: #2563eb;
   }
   &.status-4xx {
-    background: #fff1f2;
-    color: #dc2626;
+    background: var(--color-danger-soft);
+    color: var(--color-danger);
   }
   &.status-5xx {
-    background: #fef3c7;
-    color: #d97706;
+    background: var(--color-warning-soft);
+    color: var(--color-warning);
   }
 }
 .resp-meta {
   font-size: 11px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   font-family: monospace;
 }
 .resp-actions {
@@ -1146,23 +1146,23 @@ function formatResponse() {
   line-height: 1.7;
   white-space: pre-wrap;
   word-break: break-all;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 :deep(.json-key) {
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
 }
 :deep(.json-str) {
-  color: #16a34a;
+  color: var(--color-success);
 }
 :deep(.json-num) {
-  color: #d97706;
+  color: var(--color-warning);
 }
 :deep(.json-bool) {
   color: #db2777;
   font-weight: 600;
 }
 :deep(.json-null) {
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-style: italic;
 }
 .resp-headers {
@@ -1183,18 +1183,43 @@ function formatResponse() {
   padding: 6px 14px;
   font-size: 11px;
   gap: 10px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   &:last-child {
     border-bottom: none;
   }
 }
 .rh-key {
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   font-weight: 600;
   word-break: break-all;
 }
 .rh-val {
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   word-break: break-all;
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .http-layout {
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .http-left {
+    width: 100%;
+    flex-shrink: 0;
+    overflow-y: visible;
+  }
+
+  .http-right {
+    width: 100%;
+    flex: none;
+  }
+
+  .rh-row {
+    grid-template-columns: 1fr;
+    gap: 6px;
+  }
 }
 </style>

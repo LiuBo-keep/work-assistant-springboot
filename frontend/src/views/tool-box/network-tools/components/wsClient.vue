@@ -128,7 +128,7 @@
                 />
                 <span
                   v-if="autoSend"
-                  style="font-size: 11px; color: var(--el-text-color-secondary)"
+                  style="font-size: 11px; color: var(--color-text-secondary)"
                   >ms</span
                 >
                 <button
@@ -510,7 +510,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-size: 12px;
   p {
     margin: 0;
@@ -540,7 +540,7 @@ onBeforeUnmount(() => {
 .msg-item {
   border-radius: 8px;
   overflow: hidden;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   flex-shrink: 0; /* 防止被 flex 压缩 */
   &.sent {
     border-color: #bfdbfe;
@@ -549,7 +549,7 @@ onBeforeUnmount(() => {
     border-color: #bbf7d0;
   }
   &.system {
-    border-color: var(--el-border-color-lighter, #ebeef5);
+    border-color: var(--color-border-light);
     opacity: 0.7;
   }
 }
@@ -560,15 +560,15 @@ onBeforeUnmount(() => {
   gap: 8px;
   padding: 4px 10px;
   min-height: 26px;
-  border-bottom: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 1px solid var(--color-border-light);
   .sent & {
     background: #eff6ff;
   }
   .received & {
-    background: #f0fdf4;
+    background: var(--color-success-soft);
   }
   .system & {
-    background: var(--el-fill-color-lighter, #fafafa);
+    background: var(--color-bg-hover);
   }
 }
 
@@ -579,16 +579,16 @@ onBeforeUnmount(() => {
     color: #2563eb;
   }
   .received & {
-    color: #16a34a;
+    color: var(--color-success);
   }
   .system & {
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--color-text-secondary);
   }
 }
 .msg-time {
   font-size: 10px;
   font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 .msg-type-badge {
   font-size: 9px;
@@ -600,18 +600,18 @@ onBeforeUnmount(() => {
     color: #2563eb;
   }
   &.received {
-    background: #dcfce7;
-    color: #16a34a;
+    background: var(--color-success-soft);
+    color: var(--color-success);
   }
   &.system {
-    background: var(--el-fill-color, #f0f2f5);
-    color: var(--el-text-color-secondary, #909399);
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
   }
 }
 .msg-size {
   font-size: 10px;
   font-family: monospace;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 
 /* ── 消息体：折叠控制 ── */
@@ -626,8 +626,8 @@ onBeforeUnmount(() => {
   line-height: 1.55;
   white-space: pre-wrap;
   word-break: break-all;
-  color: var(--el-text-color-primary, #303133);
-  background: var(--el-bg-color, #fff);
+  color: var(--color-text-primary);
+  background: var(--color-bg-card);
   overflow: hidden;
 
   /* 折叠态：最多 3 行 */
@@ -644,14 +644,14 @@ onBeforeUnmount(() => {
   width: 100%;
   padding: 3px 10px;
   border: none;
-  border-top: 1px solid var(--el-border-color-lighter, #ebeef5);
-  background: var(--el-fill-color-lighter, #fafafa);
+  border-top: 1px solid var(--color-border-light);
+  background: var(--color-bg-hover);
   font-size: 10px;
-  color: var(--el-color-primary, #409eff);
+  color: var(--brand-primary);
   cursor: pointer;
   text-align: center;
   &:hover {
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    background: var(--brand-primary-soft);
   }
 }
 
@@ -662,16 +662,16 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   flex-shrink: 0;
   &.connected {
-    background: #16a34a;
-    box-shadow: 0 0 0 2px #86efac;
+    background: var(--color-success);
+    box-shadow: 0 0 0 2px var(--color-success);
   }
   &.connecting {
-    background: #d97706;
-    box-shadow: 0 0 0 2px #fcd34d;
+    background: var(--color-warning);
+    box-shadow: 0 0 0 2px var(--color-warning);
     animation: pulse 0.8s infinite;
   }
   &.disconnected {
-    background: var(--el-text-color-placeholder, #c0c4cc);
+    background: var(--color-text-placeholder);
   }
 }
 @keyframes pulse {
@@ -688,13 +688,13 @@ onBeforeUnmount(() => {
   font-size: 11px;
   font-weight: 600;
   &.connected {
-    color: #16a34a;
+    color: var(--color-success);
   }
   &.connecting {
-    color: #d97706;
+    color: var(--color-warning);
   }
   &.disconnected {
-    color: var(--el-text-color-placeholder, #c0c4cc);
+    color: var(--color-text-placeholder);
   }
 }
 
@@ -714,10 +714,10 @@ onBeforeUnmount(() => {
   cursor: pointer;
   transition: all 0.15s;
   &.connect {
-    background: var(--el-color-primary, #409eff);
+    background: var(--brand-primary);
     color: #fff;
     &:hover:not(:disabled) {
-      background: #337ecc;
+      background: var(--brand-primary-hover);
     }
     &:disabled {
       opacity: 0.4;
@@ -725,28 +725,28 @@ onBeforeUnmount(() => {
     }
   }
   &.disconnect {
-    background: #dc2626;
+    background: var(--color-danger);
     color: #fff;
     &:hover {
       background: #b91c1c;
     }
   }
   &.clear {
-    background: var(--el-fill-color, #f0f2f5);
-    border: 1px solid var(--el-border-color, #dcdfe6);
-    color: var(--el-text-color-regular, #606266);
+    background: var(--color-bg-hover);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-regular);
     &:hover {
-      border-color: var(--el-color-primary, #409eff);
-      color: var(--el-color-primary, #409eff);
+      border-color: var(--brand-primary);
+      color: var(--brand-primary);
     }
   }
 }
 
 .tip-sm {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   padding: 4px 8px;
-  background: var(--el-fill-color-lighter, #fafafa);
+  background: var(--color-bg-hover);
   border-radius: 5px;
   line-height: 1.5;
 }
@@ -757,15 +757,15 @@ onBeforeUnmount(() => {
   resize: vertical;
   padding: 8px 10px;
   box-sizing: border-box;
-  border: 1px solid var(--el-border-color, #dcdfe6);
+  border: 1px solid var(--color-border);
   border-radius: 6px;
   font-size: 11px;
   line-height: 1.6;
-  background: var(--el-fill-color-lighter, #fafafa);
-  color: var(--el-text-color-primary, #303133);
+  background: var(--color-bg-hover);
+  color: var(--color-text-primary);
   outline: none;
   &:focus {
-    border-color: var(--el-color-primary, #409eff);
+    border-color: var(--brand-primary);
   }
 }
 .send-row {
@@ -775,7 +775,7 @@ onBeforeUnmount(() => {
 }
 .send-hint {
   font-size: 10px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
 }
 .send-actions {
   display: flex;
@@ -789,13 +789,13 @@ onBeforeUnmount(() => {
   padding: 6px 14px;
   border: none;
   border-radius: 6px;
-  background: var(--el-color-primary, #409eff);
+  background: var(--brand-primary);
   color: #fff;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   &:hover:not(:disabled) {
-    background: #337ecc;
+    background: var(--brand-primary-hover);
   }
   &:disabled {
     opacity: 0.4;
@@ -812,21 +812,21 @@ onBeforeUnmount(() => {
 .tpl-chip {
   padding: 4px 12px;
   border-radius: 6px;
-  border: 1px solid var(--el-border-color, #dcdfe6);
-  background: var(--el-fill-color-lighter, #fafafa);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-hover);
   font-size: 11px;
-  color: var(--el-text-color-regular, #606266);
+  color: var(--color-text-regular);
   cursor: pointer;
   &:hover {
-    border-color: var(--el-color-primary, #409eff);
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    border-color: var(--brand-primary);
+    color: var(--brand-primary);
+    background: var(--brand-primary-soft);
   }
 }
 
 .msg-count {
   font-size: 11px;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   font-family: monospace;
 }
 
@@ -838,13 +838,33 @@ onBeforeUnmount(() => {
   width: 18px;
   height: 18px;
   border-radius: 4px;
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
+  border: 1px solid var(--color-border-light);
   background: transparent;
   cursor: pointer;
-  color: var(--el-text-color-placeholder, #c0c4cc);
+  color: var(--color-text-placeholder);
   &:hover {
-    color: var(--el-color-primary, #409eff);
-    border-color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary);
+  }
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .ws-layout {
+    flex-direction: column;
+    gap: 10px;
+    overflow: visible;
+  }
+
+  .ws-left {
+    width: 100%;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  .ws-right {
+    width: 100%;
+    flex: none;
   }
 }
 </style>
