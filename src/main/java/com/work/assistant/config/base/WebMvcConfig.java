@@ -33,17 +33,13 @@ public class WebMvcConfig
         .excludePathPatterns(
             "/error");
 
-    // 鉴权：放行登录接口与静态资源，其余接口需携带有效令牌。
-    // /actuator/** 需要鉴权，避免系统运行指标被匿名访问。
+    // 鉴权：仅对 /api 业务接口做校验，放行登录接口。
+    // 静态资源（/、/index.html、/assets/**、/favicon.ico 等）不在此范围，
+    // 白名单方式可避免遗漏静态路径导致首页被误拦截。
     registry.addInterceptor(authInterceptor)
-        .addPathPatterns("/**")
+        .addPathPatterns("/api/**")
         .excludePathPatterns(
-            "/api/v1/token",
-            "/error",
-            "/favicon.ico",
-            "/index.html",
-            "/assets/**",
-            "/static/**");
+            "/api/v1/token");
 
     // 接口调用记录：最后执行（可读取鉴权写入的 authUserName），仅记录 /api 业务接口。
     registry.addInterceptor(apiCallInterceptor)

@@ -25,7 +25,7 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 123456
-    url: jdbc:postgresql://49.232.206.117:5432/work-assistant-test
+    url: jdbc:postgresql://localhost:5432/work-assistant
     hikari:
       # 连接池最大连接数
       maximum-pool-size: 10

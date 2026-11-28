@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * 全局异常处理器。
@@ -45,6 +46,15 @@ public class GlobalExceptionHandler {
             .build())
         .build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fault);
+  }
+
+  /**
+   * 静态资源不存在（如 /favicon.ico），静默返回 404，避免刷 ERROR 堆栈。
+   */
+  @ExceptionHandler(NoResourceFoundException.class)
+  public ResponseEntity<Void> handleNoResourceFound(NoResourceFoundException ex) {
+    log.debug("static resource not found: {}", ex.getResourcePath());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
   }
 
   /**
