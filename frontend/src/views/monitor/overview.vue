@@ -26,8 +26,14 @@
         <span class="metric-value">{{ formatUptime(overview.uptimeMs) }}</span>
       </div>
       <div class="metric-card">
-        <span class="metric-label">进程 CPU</span>
-        <span class="metric-value">{{ overview.processCpuLoad ?? '--' }}%</span>
+        <span class="metric-label">系统 CPU</span>
+        <span class="metric-value">{{ overview.systemCpuLoadPercent ?? '--' }}%</span>
+        <span class="metric-sub">进程 {{ overview.processCpuLoad ?? '--' }}%</span>
+      </div>
+      <div class="metric-card">
+        <span class="metric-label">系统负载均值</span>
+        <span class="metric-value">{{ formatLoadAverage(overview.os?.systemLoadAverage) }}</span>
+        <span class="metric-sub">{{ overview.availableProcessors }} 核</span>
       </div>
       <div class="metric-card">
         <span class="metric-label">堆内存使用</span>
@@ -65,6 +71,21 @@
             <div class="info-row"><span class="info-label">系统物理内存</span><span class="info-value">{{ formatBytes(overview?.totalPhysicalMemory) }}</span></div>
             <div class="info-row"><span class="info-label">空闲物理内存</span><span class="info-value">{{ formatBytes(overview?.freePhysicalMemory) }}</span></div>
             <div class="info-row"><span class="info-label">守护线程</span><span class="info-value">{{ overview?.daemonThreadCount ?? '--' }}</span></div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <span class="panel-title">操作系统信息</span>
+          </div>
+          <div class="info-list">
+            <div class="info-row"><span class="info-label">系统名称</span><span class="info-value">{{ overview?.os?.name ?? '--' }}</span></div>
+            <div class="info-row"><span class="info-label">系统版本</span><span class="info-value">{{ overview?.os?.version ?? '--' }}</span></div>
+            <div class="info-row"><span class="info-label">系统架构</span><span class="info-value">{{ overview?.os?.arch ?? '--' }}</span></div>
+            <div class="info-row"><span class="info-label">系统负载均值</span><span class="info-value">{{ formatLoadAverage(overview?.os?.systemLoadAverage) }}</span></div>
+            <div class="info-row"><span class="info-label">总物理内存</span><span class="info-value">{{ formatBytes(overview?.os?.totalPhysicalMemory) }}</span></div>
+            <div class="info-row"><span class="info-label">空闲物理内存</span><span class="info-value">{{ formatBytes(overview?.os?.freePhysicalMemory) }}</span></div>
+            <div class="info-row"><span class="info-label">已提交虚拟内存</span><span class="info-value">{{ formatBytes(overview?.os?.committedVirtualMemory) }}</span></div>
           </div>
         </div>
       </div>
@@ -107,6 +128,12 @@ const heapUsageColor = computed(() => {
   if (p > 70) return '#ba7517'
   return '#1d9e75'
 })
+
+/* ---- 格式化系统负载均值 ---- */
+function formatLoadAverage(v) {
+  if (v == null || v < 0) return '--'
+  return v.toFixed(2)
+}
 
 /* ---- 渲染内存构成饼图 ---- */
 function renderMemoryPie() {
@@ -230,7 +257,7 @@ onBeforeUnmount(() => {
 
 .metric-cards {
   display: grid;
-  grid-template-columns: repeat(6, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   gap: 12px;
 }
 

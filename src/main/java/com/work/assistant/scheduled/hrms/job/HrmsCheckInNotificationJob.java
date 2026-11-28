@@ -12,6 +12,13 @@ import java.time.LocalDate;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
+/**
+ * 下班打卡提醒定时任务。
+ *
+ * <p>在约定时间检查员工是否已下班打卡，未打卡则通过通知渠道发送提醒。
+ *
+ * @author work-assistant
+ */
 @Slf4j
 @Component
 public class HrmsCheckInNotificationJob {

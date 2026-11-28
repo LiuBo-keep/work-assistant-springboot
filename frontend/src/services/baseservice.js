@@ -83,12 +83,15 @@ export default class BaseService {
             })
           }
 
+          // 优先提取后端 FaultResponse 的错误信息
+          let message = error.response.statusText || error.response.data || status
+          if (error.response.data?.error?.message) {
+            message = error.response.data.error.message
+          }
+
           return Promise.reject({
             code: status,
-            error:
-              error.response.statusText ||
-              error.response.data ||
-              status
+            error: message
           })
         }
 

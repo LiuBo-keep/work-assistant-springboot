@@ -1,5 +1,6 @@
 package com.work.assistant.config.base;
 
+import com.work.assistant.config.apimonitor.ApiCallInterceptor;
 import com.work.assistant.config.ratelimit.RateLimitInterceptor;
 import com.work.assistant.config.security.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class WebMvcConfig
 
   private final RateLimitInterceptor rateLimitInterceptor;
   private final AuthInterceptor authInterceptor;
+  private final ApiCallInterceptor apiCallInterceptor;
 
   @Override
   public void addInterceptors(
@@ -42,5 +44,9 @@ public class WebMvcConfig
             "/index.html",
             "/assets/**",
             "/static/**");
+
+    // 接口调用记录：最后执行（可读取鉴权写入的 authUserName），仅记录 /api 业务接口。
+    registry.addInterceptor(apiCallInterceptor)
+        .addPathPatterns("/api/**");
   }
 }

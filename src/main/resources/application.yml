@@ -57,6 +57,9 @@ work:
     rsa:
       # RSA 密钥对存储目录（密码传输加解密用，首次启动自动生成，务必妥善保管）
       key-dir: ./data/rsa
+    backup:
+      # 数据库备份文件存储目录
+      dir: ./data/backups
 
 # Actuator 系统监控端点配置
 management:

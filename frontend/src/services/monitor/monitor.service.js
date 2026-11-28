@@ -32,6 +32,18 @@ class MonitorService extends BaseService {
   database() {
     return this.get('/api/v1/monitor/database')
   }
+
+  /** 接口调用统计（近 N 小时） */
+  apiStats(hours = 24) {
+    return this.get('/api/v1/monitor/apis/stats', {
+      params: { hours }
+    })
+  }
+
+  /** 接口调用明细（最近 100 条） */
+  apiLogs() {
+    return this.get('/api/v1/monitor/apis/logs')
+  }
 }
 
 export default new MonitorService()

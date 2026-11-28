@@ -5,7 +5,12 @@ import com.work.assistant.external.notify.model.NotifyRequest;
 import com.work.assistant.external.notify.model.NotifyResponse;
 
 /**
- * 通知处理器
+ * 通知处理器。
+ *
+ * <p>不同通知渠道（钉钉、PushPlus 等）实现该接口，由 {@code NotifyManager}
+ * 按 {@link NotifyType} 路由分发。
+ *
+ * @author work-assistant
  */
 public interface NotifyHandler {
 

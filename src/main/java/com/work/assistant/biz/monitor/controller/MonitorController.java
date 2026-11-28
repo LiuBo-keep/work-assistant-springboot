@@ -66,4 +66,20 @@ public class MonitorController {
   public RestResponse database() {
     return RestResponse.success(monitorService.database());
   }
+
+  /**
+   * 接口调用统计（近 N 小时）。
+   */
+  @GetMapping("/apis/stats")
+  public RestResponse apiStats(@RequestParam(value = "hours", defaultValue = "24") int hours) {
+    return RestResponse.success(monitorService.apiStats(hours));
+  }
+
+  /**
+   * 接口调用明细（最近 100 条）。
+   */
+  @GetMapping("/apis/logs")
+  public RestResponse apiLogs() {
+    return RestResponse.success(monitorService.apiLogs());
+  }
 }

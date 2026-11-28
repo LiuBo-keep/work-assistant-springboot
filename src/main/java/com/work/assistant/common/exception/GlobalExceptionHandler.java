@@ -41,7 +41,7 @@ public class GlobalExceptionHandler {
     FaultResponse fault = FaultResponse.builder()
         .error(FaultResponse.Error.builder()
             .code(AppErrorCode.INTERNAL_SERVER_ERROR.name())
-            .message("Bad request: " + ex.getMessage())
+            .message(ex.getMessage())
             .build())
         .build();
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(fault);

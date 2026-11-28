@@ -20,6 +20,14 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * 打卡记录拉取管理器。
+ *
+ * <p>负责从 HRMS 外部接口拉取员工打卡记录并写入本地库，内部使用可重入锁
+ * 保证并发拉取时的幂等与串行化，避免重复拉取。
+ *
+ * @author work-assistant
+ */
 @Slf4j
 @Component
 public class HrmsCardRecordPullManager {

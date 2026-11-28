@@ -8,6 +8,14 @@ import java.util.List;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * 通知配置提供者。
+ *
+ * <p>从通知配置表读取渠道配置（钉钉 Webhook、PushPlus Token 等），
+ * 按通知类型组装为 {@link NotifyConfigInfo}。
+ *
+ * @author work-assistant
+ */
 @Component
 public class NotifyConfigProvider {
 

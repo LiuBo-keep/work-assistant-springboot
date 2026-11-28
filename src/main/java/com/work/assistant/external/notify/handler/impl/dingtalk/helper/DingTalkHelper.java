@@ -1,5 +1,12 @@
 package com.work.assistant.external.notify.handler.impl.dingtalk.helper;
 
+/**
+ * 钉钉 Webhook 地址解析助手。
+ *
+ * <p>从钉钉机器人 Webhook 地址中解析出域名与访问令牌（access_token）。
+ *
+ * @author work-assistant
+ */
 public class DingTalkHelper {
 
 

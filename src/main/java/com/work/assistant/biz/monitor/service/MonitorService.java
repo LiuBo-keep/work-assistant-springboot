@@ -1,7 +1,9 @@
 package com.work.assistant.biz.monitor.service;
 
+import com.work.assistant.biz.monitor.model.ApiCallLog;
 import com.work.assistant.biz.monitor.model.MetricSnapshot;
 import com.work.assistant.biz.monitor.model.TaskRunLog;
+import com.work.assistant.biz.monitor.repository.ApiCallLogRepository;
 import com.work.assistant.biz.monitor.repository.MetricSnapshotRepository;
 import com.work.assistant.biz.monitor.repository.TaskRunLogRepository;
 import com.zaxxer.hikari.HikariDataSource;
@@ -39,13 +41,16 @@ public class MonitorService {
 
   private final MetricSnapshotRepository metricSnapshotRepository;
   private final TaskRunLogRepository taskRunLogRepository;
+  private final ApiCallLogRepository apiCallLogRepository;
   private final DataSource dataSource;
 
   public MonitorService(MetricSnapshotRepository metricSnapshotRepository,
                         TaskRunLogRepository taskRunLogRepository,
+                        ApiCallLogRepository apiCallLogRepository,
                         DataSource dataSource) {
     this.metricSnapshotRepository = metricSnapshotRepository;
     this.taskRunLogRepository = taskRunLogRepository;
+    this.apiCallLogRepository = apiCallLogRepository;
     this.dataSource = dataSource;
   }
 
@@ -73,17 +78,25 @@ public class MonitorService {
     result.put("startTime", ManagementFactory.getRuntimeMXBean().getStartTime());
     result.put("uptimeMs", ManagementFactory.getRuntimeMXBean().getUptime());
 
-    // CPU
+    // CPU 与操作系统信息
     result.put("availableProcessors", osBean.getAvailableProcessors());
     result.put("systemLoadAverage", osBean.getSystemLoadAverage());
-    result.put("systemCpuLoad", osBean.getSystemLoadAverage());
+
+    Map<String, Object> os = new LinkedHashMap<>();
+    os.put("name", osBean.getName());
+    os.put("version", osBean.getVersion());
+    os.put("arch", osBean.getArch());
+    os.put("systemLoadAverage", osBean.getSystemLoadAverage());
+
+    // 扩展型 MXBean 提供物理内存、虚拟内存与 CPU 负载等更丰富的系统指标
     if (osBean instanceof com.sun.management.OperatingSystemMXBean sunOsBean) {
-      result.put("processCpuLoad", round(sunOsBean.getProcessCpuLoad() * 100));
-      result.put("systemCpuLoadPercent", round(sunOsBean.getCpuLoad() * 100));
-      result.put("committedVirtualMemory", sunOsBean.getCommittedVirtualMemorySize());
-      result.put("totalPhysicalMemory", sunOsBean.getTotalMemorySize());
-      result.put("freePhysicalMemory", sunOsBean.getFreeMemorySize());
+      os.put("totalPhysicalMemory", sunOsBean.getTotalMemorySize());
+      os.put("freePhysicalMemory", sunOsBean.getFreeMemorySize());
+      os.put("committedVirtualMemory", sunOsBean.getCommittedVirtualMemorySize());
+      os.put("systemCpuLoadPercent", round(sunOsBean.getCpuLoad() * 100));
+      os.put("processCpuLoadPercent", round(sunOsBean.getProcessCpuLoad() * 100));
     }
+    result.put("os", os);
 
     // 内存
     Map<String, Object> memory = new LinkedHashMap<>();
@@ -314,6 +327,58 @@ public class MonitorService {
   }
 
   /**
+   * 聚合接口调用统计（近 N 小时）。
+   *
+   * <p>返回总调用次数、成功率、平均耗时、慢接口 TOP（按调用次数）、状态码分布。
+   */
+  public Map<String, Object> apiStats(int hours) {
+    LocalDateTime from = LocalDateTime.now().minusHours(hours);
+    LocalDateTime to = LocalDateTime.now();
+
+    long totalCount = apiCallLogRepository.countByCreatedAtBetween(from, to);
+    // 成功 = 状态码 2xx
+    long successCount = apiCallLogRepository
+        .countByCreatedAtBetweenAndStatusCodeBetween(from, to, 200, 299);
+
+    Map<String, Object> result = new LinkedHashMap<>();
+    result.put("totalCount", totalCount);
+    result.put("successCount", successCount);
+    result.put("failCount", totalCount - successCount);
+    result.put("successRate", totalCount > 0 ? round(successCount * 100.0 / totalCount) : 100.0);
+
+    // 各接口聚合：路径、次数、平均耗时、最大耗时
+    List<Map<String, Object>> topApis = new ArrayList<>();
+    for (Object[] row : apiCallLogRepository.aggregateByPath(from)) {
+      Map<String, Object> item = new LinkedHashMap<>();
+      item.put("path", row[0]);
+      item.put("count", row[1]);
+      item.put("avgDurationMs", row[2] == null ? 0 : toLong(row[2]));
+      item.put("maxDurationMs", row[3] == null ? 0 : toLong(row[3]));
+      topApis.add(item);
+    }
+    result.put("topApis", topApis);
+
+    // 状态码分布
+    List<Map<String, Object>> statusDist = new ArrayList<>();
+    for (Object[] row : apiCallLogRepository.aggregateByStatus(from)) {
+      Map<String, Object> item = new LinkedHashMap<>();
+      item.put("statusCode", row[0]);
+      item.put("count", row[1]);
+      statusDist.add(item);
+    }
+    result.put("statusDistribution", statusDist);
+
+    return result;
+  }
+
+  /**
+   * 查询最近接口调用明细（最近 100 条）。
+   */
+  public List<ApiCallLog> apiLogs() {
+    return apiCallLogRepository.findTop100ByOrderByCreatedAtDesc();
+  }
+
+  /**
    * 记录一次定时任务执行结果。
    */
   public void recordTaskRun(String taskName, LocalDateTime startTime,
@@ -337,5 +402,18 @@ public class MonitorService {
 
   private double round(double value) {
     return Math.round(value * 100.0) / 100.0;
+  }
+
+  /**
+   * 将聚合查询返回的数值对象安全转为 long（兼容 Long/Double/BigDecimal 等类型）。
+   */
+  private long toLong(Object value) {
+    if (value == null) {
+      return 0L;
+    }
+    if (value instanceof Number number) {
+      return number.longValue();
+    }
+    return Long.parseLong(value.toString());
   }
 }

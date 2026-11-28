@@ -30,7 +30,7 @@
       router
       @select="onMenuSelect"
     >
-      <template v-for="group in menuGroups" :key="group.title">
+      <template v-for="group in visibleMenuGroups" :key="group.title">
         <div v-show="!collapse" class="menu-group-label">{{ group.title }}</div>
 
         <el-sub-menu v-for="item in group.items.filter(i => i.subs)" :key="item.index" :index="item.index">
@@ -86,9 +86,11 @@ import {
   Star,
   Odometer,
   TrendCharts,
-  Coin
+  Coin,
+  FolderOpened
 } from '@element-plus/icons-vue'
 import bus from '../utils/bus'
+import browser from '../store/persistent/browser'
 import pkg from '../../package.json'
 
 const props = defineProps({
@@ -196,6 +198,7 @@ const menuGroups = ref([
   },
   {
     title: '系统',
+    roles: ['ADMIN'],
     items: [
       {
         icon: Odometer, index: 'monitor', title: '系统监控',
@@ -204,12 +207,40 @@ const menuGroups = ref([
           { icon: TrendCharts, index: '/monitor/trend', title: '资源趋势' },
           { icon: Connection, index: '/monitor/threads', title: '线程监控' },
           { icon: AlarmClock, index: '/monitor/tasks', title: '定时任务' },
-          { icon: Coin, index: '/monitor/database', title: '数据库监控' }
+          { icon: Coin, index: '/monitor/database', title: '数据库监控' },
+          { icon: Monitor, index: '/monitor/api-monitor', title: '接口监控' }
+        ]
+      },
+      {
+        icon: FolderOpened, index: 'backup', title: '备份管理',
+        subs: [
+          { icon: FolderOpened, index: '/backup/database-backup', title: '数据库备份' }
+        ]
+      },
+      {
+        icon: Setting, index: 'user', title: '用户管理',
+        subs: [
+          { icon: Lock, index: '/system/user', title: '用户管理' }
         ]
       }
     ]
   }
 ])
+
+/* ---- 按当前用户角色过滤可见菜单 ---- */
+const currentRole = computed(() => browser.role || '')
+const visibleMenuGroups = computed(() => {
+  return menuGroups.value
+    .map(group => {
+      if (!group.roles || group.roles.length === 0) {
+        return group
+      }
+      return group.roles.includes(currentRole.value)
+        ? group
+        : { ...group, items: [] }
+    })
+    .filter(group => group.items.length > 0)
+})
 
 onMounted(() => {
   bus.on('collapse', handleCollapse)
