@@ -12,16 +12,22 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.ReentrantLock;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * 打卡记录拉取管理器。
+ *
+ * <p>负责从 HRMS 外部接口拉取员工打卡记录并写入本地库，内部使用可重入锁
+ * 保证并发拉取时的幂等与串行化，避免重复拉取。
+ *
+ * @author work-assistant
+ */
 @Slf4j
 @Component
 public class HrmsCardRecordPullManager {
@@ -68,8 +74,8 @@ public class HrmsCardRecordPullManager {
     try {
       lock.lock();
       TimeUnit.SECONDS.sleep(30);
-      HrmsNotifyConfig config = getEnableConfig();
-      if (config == null || Boolean.FALSE.equals(config.getEnabled())) {
+      HrmsNotifyConfig config = hrmsNotifyConfigRepository.findEnabledConfig();
+      if (config == null) {
         log.warn("hrms notify config not enabled");
         return;
       }
@@ -123,22 +129,6 @@ public class HrmsCardRecordPullManager {
     } finally {
       lock.unlock();
     }
-  }
-
-  /**
-   * 获取启用配置
-   */
-  private HrmsNotifyConfig getEnableConfig() {
-
-    List<HrmsNotifyConfig> configs = hrmsNotifyConfigRepository.findAll();
-    if (CollectionUtils.isEmpty(configs)) {
-      return null;
-    }
-    HrmsNotifyConfig config = configs.getFirst();
-    if (Boolean.FALSE.equals(config.getEnabled())) {
-      return null;
-    }
-    return config;
   }
 
   /**

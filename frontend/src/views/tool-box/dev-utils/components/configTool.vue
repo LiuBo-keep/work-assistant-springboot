@@ -812,10 +812,6 @@ function generateConfig() {
    ============================================================ */
 const copiedText = ref('')
 
-function getRsaFullKey() {
-  return rsaKeys.value.pub + '\n\n' + rsaKeys.value.priv
-}
-
 async function copyText(text) {
   await navigator.clipboard.writeText(text).catch(() => {
   })

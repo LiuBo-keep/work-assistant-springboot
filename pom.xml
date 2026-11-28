@@ -17,44 +17,44 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
-    <repositories>
-        <repository>
-            <id>kunlun-public-repository</id>
-            <name>Kunlun Repository by Nexus</name>
-            <url>https://kunlun.shijicloud.com/nexus/repository/maven-public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
-    <pluginRepositories>
-        <pluginRepository>
-            <id>kunlun-public-plugin-repository</id>
-            <name>Kunlun Repository by Nexus</name>
-            <url>https://kunlun.shijicloud.com/nexus/repository/maven-public/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </pluginRepository>
-    </pluginRepositories>
-    <distributionManagement>
-        <repository>
-            <id>kunlun-release</id>
-            <name>Kunlun Release Repository</name>
-            <url>https://kunlun.shijicloud.com/nexus/repository/maven-releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>kunlun-snapshot</id>
-            <name>Kunlun Snapshot Repository</name>
-            <url>https://kunlun.shijicloud.com/nexus/repository/maven-snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+<!--    <repositories>-->
+<!--        <repository>-->
+<!--            <id>kunlun-public-repository</id>-->
+<!--            <name>Kunlun Repository by Nexus</name>-->
+<!--            <url>https://kunlun.shijicloud.com/nexus/repository/maven-public/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>true</enabled>-->
+<!--            </snapshots>-->
+<!--        </repository>-->
+<!--    </repositories>-->
+<!--    <pluginRepositories>-->
+<!--        <pluginRepository>-->
+<!--            <id>kunlun-public-plugin-repository</id>-->
+<!--            <name>Kunlun Repository by Nexus</name>-->
+<!--            <url>https://kunlun.shijicloud.com/nexus/repository/maven-public/</url>-->
+<!--            <releases>-->
+<!--                <enabled>true</enabled>-->
+<!--            </releases>-->
+<!--            <snapshots>-->
+<!--                <enabled>false</enabled>-->
+<!--            </snapshots>-->
+<!--        </pluginRepository>-->
+<!--    </pluginRepositories>-->
+<!--    <distributionManagement>-->
+<!--        <repository>-->
+<!--            <id>kunlun-release</id>-->
+<!--            <name>Kunlun Release Repository</name>-->
+<!--            <url>https://kunlun.shijicloud.com/nexus/repository/maven-releases/</url>-->
+<!--        </repository>-->
+<!--        <snapshotRepository>-->
+<!--            <id>kunlun-snapshot</id>-->
+<!--            <name>Kunlun Snapshot Repository</name>-->
+<!--            <url>https://kunlun.shijicloud.com/nexus/repository/maven-snapshots/</url>-->
+<!--        </snapshotRepository>-->
+<!--    </distributionManagement>-->
 
     <properties>
         <java.version>21</java.version>
@@ -137,6 +137,12 @@
             <artifactId>spring-boot-starter-liquibase</artifactId>
         </dependency>
 
+        <!-- 系统运行监控：Actuator + Micrometer 采集健康/指标/日志端点 -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>com.squareup.retrofit2</groupId>
             <artifactId>retrofit</artifactId>
@@ -170,13 +176,13 @@
         </dependency>
 
         <!-- win-sw jar -->
-        <dependency>
-            <groupId>com.sun.winsw</groupId>
-            <artifactId>winsw</artifactId>
-            <version>${winsw.version}</version>
-            <classifier>bin</classifier>
-            <type>exe</type>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.sun.winsw</groupId>-->
+<!--            <artifactId>winsw</artifactId>-->
+<!--            <version>${winsw.version}</version>-->
+<!--            <classifier>bin</classifier>-->
+<!--            <type>exe</type>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
@@ -270,6 +276,12 @@
                 </executions>
             </plugin>
 
+            <!--
+                 winsw 依赖已注释（winsw 仅在 jenkins-releases 仓库可用，
+                阿里云镜像无此 artifact），对应的 copy goal 一并注释，
+                避免打包阶段因找不到 com.sun.winsw:winsw 而失败。
+                如需 Windows 服务包装器 service.exe，请手动从
+                https://github.com/winsw/winsw/releases 下载放入 dist 目录。
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
@@ -295,6 +307,7 @@
                     </execution>
                 </executions>
             </plugin>
+            -->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

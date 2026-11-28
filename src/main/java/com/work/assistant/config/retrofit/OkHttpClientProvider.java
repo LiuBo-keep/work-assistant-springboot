@@ -181,7 +181,6 @@ public class OkHttpClientProvider {
       SSLSocketFactory sslSocketFactory = sslContext.getSocketFactory();
       return HttpsTslConfig.builder().sslSocketFactory(sslSocketFactory).trustManager(trustManager).build();
     } catch (Exception e) {
-      e.printStackTrace();
       throw new WorkAssistantException(AppErrorCode.INTERNAL_SERVER_ERROR, e.getMessage());
     }
   }

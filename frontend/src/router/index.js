@@ -119,6 +119,61 @@ const routes = [
         path: '/tool-box/network-tools',
         component: () => import('../views/tool-box/network-tools/networkTools.vue'),
         meta: { title: '网络工具集', active: '/tool-box/network-tools', auth: true }
+      },
+      {
+        path: '/tool-box/favorite',
+        component: () => import('../views/tool-box/favorite/favorite.vue'),
+        meta: { title: '工具收藏', active: '/tool-box/favorite', auth: true }
+      },
+      {
+        path: '/monitor',
+        redirect: '/monitor/overview',
+        meta: { roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/overview',
+        component: () => import('../views/monitor/overview.vue'),
+        meta: { title: '系统概览', active: '/monitor/overview', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/trend',
+        component: () => import('../views/monitor/trend.vue'),
+        meta: { title: '资源趋势', active: '/monitor/trend', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/threads',
+        component: () => import('../views/monitor/threads.vue'),
+        meta: { title: '线程监控', active: '/monitor/threads', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/tasks',
+        component: () => import('../views/monitor/tasks.vue'),
+        meta: { title: '定时任务', active: '/monitor/tasks', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/database',
+        component: () => import('../views/monitor/database.vue'),
+        meta: { title: '数据库监控', active: '/monitor/database', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/monitor/api-monitor',
+        component: () => import('../views/monitor/api-monitor.vue'),
+        meta: { title: '接口监控', active: '/monitor/api-monitor', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/backup',
+        redirect: '/backup/database-backup',
+        meta: { roles: ['ADMIN'] }
+      },
+      {
+        path: '/backup/database-backup',
+        component: () => import('../views/backup/database-backup.vue'),
+        meta: { title: '数据库备份', active: '/backup/database-backup', auth: true, roles: ['ADMIN'] }
+      },
+      {
+        path: '/system/user',
+        component: () => import('../views/system/user/index.vue'),
+        meta: { title: '用户管理', active: '/system/user', auth: true, roles: ['ADMIN'] }
       }
     ]
   },
@@ -170,6 +225,15 @@ router.beforeEach((to) => {
   if (!token) {
     return '/login'
   }
+
+  // 角色权限校验：路由 meta.roles 指定的角色才可访问
+  if (to.meta?.roles && Array.isArray(to.meta.roles)) {
+    const role = browser.role
+    if (!to.meta.roles.includes(role)) {
+      return '/'
+    }
+  }
+
   return true
 })
 

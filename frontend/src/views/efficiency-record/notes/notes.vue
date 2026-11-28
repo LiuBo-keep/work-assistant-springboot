@@ -1,7 +1,10 @@
 <template>
   <div class="notes-layout">
     <!-- ===== 左侧：笔记列表 ===== -->
-    <div class="notes-sidebar" :class="{ collapsed: sidebarCollapsed }">
+    <div
+      class="notes-sidebar"
+      :class="{ collapsed: sidebarCollapsed, 'mobile-hidden': isMobile && !showList }"
+    >
       <!-- 顶部栏 -->
       <div class="sb-head">
         <span class="sb-title">
@@ -90,9 +93,11 @@
     </div>
 
     <!-- ===== 右侧：编辑区 ===== -->
-    <div class="editor-area" v-if="current">
+    <div class="editor-area" v-if="current" :class="{ 'mobile-hidden': isMobile && showList }">
       <!-- 编辑区头部 -->
       <div class="editor-head">
+        <!-- 移动端：返回列表按钮 -->
+        <el-icon class="mobile-back" :size="18" @click="backToList"><ArrowLeft /></el-icon>
         <!-- 预览模式：标题只读展示 -->
         <span v-if="previewMode" class="title-readonly">{{
           current.title
@@ -204,7 +209,7 @@
     </div>
 
     <!-- 空状态（无选中笔记） -->
-    <div v-else class="editor-empty">
+    <div v-else class="editor-empty" :class="{ 'mobile-hidden': isMobile && showList }">
       <el-icon :size="48" class="empty-icon"><Notebook /></el-icon>
       <p class="empty-title">选择或新建一篇笔记</p>
       <el-button type="primary" :icon="Plus" @click="createNote"
@@ -231,6 +236,7 @@ import {
   Calendar,
   Clock,
   Warning,
+  ArrowLeft,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import notesService from '@/services/efficiency-record/notes/notes.service'
@@ -252,6 +258,12 @@ const sidebarCollapsed = ref(false)
 const renderedHtml = ref('')
 const editorRef = ref(null)
 const editorBodyRef = ref(null)
+
+/* ---- 移动端检测 ---- */
+const mobileQuery = window.matchMedia('(max-width: 768px)')
+const isMobile = ref(mobileQuery.matches)
+const showList = ref(true) // 移动端：true=显示列表，false=显示详情
+const onMobileChange = (e) => { isMobile.value = e.matches }
 
 const categories = ['工作', '开发', '会议', '其他']
 
@@ -277,6 +289,14 @@ function onCatClick(c) {
   doSearch()
 }
 
+/* ---- 移动端：返回列表 ---- */
+function backToList() {
+  if (isDirty.value) {
+    ElMessage.warning('当前笔记有未保存的更改')
+  }
+  showList.value = true
+}
+
 /* ---- 搜索 ---- */
 function doSearch() {
   noteList.value = notesService.search({
@@ -297,6 +317,7 @@ async function selectNote(note) {
   current.value = { ...note }
   isDirty.value = false
   previewMode.value = true // 默认预览模式
+  if (isMobile.value) showList.value = false
   destroyEditor()
   // 渲染预览 HTML
   await nextTick()
@@ -317,6 +338,7 @@ async function createNote() {
   current.value = { ...res.data }
   isDirty.value = false
   previewMode.value = false
+  if (isMobile.value) showList.value = false
   await nextTick()
   initEditor('')
   // 自动聚焦标题
@@ -353,6 +375,7 @@ function removeNote() {
   current.value = null
   currentId.value = null
   isDirty.value = false
+  if (isMobile.value) showList.value = true
   doSearch()
   destroyEditor()
 }
@@ -483,12 +506,14 @@ function onBeforeUnload(e) {
 /* ---- 生命周期 ---- */
 onMounted(() => {
   doSearch()
+  mobileQuery.addEventListener('change', onMobileChange)
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('beforeunload', onBeforeUnload)
 })
 
 onBeforeUnmount(() => {
   destroyEditor()
+  mobileQuery.removeEventListener('change', onMobileChange)
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('beforeunload', onBeforeUnload)
 })
@@ -500,7 +525,7 @@ onBeforeUnmount(() => {
   display: flex;
   height: 100%;
   min-height: calc(100vh - 56px);
-  background: #f5f7fa;
+  background: var(--color-bg-page);
   overflow: hidden;
   position: relative;
 }
@@ -509,8 +534,8 @@ onBeforeUnmount(() => {
 .notes-sidebar {
   width: 240px;
   flex-shrink: 0;
-  background: #fff;
-  border-right: 1px solid #ebeef5;
+  background: var(--color-bg-card);
+  border-right: 1px solid var(--color-border-light);
   display: flex;
   flex-direction: column;
   transition:
@@ -530,7 +555,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -540,10 +565,10 @@ onBeforeUnmount(() => {
   gap: 5px;
   font-size: 13px;
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
   white-space: nowrap;
   .el-icon {
-    color: #909399;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -561,19 +586,19 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #909399;
+  color: var(--color-text-secondary);
   transition:
     background 0.15s,
     color 0.15s;
   &:hover {
-    background: #f0f2f5;
-    color: #303133;
+    background: var(--color-bg-hover);
+    color: var(--color-text-primary);
   }
 }
 
 .sb-search {
   padding: 8px 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -582,7 +607,7 @@ onBeforeUnmount(() => {
   flex-wrap: wrap;
   gap: 4px;
   padding: 6px 10px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -592,20 +617,20 @@ onBeforeUnmount(() => {
   font-size: 11px;
   font-weight: 500;
   cursor: pointer;
-  border: 0.5px solid #ebeef5;
-  color: #909399;
-  background: #fff;
+  border: 0.5px solid var(--color-border-light);
+  color: var(--color-text-secondary);
+  background: var(--color-bg-card);
   white-space: nowrap;
   transition: all 0.15s;
 
   &:hover {
-    border-color: #c6e2ff;
-    color: #409eff;
+    border-color: var(--brand-primary-soft);
+    color: var(--brand-primary);
   }
   &.active {
-    background: #ecf5ff;
-    color: #409eff;
-    border-color: #b3d8ff;
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
+    border-color: var(--brand-primary-soft);
   }
 }
 
@@ -616,7 +641,7 @@ onBeforeUnmount(() => {
     width: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #ebeef5;
+    background: var(--color-border-light);
     border-radius: 2px;
   }
 }
@@ -627,7 +652,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   padding: 32px 0;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
   font-size: 12px;
 }
 
@@ -638,11 +663,11 @@ onBeforeUnmount(() => {
   transition: background 0.12s;
 
   &:hover {
-    background: #f5f7fa;
+    background: var(--color-bg-hover);
   }
   &.active {
-    background: #ecf5ff;
-    border-left-color: #409eff;
+    background: var(--brand-primary-fade);
+    border-left-color: var(--brand-primary);
   }
 }
 
@@ -659,31 +684,31 @@ onBeforeUnmount(() => {
   font-size: 10px;
   font-weight: 500;
   &.cat-work {
-    background: #e6f1fb;
-    color: #0c447c;
+    background: var(--color-info-soft);
+    color: var(--color-info);
   }
   &.cat-dev {
-    background: #eeedfe;
-    color: #534ab7;
+    background: var(--brand-primary-fade);
+    color: var(--brand-primary);
   }
   &.cat-meet {
-    background: #e1f5ee;
-    color: #085041;
+    background: var(--color-success-soft);
+    color: var(--color-success-dark);
   }
   &.cat-other {
-    background: #f1f1f1;
-    color: #909399;
+    background: var(--color-bg-hover);
+    color: var(--color-text-secondary);
   }
 }
 
 .ni-time {
   font-size: 10px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 }
 .ni-title {
   font-size: 12px;
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
   margin-bottom: 3px;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -691,7 +716,7 @@ onBeforeUnmount(() => {
 }
 .ni-preview {
   font-size: 11px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -700,8 +725,8 @@ onBeforeUnmount(() => {
 .sb-foot {
   padding: 6px 12px;
   font-size: 11px;
-  color: #c0c4cc;
-  border-top: 1px solid #f0f0f0;
+  color: var(--color-text-placeholder);
+  border-top: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -713,18 +738,18 @@ onBeforeUnmount(() => {
   transform: translateY(-50%);
   width: 20px;
   height: 48px;
-  background: #fff;
-  border: 1px solid #ebeef5;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
   border-left: none;
   border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #909399;
+  color: var(--color-text-secondary);
   z-index: 10;
   &:hover {
-    color: #409eff;
+    color: var(--brand-primary);
   }
 }
 
@@ -734,7 +759,7 @@ onBeforeUnmount(() => {
   display: flex;
   flex-direction: column;
   min-width: 0;
-  background: #fff;
+  background: var(--color-bg-card);
 }
 
 .editor-head {
@@ -742,7 +767,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -756,7 +781,7 @@ onBeforeUnmount(() => {
   :deep(.el-input__inner) {
     font-size: 16px;
     font-weight: 500;
-    color: #303133;
+    color: var(--color-text-primary);
   }
 }
 
@@ -765,7 +790,7 @@ onBeforeUnmount(() => {
   flex: 1;
   font-size: 16px;
   font-weight: 500;
-  color: #303133;
+  color: var(--color-text-primary);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -795,7 +820,7 @@ onBeforeUnmount(() => {
   }
 
   :deep(.toastui-editor-toolbar) {
-    border-bottom: 1px solid #f0f0f0;
+    border-bottom: 1px solid var(--color-border-light);
   }
 
   :deep(.toastui-editor-main) {
@@ -814,7 +839,7 @@ onBeforeUnmount(() => {
     width: 4px;
   }
   &::-webkit-scrollbar-thumb {
-    background: #ebeef5;
+    background: var(--color-border-light);
     border-radius: 2px;
   }
 }
@@ -824,7 +849,7 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   padding: 6px 14px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-border-light);
   flex-shrink: 0;
 }
 
@@ -833,7 +858,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 14px;
   font-size: 11px;
-  color: #c0c4cc;
+  color: var(--color-text-placeholder);
 
   span {
     display: inline-flex;
@@ -847,7 +872,7 @@ onBeforeUnmount(() => {
   align-items: center;
   gap: 4px;
   font-size: 11px;
-  color: #e6a23c;
+  color: var(--color-warning);
 }
 
 /* ===== 空状态 ===== */
@@ -858,14 +883,92 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #fff;
+  background: var(--color-bg-card);
 
   .empty-icon {
-    color: #dcdfe6;
+    color: var(--color-border);
   }
   .empty-title {
     font-size: 14px;
-    color: #c0c4cc;
+    color: var(--color-text-placeholder);
+  }
+}
+
+/* ===== 移动端适配：列表 ↔ 详情单栏切换 ===== */
+@media screen and (max-width: 768px) {
+  .notes-layout {
+    height: auto;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* 列表栏：移动端全宽 */
+  .notes-sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  /* 移动端隐藏：列表/详情互斥显示 */
+  .notes-sidebar.mobile-hidden,
+  .editor-area.mobile-hidden,
+  .editor-empty.mobile-hidden {
+    display: none;
+  }
+
+  /* 收起按钮在移动端隐藏（用返回按钮代替） */
+  .sidebar-toggle {
+    display: none;
+  }
+
+  /* 编辑区头部：返回按钮 + 标题 */
+  .mobile-back {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+    padding: 2px;
+
+    &:hover {
+      color: var(--brand-primary);
+    }
+  }
+
+  /* 编辑区操作按钮：窄屏精简，换行处理 */
+  .editor-head {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .editor-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* 底部元信息：窄屏换行 */
+  .editor-foot {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .foot-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* 预览内容内边距收窄 */
+  .md-preview {
+    padding: 14px 16px;
+  }
+}
+
+/* 移动端返回按钮默认隐藏（仅移动端显示） */
+.mobile-back {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .mobile-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

@@ -57,7 +57,7 @@
           <!-- 高亮预览 -->
           <div class="field-label mb6">高亮预览</div>
           <div class="regex-preview"
-               v-html="regexHighlighted || '<span style=&quot;color:var(--el-text-color-placeholder)&quot;>匹配结果将在此高亮显示...</span>'" />
+               v-html="regexHighlighted || '<span style=&quot;color:var(--color-text-placeholder)&quot;>匹配结果将在此高亮显示...</span>'" />
 
           <!-- 匹配详情 -->
           <template v-if="regexMatches.length">

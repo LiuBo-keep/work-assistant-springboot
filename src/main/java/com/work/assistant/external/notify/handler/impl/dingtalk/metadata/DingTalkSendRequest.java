@@ -4,6 +4,11 @@ import com.work.assistant.external.notify.handler.impl.dingtalk.enums.DingTalkMs
 import java.util.List;
 import lombok.Data;
 
+/**
+ * 钉钉机器人发送请求体。
+ *
+ * @author work-assistant
+ */
 @Data
 public class DingTalkSendRequest {
 

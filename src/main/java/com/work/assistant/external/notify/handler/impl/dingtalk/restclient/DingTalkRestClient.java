@@ -7,6 +7,11 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
+/**
+ * 钉钉机器人 Retrofit 客户端。
+ *
+ * @author work-assistant
+ */
 public interface DingTalkRestClient {
 
   /**

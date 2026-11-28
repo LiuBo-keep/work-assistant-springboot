@@ -91,7 +91,7 @@ const tabs = [
   padding: 20px 24px 16px;
   box-sizing: border-box;
   gap: 12px;
-  background: var(--el-bg-color-page, #f5f7fa);
+  background: var(--color-bg-page);
   overflow: hidden;
 }
 
@@ -112,25 +112,26 @@ const tabs = [
   width: 40px;
   height: 40px;
   border-radius: 10px;
-  background: var(--el-color-primary, #409eff);
+  background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-active));
   display: flex;
   align-items: center;
   justify-content: center;
   color: #fff;
   flex-shrink: 0;
+  box-shadow: 0 4px 10px rgba(55, 138, 221, 0.25);
 }
 
 .header-title {
   margin: 0;
   font-size: 16px;
   font-weight: 700;
-  color: var(--el-text-color-primary, #303133);
+  color: var(--color-text-primary);
 }
 
 .header-sub {
   margin: 2px 0 0;
   font-size: 12px;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
 }
 
 /* ── Tabs ── */
@@ -138,7 +139,7 @@ const tabs = [
   display: flex;
   gap: 6px;
   flex-shrink: 0;
-  border-bottom: 2px solid var(--el-border-color-lighter, #ebeef5);
+  border-bottom: 2px solid var(--color-border-light);
 }
 
 .tool-tab {
@@ -150,7 +151,7 @@ const tabs = [
   background: transparent;
   font-size: 13px;
   font-weight: 500;
-  color: var(--el-text-color-secondary, #909399);
+  color: var(--color-text-secondary);
   cursor: pointer;
   transition: all .18s;
   border-bottom: 2px solid transparent;
@@ -163,15 +164,15 @@ const tabs = [
   }
 
   &:hover {
-    color: var(--el-color-primary, #409eff);
-    background: var(--el-color-primary-light-9, #ecf5ff);
+    color: var(--brand-primary);
+    background: var(--brand-primary-fade);
   }
 
   &.active {
-    color: var(--el-color-primary, #409eff);
-    border-bottom-color: var(--el-color-primary, #409eff);
+    color: var(--brand-primary);
+    border-bottom-color: var(--brand-primary);
     font-weight: 600;
-    background: var(--el-bg-color, #fff);
+    background: var(--color-bg-card);
   }
 }
 
@@ -182,5 +183,40 @@ const tabs = [
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* ══ 移动端适配 ══ */
+@media screen and (max-width: 768px) {
+  .network-page {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .header-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+  }
+
+  .header-title {
+    font-size: 15px;
+  }
+
+  .header-sub {
+    display: none;
+  }
+
+  /* tab 可横向滚动 */
+  .tool-tabs {
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .tool-tab {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    white-space: nowrap;
+  }
 }
 </style>

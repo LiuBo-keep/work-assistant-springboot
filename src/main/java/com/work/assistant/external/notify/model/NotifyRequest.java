@@ -6,7 +6,9 @@ import java.util.Map;
 import lombok.Data;
 
 /**
- * 通知请求
+ * 通知请求。
+ *
+ * @author work-assistant
  */
 @Data
 public class NotifyRequest {

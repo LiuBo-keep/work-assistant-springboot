@@ -9,11 +9,16 @@ import com.work.assistant.external.notify.enums.NotifyType;
 import com.work.assistant.external.notify.manager.NotifyManager;
 import com.work.assistant.external.notify.model.NotifyRequest;
 import java.time.LocalDate;
-import java.util.List;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
+/**
+ * 下班打卡提醒定时任务。
+ *
+ * <p>在约定时间检查员工是否已下班打卡，未打卡则通过通知渠道发送提醒。
+ *
+ * @author work-assistant
+ */
 @Slf4j
 @Component
 public class HrmsCheckInNotificationJob {
@@ -72,8 +77,8 @@ public class HrmsCheckInNotificationJob {
 
     try {
 
-      HrmsNotifyConfig config = getEnableConfig();
-      if (config == null || Boolean.FALSE.equals(config.getEnabled())) {
+      HrmsNotifyConfig config = hrmsNotifyConfigRepository.findEnabledConfig();
+      if (config == null) {
         log.warn("hrms notify config not enabled");
         return;
       }
@@ -169,21 +174,5 @@ public class HrmsCheckInNotificationJob {
     }
 
     return builder.toString();
-  }
-
-  /**
-   * 获取启用配置
-   */
-  private HrmsNotifyConfig getEnableConfig() {
-
-    List<HrmsNotifyConfig> configs = hrmsNotifyConfigRepository.findAll();
-    if (CollectionUtils.isEmpty(configs)) {
-      return null;
-    }
-    HrmsNotifyConfig config = configs.getFirst();
-    if (Boolean.FALSE.equals(config.getEnabled())) {
-      return null;
-    }
-    return config;
   }
 }

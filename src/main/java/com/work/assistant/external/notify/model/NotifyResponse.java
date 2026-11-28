@@ -4,7 +4,9 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 通知响应
+ * 通知响应。
+ *
+ * @author work-assistant
  */
 @Data
 @Builder

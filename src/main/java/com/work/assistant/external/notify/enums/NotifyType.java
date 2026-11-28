@@ -1,5 +1,10 @@
 package com.work.assistant.external.notify.enums;
 
+/**
+ * 通知渠道类型。
+ *
+ * @author work-assistant
+ */
 public enum NotifyType {
 
   /**

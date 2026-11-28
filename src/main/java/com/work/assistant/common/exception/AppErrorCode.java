@@ -30,7 +30,17 @@ public enum AppErrorCode {
   LOGIN_FAILED(HttpStatus.BAD_REQUEST,
       "Login failed. Possible reasons:Tenant name, login or password is wrong;"
           + "Account is locked due to failed login attempts;Account is inactive or blocked;"
-          + "For more support please contact your administrator two-factor authentication failed");
+          + "For more support please contact your administrator two-factor authentication failed"),
+
+  /**
+   * 未授权（登录失败 / 凭证无效）。
+   */
+  UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "用户名或密码错误"),
+
+  /**
+   * 账号被禁用。
+   */
+  ACCOUNT_DISABLED(HttpStatus.FORBIDDEN, "账号已被禁用，请联系管理员");
 
   private final HttpStatus refHttpStatusCode;
   private final String msg;

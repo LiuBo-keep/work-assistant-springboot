@@ -33,4 +33,189 @@
             <column name="version_num" type="INTEGER"/>
         </createTable>
     </changeSet>
+
+    <!-- 工具收藏 - 分类表 -->
+    <changeSet id="202611271600" author="aidan.liu">
+        <createTable tableName="tool_category">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tool_category_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sort_order" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <addUniqueConstraint tableName="tool_category"
+                             columnNames="name"
+                             constraintName="uk_tool_category_name"/>
+    </changeSet>
+
+    <!-- 工具收藏 - 收藏表 -->
+    <changeSet id="202611271601" author="aidan.liu">
+        <createTable tableName="tool_favorite">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="tool_favorite_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="url" type="VARCHAR(2048)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="icon" type="VARCHAR(2048)"/>
+            <column name="description" type="VARCHAR(512)"/>
+            <column name="category_id" type="VARCHAR(255)"/>
+            <column name="sort_order" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="click_count" type="INTEGER" defaultValueNumeric="0"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <addForeignKeyConstraint baseTableName="tool_favorite"
+                                 baseColumnNames="category_id"
+                                 constraintName="fk_tool_favorite_category"
+                                 referencedTableName="tool_category"
+                                 referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <!-- 密码本条目表 -->
+    <changeSet id="202611272200" author="work-assistant">
+        <createTable tableName="password_entry">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="password_entry_pkey"/>
+            </column>
+            <column name="name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="category" type="VARCHAR(64)"/>
+            <column name="account" type="VARCHAR(255)"/>
+            <column name="password" type="TEXT"/>
+            <column name="url" type="VARCHAR(2048)"/>
+            <column name="remark" type="VARCHAR(512)"/>
+            <column name="owner" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="version_num" type="INTEGER" defaultValueNumeric="0"/>
+        </createTable>
+        <createIndex tableName="password_entry" indexName="idx_password_entry_owner">
+            <column name="owner"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 系统监控 - 定时任务执行记录表 -->
+    <changeSet id="202611272330" author="work-assistant">
+        <createTable tableName="task_run_log">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="task_run_log_pkey"/>
+            </column>
+            <column name="task_name" type="VARCHAR(128)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="start_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="end_time" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="duration_ms" type="BIGINT"/>
+            <column name="status" type="VARCHAR(16)"/>
+            <column name="error_msg" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="task_run_log" indexName="idx_task_run_log_start_time">
+            <column name="start_time"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 系统监控 - 指标快照表 -->
+    <changeSet id="202611272331" author="work-assistant">
+        <createTable tableName="metric_snapshot">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="metric_snapshot_pkey"/>
+            </column>
+            <column name="metric_name" type="VARCHAR(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="metric_value" type="DOUBLE"/>
+            <column name="captured_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="metric_snapshot" indexName="idx_metric_snapshot_name_time">
+            <column name="metric_name"/>
+            <column name="captured_at"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 数据库备份记录表 -->
+    <changeSet id="202611281200" author="work-assistant">
+        <createTable tableName="database_backup">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="database_backup_pkey"/>
+            </column>
+            <column name="file_name" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_size" type="BIGINT"/>
+            <column name="table_count" type="INTEGER"/>
+            <column name="status" type="VARCHAR(16)"/>
+            <column name="error_msg" type="TEXT"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="database_backup" indexName="idx_database_backup_created_at">
+            <column name="created_at"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 数据库备份记录表：新增备份类型与表清单字段 -->
+    <changeSet id="202611281205" author="work-assistant">
+        <addColumn tableName="database_backup">
+            <column name="backup_type" type="VARCHAR(16)"/>
+            <column name="table_list" type="TEXT"/>
+        </addColumn>
+    </changeSet>
+
+    <!-- 接口调用日志表 -->
+    <changeSet id="202611281330" author="work-assistant">
+        <createTable tableName="api_call_log">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="api_call_log_pkey"/>
+            </column>
+            <column name="http_method" type="VARCHAR(10)"/>
+            <column name="request_path" type="VARCHAR(512)"/>
+            <column name="status_code" type="INTEGER"/>
+            <column name="duration_ms" type="BIGINT"/>
+            <column name="client_ip" type="VARCHAR(64)"/>
+            <column name="user_name" type="VARCHAR(128)"/>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+        <createIndex tableName="api_call_log" indexName="idx_api_call_log_created_at">
+            <column name="created_at"/>
+        </createIndex>
+        <createIndex tableName="api_call_log" indexName="idx_api_call_log_path">
+            <column name="request_path"/>
+        </createIndex>
+    </changeSet>
+
+    <!-- 系统用户表 -->
+    <changeSet id="202611281400" author="work-assistant">
+        <createTable tableName="sys_user">
+            <column name="id" type="VARCHAR(255)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="sys_user_pkey"/>
+            </column>
+            <column name="user_name" type="VARCHAR(64)">
+                <constraints nullable="false" unique="true" uniqueConstraintName="uk_sys_user_name"/>
+            </column>
+            <column name="password" type="VARCHAR(512)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="display_name" type="VARCHAR(64)"/>
+            <column name="role" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="BOOLEAN" defaultValueBoolean="true">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+            <column name="updated_at" type="TIMESTAMP WITHOUT TIME ZONE"/>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

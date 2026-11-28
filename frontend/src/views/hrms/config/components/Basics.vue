@@ -189,16 +189,17 @@ onMounted(() => getConfig())
 /* ===== 页面容器 ===== */
 .page-wrap {
   padding: 16px;
-  background: #f5f7fa;
+  background: var(--color-bg-page);
   min-height: 100%;
   box-sizing: border-box;
 }
 
 /* ===== 卡片 ===== */
 .config-card {
-  background: #fff;
-  border: 1px solid #ebeef5;
-  border-radius: 8px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   overflow: hidden;
 }
 
@@ -206,27 +207,27 @@ onMounted(() => getConfig())
 .card-head {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 14px 20px;
-  border-bottom: 1px solid #f0f0f0;
+  gap: 10px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .head-icon {
-  width: 26px;
-  height: 26px;
-  border-radius: 6px;
-  background: #e6f1fb;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--brand-primary-fade);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #185fa5;
+  color: var(--brand-primary);
   flex-shrink: 0;
 }
 
 .head-title {
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 600;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 /* ===== 表单主体 ===== */
@@ -257,7 +258,7 @@ onMounted(() => getConfig())
 .field-label {
   font-size: 13px;
   font-weight: 500;
-  color: #606266;
+  color: var(--color-text-regular);
 }
 
 /* 必填红星位置微调 */
@@ -271,14 +272,14 @@ onMounted(() => getConfig())
 :deep(.el-input__wrapper),
 :deep(.el-select .el-input__wrapper) {
   height: 32px;
-  box-shadow: 0 0 0 1px #dcdfe6 inset;
+  box-shadow: 0 0 0 1px var(--color-border) inset;
 
   &:hover {
-    box-shadow: 0 0 0 1px #c0c4cc inset;
+    box-shadow: 0 0 0 1px var(--color-text-placeholder) inset;
   }
 
   &.is-focus {
-    box-shadow: 0 0 0 1px #409eff inset;
+    box-shadow: 0 0 0 1px var(--brand-primary) inset;
   }
 }
 
@@ -294,11 +295,11 @@ onMounted(() => getConfig())
   font-size: 12px;
 
   &.on {
-    color: #0f6e56;
+    color: var(--color-success);
   }
 
   &.off {
-    color: #909399;
+    color: var(--color-text-secondary);
   }
 }
 
@@ -309,7 +310,7 @@ onMounted(() => getConfig())
   align-items: center;
   gap: 10px;
   padding: 16px 0 20px;
-  border-top: 1px solid #f0f0f0;
+  border-top: 1px solid var(--color-border-light);
   margin-top: 4px;
 }
 
