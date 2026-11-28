@@ -146,11 +146,12 @@
     <el-dialog
       v-model="favDialog"
       :title="favForm.id ? '编辑收藏' : '新增收藏'"
-      width="460px"
+      :width="isMobile ? '92%' : '460px'"
+      align-center
       :close-on-click-modal="false"
       destroy-on-close
     >
-      <el-form :model="favForm" label-width="72px" label-position="left">
+      <el-form :model="favForm" :label-width="isMobile ? '56px' : '72px'" label-position="left">
         <el-form-item label="名称" required>
           <el-input v-model="favForm.name" placeholder="工具名称，如 JSON 在线解析" />
         </el-form-item>
@@ -200,11 +201,12 @@
     <el-dialog
       v-model="catDialog"
       title="新增分类"
-      width="360px"
+      :width="isMobile ? '92%' : '360px'"
+      align-center
       :close-on-click-modal="false"
       destroy-on-close
     >
-      <el-form label-width="60px" label-position="left">
+      <el-form :label-width="isMobile ? '56px' : '60px'" label-position="left">
         <el-form-item label="名称" required>
           <el-input v-model="catForm.name" placeholder="分类名称，如 开发工具" @keyup.enter="saveCategory" />
         </el-form-item>
@@ -219,13 +221,18 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {
   Plus, Search, Edit, Delete, Close, Grid, Files, Folder,
   CollectionTag, Pointer, TopRight, MagicStick
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import toolFavoriteService from '@/services/tool/tool-favorite.service'
+
+/* ---- 移动端检测 ---- */
+const mobileQuery = window.matchMedia('(max-width: 768px)')
+const isMobile = ref(mobileQuery.matches)
+const onMobileChange = (e) => { isMobile.value = e.matches }
 
 /* ---- 数据状态 ---- */
 const loading = ref(false)
@@ -426,7 +433,14 @@ async function removeCategory(cat) {
 }
 
 /* ---- 初始化 ---- */
-onMounted(loadData)
+onMounted(() => {
+  mobileQuery.addEventListener('change', onMobileChange)
+  loadData()
+})
+
+onBeforeUnmount(() => {
+  mobileQuery.removeEventListener('change', onMobileChange)
+})
 </script>
 
 <style lang="scss" scoped>
@@ -686,6 +700,7 @@ onMounted(loadData)
   display: flex;
   flex-direction: column;
   gap: 2px;
+  overflow: hidden;
 }
 
 .fav-name {
@@ -695,6 +710,8 @@ onMounted(loadData)
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  display: block;
+  max-width: 100%;
 }
 
 .fav-domain {
@@ -814,6 +831,11 @@ onMounted(loadData)
     .header-sub {
       display: none;
     }
+
+    /* 新增按钮在窄屏改为纯图标，避免挤压标题 */
+    .header-right .el-button {
+      padding: 8px 10px;
+    }
   }
 
   /* 左栏分类改为顶部横向通栏 */
@@ -866,6 +888,68 @@ onMounted(loadData)
 
   .fav-grid-wrap {
     padding: 2px 0 8px;
+  }
+
+  /* 卡片：统一间距，避免描述为空时撑高 */
+  .fav-card {
+    padding: 12px;
+    gap: 8px;
+  }
+
+  .fav-desc {
+    min-height: auto;
+  }
+
+  /* 编辑/删除按钮在移动端始终可见（无 hover），用绝对定位放到右上角，不挤压标题 */
+  .fav-card {
+    position: relative;
+  }
+
+  .fav-actions {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    opacity: 1;
+  }
+
+  /* 标题区给右上角按钮留出空间，避免重叠 */
+  .fav-card-head {
+    padding-right: 44px;
+    align-items: flex-start;
+  }
+
+  /* 标题允许换行，避免长标题被硬截断 */
+  .fav-name {
+    white-space: normal;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* 描述为空时隐藏，避免出现孤立无意义内容 */
+  .fav-desc:empty {
+    display: none;
+  }
+
+  .fav-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+  }
+
+  /* ===== 弹窗移动端适配 ===== */
+  /* 网址行：智能填充按钮换行到输入框下方，避免溢出 */
+  .url-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+
+  .resolve-btn {
+    width: 100%;
+    margin-left: 0;
   }
 }
 </style>

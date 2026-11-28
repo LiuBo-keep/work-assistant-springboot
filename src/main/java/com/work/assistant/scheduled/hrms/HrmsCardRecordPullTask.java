@@ -1,6 +1,7 @@
 package com.work.assistant.scheduled.hrms;
 
 import com.work.assistant.scheduled.hrms.job.HrmsCardRecordPullJob;
+import com.work.assistant.scheduled.monitor.TaskExecutionRecorder;
 import java.time.LocalTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -46,8 +47,15 @@ public class HrmsCardRecordPullTask {
    */
   private final HrmsCardRecordPullJob hrmsCardRecordPullJob;
 
-  public HrmsCardRecordPullTask(HrmsCardRecordPullJob hrmsCardRecordPullJob) {
+  /**
+   * 任务执行记录器（用于系统监控面板展示执行历史）
+   */
+  private final TaskExecutionRecorder taskExecutionRecorder;
+
+  public HrmsCardRecordPullTask(HrmsCardRecordPullJob hrmsCardRecordPullJob,
+                                TaskExecutionRecorder taskExecutionRecorder) {
     this.hrmsCardRecordPullJob = hrmsCardRecordPullJob;
+    this.taskExecutionRecorder = taskExecutionRecorder;
   }
 
   /**
@@ -90,7 +98,8 @@ public class HrmsCardRecordPullTask {
       // 目的： 防止 HRMS 数据延迟
       if (between(now, MORNING_START, MORNING_END)) {
         log.info("execute morning pull");
-        hrmsCardRecordPullJob.pullMorning();
+        taskExecutionRecorder.execute("hrmsCardRecordPull.morning",
+            () -> hrmsCardRecordPullJob.pullMorning());
       }
 
       // 下午打卡拉取
@@ -98,7 +107,8 @@ public class HrmsCardRecordPullTask {
       // 说明：下班时间不固定，所以窗口设置较长
       if (between(now, AFTERNOON_START, AFTERNOON_END)) {
         log.info("execute afternoon pull");
-        hrmsCardRecordPullJob.pullAfternoon();
+        taskExecutionRecorder.execute("hrmsCardRecordPull.afternoon",
+            () -> hrmsCardRecordPullJob.pullAfternoon());
       }
 
     } catch (Exception e) {

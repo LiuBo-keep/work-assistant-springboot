@@ -12,7 +12,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
 /**
- * 通知管理器
+ * 通知管理器。
+ *
+ * <p>在启动时收集所有 {@link NotifyHandler} 实现，按 {@link NotifyType} 建立映射，
+ * 对外提供统一的通知分发入口。
+ *
+ * @author work-assistant
  */
 @Slf4j
 @Component

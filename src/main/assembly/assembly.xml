@@ -36,11 +36,16 @@
     </fileSets>
 
     <files>
+        <!--
+            service.exe 由 winsw 依赖经 maven-dependency-plugin 复制生成，
+            因 winsw 在阿里云镜像不可用且对应依赖已注释，此处一并注释，
+            避免 assembly 打包阶段找不到 service.exe 而失败。
         <file>
             <source>${dist.dir}/service.exe</source>
             <outputDirectory/>
             <destName>${dist.project.name}-service.exe</destName>
         </file>
+        -->
         <file>
             <source>${dist.dir}/service.xml</source>
             <outputDirectory/>

@@ -25,7 +25,18 @@ spring:
     driver-class-name: org.postgresql.Driver
     username: postgres
     password: 123456
-    url: jdbc:postgresql://localhost:5432/work-assistant
+    url: jdbc:postgresql://49.232.206.117:5432/work-assistant-test
+    hikari:
+      # 连接池最大连接数
+      maximum-pool-size: 10
+      # 最小空闲连接数
+      minimum-idle: 2
+      # 连接最大存活时间（毫秒），到期后自动销毁重建，实现"自动续连/换新"
+      max-lifetime: 1800000
+      # 空闲连接保活时间（毫秒），定期对空闲连接发 keepalive 查询防止被数据库/防火墙断开
+      keepalive-time: 300000
+      # 连接泄漏检测阈值（毫秒），连接被持有超过该时长会打印告警日志；0 表示关闭
+      leak-detection-threshold: 60000
   servlet:
     multipart:
       max-file-size: 5MB
@@ -39,4 +50,35 @@ logging:
       max-history: 30
       total-size-cap: 5GB
       file-name-pattern: /data/logs/myapp/app-%d{yyyy-MM-dd}.%i.log
+
+# 工作助手自定义配置
+work:
+  assistant:
+    rsa:
+      # RSA 密钥对存储目录（密码传输加解密用，首次启动自动生成，务必妥善保管）
+      key-dir: ./data/rsa
+    backup:
+      # 数据库备份文件存储目录
+      dir: ./data/backups
+
+# Actuator 系统监控端点配置
+management:
+  endpoints:
+    web:
+      exposure:
+        # 仅暴露所需端点，避免泄露 env/configprops 等敏感信息
+        include: health,metrics,logfile
+  endpoint:
+    health:
+      # 健康详情仅在授权后展示，避免泄露数据库地址等敏感信息
+      show-details: never
+  health:
+    # 磁盘空间健康检查阈值
+    diskspace:
+      enabled: true
+      threshold: 10MB
+  metrics:
+    # 关闭一些高频无用指标，减少内存占用
+    enable:
+      all: true
 

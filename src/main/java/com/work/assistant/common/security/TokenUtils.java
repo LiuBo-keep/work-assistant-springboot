@@ -1,5 +1,6 @@
 package com.work.assistant.common.security;
 
+import com.work.assistant.common.constant.CryptoConstants;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Base64;
@@ -13,13 +14,14 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * <p>不引入额外依赖，基于 JDK 内置 HmacSHA256 实现签名令牌。
  * 令牌格式：{@code payloadBase64.signatureHex}，其中 payload 为
- * JSON 形式的 {@code {"userName": "...", "expireAt": <毫秒时间戳>}}。
+ * JSON 形式的 {@code {"userName": "...", "role": "...", "expireAt": <毫秒时间戳>}}。
  *
  * <p>设计要点：
  * <ul>
  *   <li>签名密钥由系统内 AES 密码派生，保证与服务端绑定。</li>
  *   <li>令牌含过期时间，鉴权时校验有效性，防止长期复用。</li>
- *   <li>避免在令牌中存放敏感明文，仅存用户名与过期时间。</li>
+ *   <li>令牌携带用户角色，供鉴权拦截器与前端做目录级权限控制。</li>
+ *   <li>避免在令牌中存放敏感明文，仅存用户名、角色与过期时间。</li>
  * </ul>
  *
  * @author aidan.liu
@@ -31,12 +33,6 @@ public final class TokenUtils {
    */
   public static final Duration TOKEN_TTL = Duration.ofHours(12);
 
-  /**
-   * 签名密钥（与 AES 密码保持一致，集中管理）。
-   */
-  private static final String SIGN_SECRET =
-      "6c96439b-ad24-4428-81ff-184d386afe28";
-
   private static final String HMAC_ALGORITHM = "HmacSHA256";
 
   private TokenUtils() {
@@ -46,11 +42,14 @@ public final class TokenUtils {
    * 签发令牌。
    *
    * @param userName 用户名
+   * @param role     用户角色（写入令牌，供权限控制）
    * @return 令牌字符串
    */
-  public static String issueToken(String userName) {
+  public static String issueToken(String userName, String role) {
     long expireAt = System.currentTimeMillis() + TOKEN_TTL.toMillis();
-    String payload = "{\"userName\":\"" + escape(userName) + "\",\"expireAt\":" + expireAt + "}";
+    String payload = "{\"userName\":\"" + escape(userName) + "\","
+        + "\"role\":\"" + escape(role == null ? "" : role) + "\","
+        + "\"expireAt\":" + expireAt + "}";
     String payloadBase64 = Base64.getUrlEncoder()
         .withoutPadding()
         .encodeToString(payload.getBytes(StandardCharsets.UTF_8));
@@ -58,12 +57,12 @@ public final class TokenUtils {
   }
 
   /**
-   * 校验并解析令牌。
+   * 校验并解析令牌，返回令牌携带的用户信息。
    *
    * @param token 令牌
-   * @return 解析出的用户名；无效或过期返回 {@code null}
+   * @return 解析出的用户信息（含用户名与角色）；无效或过期返回 {@code null}
    */
-  public static String verifyAndGetUserName(String token) {
+  public static TokenInfo verify(String token) {
     if (token == null || token.isEmpty()) {
       return null;
     }
@@ -88,16 +87,46 @@ public final class TokenUtils {
       if (System.currentTimeMillis() > expireAt) {
         return null;
       }
-      return (String) map.get("userName");
+      TokenInfo info = new TokenInfo();
+      info.userName = (String) map.get("userName");
+      info.role = (String) map.get("role");
+      return info;
     } catch (Exception e) {
       return null;
+    }
+  }
+
+  /**
+   * 校验并解析令牌，仅返回用户名。
+   *
+   * @param token 令牌
+   * @return 解析出的用户名；无效或过期返回 {@code null}
+   */
+  public static String verifyAndGetUserName(String token) {
+    TokenInfo info = verify(token);
+    return info == null ? null : info.userName;
+  }
+
+  /**
+   * 令牌解析结果（用户名 + 角色）。
+   */
+  public static class TokenInfo {
+    private String userName;
+    private String role;
+
+    public String getUserName() {
+      return userName;
+    }
+
+    public String getRole() {
+      return role;
     }
   }
 
   private static String sign(String data) {
     try {
       Mac mac = Mac.getInstance(HMAC_ALGORITHM);
-      mac.init(new SecretKeySpec(SIGN_SECRET.getBytes(StandardCharsets.UTF_8), HMAC_ALGORITHM));
+      mac.init(new SecretKeySpec(CryptoConstants.SERVER_SECRET.getBytes(StandardCharsets.UTF_8), HMAC_ALGORITHM));
       byte[] digest = mac.doFinal(data.getBytes(StandardCharsets.UTF_8));
       StringBuilder sb = new StringBuilder(digest.length * 2);
       for (byte b : digest) {

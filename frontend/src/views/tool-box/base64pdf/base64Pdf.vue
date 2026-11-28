@@ -821,6 +821,7 @@ IDUKLy9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0MTQKJSVFT0YK`
     overflow-y: auto;
     height: auto;
     min-height: 100%;
+    padding-bottom: 24px;
   }
 
   .header-sub {
@@ -837,6 +838,13 @@ IDUKLy9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0MTQKJSVFT0YK`
     font-size: 15px;
   }
 
+  /* 状态标签在窄屏收窄，避免挤压标题 */
+  .status-badge {
+    padding: 4px 10px;
+    font-size: 11px;
+    gap: 5px;
+  }
+
   .main-layout {
     flex-direction: column;
     gap: 12px;
@@ -844,6 +852,8 @@ IDUKLy9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0MTQKJSVFT0YK`
   }
 
   .col {
+    gap: 12px;
+
     &.col-left {
       width: 100%;
       flex-shrink: 0;
@@ -855,8 +865,54 @@ IDUKLy9Sb290IDEgMCBSCj4+CnN0YXJ0eHJlZgo0MTQKJSVFT0YK`
     }
   }
 
+  /* 输入框：移动端给固定高度，避免 flex 塌陷 */
+  .input-card {
+    flex: none;
+  }
+
+  .b64-textarea {
+    min-height: 200px;
+  }
+
+  /* 操作按钮：窄屏改为纵向排列，避免文字挤压溢出 */
+  .action-body {
+    flex-wrap: wrap;
+  }
+
+  .action-btn {
+    flex: 1 1 100%;
+    padding: 11px 0;
+  }
+
+  /* 预览区：移动端给固定高度 */
+  .preview-card {
+    flex: none;
+    min-height: 300px;
+  }
+
   .preview-iframe-wrap {
     min-height: 400px;
+  }
+
+  .preview-empty {
+    padding: 32px 16px;
+    min-height: 260px;
+  }
+
+  /* 输入区底部：提示与字数统计在窄屏换行，避免挤在一起 */
+  .card-foot {
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 8px 14px;
+  }
+
+  .foot-msg {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .char-count {
+    flex-shrink: 0;
   }
 }
 </style>

@@ -1,5 +1,6 @@
 package com.work.assistant.config.base;
 
+import com.work.assistant.config.apimonitor.ApiCallInterceptor;
 import com.work.assistant.config.ratelimit.RateLimitInterceptor;
 import com.work.assistant.config.security.AuthInterceptor;
 import lombok.RequiredArgsConstructor;
@@ -19,28 +20,33 @@ public class WebMvcConfig
 
   private final RateLimitInterceptor rateLimitInterceptor;
   private final AuthInterceptor authInterceptor;
+  private final ApiCallInterceptor apiCallInterceptor;
 
   @Override
   public void addInterceptors(
       InterceptorRegistry registry) {
 
     // 全局限流：最外层，先于鉴权执行。
+    // 注意：/actuator/** 不再放行，纳入限流范围，防止匿名高频拉取指标。
     registry.addInterceptor(rateLimitInterceptor)
         .addPathPatterns("/**")
         .excludePathPatterns(
-            "/actuator/**",
             "/error");
 
     // 鉴权：放行登录接口与静态资源，其余接口需携带有效令牌。
+    // /actuator/** 需要鉴权，避免系统运行指标被匿名访问。
     registry.addInterceptor(authInterceptor)
         .addPathPatterns("/**")
         .excludePathPatterns(
             "/api/v1/token",
-            "/actuator/**",
             "/error",
             "/favicon.ico",
             "/index.html",
             "/assets/**",
             "/static/**");
+
+    // 接口调用记录：最后执行（可读取鉴权写入的 authUserName），仅记录 /api 业务接口。
+    registry.addInterceptor(apiCallInterceptor)
+        .addPathPatterns("/api/**");
   }
 }

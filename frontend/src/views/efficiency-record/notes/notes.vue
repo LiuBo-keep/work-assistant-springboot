@@ -1,7 +1,10 @@
 <template>
   <div class="notes-layout">
     <!-- ===== 左侧：笔记列表 ===== -->
-    <div class="notes-sidebar" :class="{ collapsed: sidebarCollapsed }">
+    <div
+      class="notes-sidebar"
+      :class="{ collapsed: sidebarCollapsed, 'mobile-hidden': isMobile && !showList }"
+    >
       <!-- 顶部栏 -->
       <div class="sb-head">
         <span class="sb-title">
@@ -90,9 +93,11 @@
     </div>
 
     <!-- ===== 右侧：编辑区 ===== -->
-    <div class="editor-area" v-if="current">
+    <div class="editor-area" v-if="current" :class="{ 'mobile-hidden': isMobile && showList }">
       <!-- 编辑区头部 -->
       <div class="editor-head">
+        <!-- 移动端：返回列表按钮 -->
+        <el-icon class="mobile-back" :size="18" @click="backToList"><ArrowLeft /></el-icon>
         <!-- 预览模式：标题只读展示 -->
         <span v-if="previewMode" class="title-readonly">{{
           current.title
@@ -204,7 +209,7 @@
     </div>
 
     <!-- 空状态（无选中笔记） -->
-    <div v-else class="editor-empty">
+    <div v-else class="editor-empty" :class="{ 'mobile-hidden': isMobile && showList }">
       <el-icon :size="48" class="empty-icon"><Notebook /></el-icon>
       <p class="empty-title">选择或新建一篇笔记</p>
       <el-button type="primary" :icon="Plus" @click="createNote"
@@ -231,6 +236,7 @@ import {
   Calendar,
   Clock,
   Warning,
+  ArrowLeft,
 } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import notesService from '@/services/efficiency-record/notes/notes.service'
@@ -252,6 +258,12 @@ const sidebarCollapsed = ref(false)
 const renderedHtml = ref('')
 const editorRef = ref(null)
 const editorBodyRef = ref(null)
+
+/* ---- 移动端检测 ---- */
+const mobileQuery = window.matchMedia('(max-width: 768px)')
+const isMobile = ref(mobileQuery.matches)
+const showList = ref(true) // 移动端：true=显示列表，false=显示详情
+const onMobileChange = (e) => { isMobile.value = e.matches }
 
 const categories = ['工作', '开发', '会议', '其他']
 
@@ -277,6 +289,14 @@ function onCatClick(c) {
   doSearch()
 }
 
+/* ---- 移动端：返回列表 ---- */
+function backToList() {
+  if (isDirty.value) {
+    ElMessage.warning('当前笔记有未保存的更改')
+  }
+  showList.value = true
+}
+
 /* ---- 搜索 ---- */
 function doSearch() {
   noteList.value = notesService.search({
@@ -297,6 +317,7 @@ async function selectNote(note) {
   current.value = { ...note }
   isDirty.value = false
   previewMode.value = true // 默认预览模式
+  if (isMobile.value) showList.value = false
   destroyEditor()
   // 渲染预览 HTML
   await nextTick()
@@ -317,6 +338,7 @@ async function createNote() {
   current.value = { ...res.data }
   isDirty.value = false
   previewMode.value = false
+  if (isMobile.value) showList.value = false
   await nextTick()
   initEditor('')
   // 自动聚焦标题
@@ -353,6 +375,7 @@ function removeNote() {
   current.value = null
   currentId.value = null
   isDirty.value = false
+  if (isMobile.value) showList.value = true
   doSearch()
   destroyEditor()
 }
@@ -483,12 +506,14 @@ function onBeforeUnload(e) {
 /* ---- 生命周期 ---- */
 onMounted(() => {
   doSearch()
+  mobileQuery.addEventListener('change', onMobileChange)
   window.addEventListener('keydown', onKeyDown)
   window.addEventListener('beforeunload', onBeforeUnload)
 })
 
 onBeforeUnmount(() => {
   destroyEditor()
+  mobileQuery.removeEventListener('change', onMobileChange)
   window.removeEventListener('keydown', onKeyDown)
   window.removeEventListener('beforeunload', onBeforeUnload)
 })
@@ -866,6 +891,84 @@ onBeforeUnmount(() => {
   .empty-title {
     font-size: 14px;
     color: var(--color-text-placeholder);
+  }
+}
+
+/* ===== 移动端适配：列表 ↔ 详情单栏切换 ===== */
+@media screen and (max-width: 768px) {
+  .notes-layout {
+    height: auto;
+    min-height: calc(100vh - 56px);
+  }
+
+  /* 列表栏：移动端全宽 */
+  .notes-sidebar {
+    width: 100%;
+    border-right: none;
+  }
+
+  /* 移动端隐藏：列表/详情互斥显示 */
+  .notes-sidebar.mobile-hidden,
+  .editor-area.mobile-hidden,
+  .editor-empty.mobile-hidden {
+    display: none;
+  }
+
+  /* 收起按钮在移动端隐藏（用返回按钮代替） */
+  .sidebar-toggle {
+    display: none;
+  }
+
+  /* 编辑区头部：返回按钮 + 标题 */
+  .mobile-back {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    flex-shrink: 0;
+    padding: 2px;
+
+    &:hover {
+      color: var(--brand-primary);
+    }
+  }
+
+  /* 编辑区操作按钮：窄屏精简，换行处理 */
+  .editor-head {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .editor-actions {
+    width: 100%;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+  }
+
+  /* 底部元信息：窄屏换行 */
+  .editor-foot {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .foot-meta {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  /* 预览内容内边距收窄 */
+  .md-preview {
+    padding: 14px 16px;
+  }
+}
+
+/* 移动端返回按钮默认隐藏（仅移动端显示） */
+.mobile-back {
+  display: none;
+}
+@media screen and (max-width: 768px) {
+  .mobile-back {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 }
 </style>

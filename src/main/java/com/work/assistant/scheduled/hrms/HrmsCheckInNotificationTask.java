@@ -1,6 +1,7 @@
 package com.work.assistant.scheduled.hrms;
 
 import com.work.assistant.scheduled.hrms.job.HrmsCheckInNotificationJob;
+import com.work.assistant.scheduled.monitor.TaskExecutionRecorder;
 import java.time.LocalTime;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -101,8 +102,15 @@ public class HrmsCheckInNotificationTask {
    */
   private final HrmsCheckInNotificationJob hrmsCheckInNotificationJob;
 
-  public HrmsCheckInNotificationTask(HrmsCheckInNotificationJob hrmsCheckInNotificationJob) {
+  /**
+   * 任务执行记录器（用于系统监控面板展示执行历史）
+   */
+  private final TaskExecutionRecorder taskExecutionRecorder;
+
+  public HrmsCheckInNotificationTask(HrmsCheckInNotificationJob hrmsCheckInNotificationJob,
+                                     TaskExecutionRecorder taskExecutionRecorder) {
     this.hrmsCheckInNotificationJob = hrmsCheckInNotificationJob;
+    this.taskExecutionRecorder = taskExecutionRecorder;
   }
 
 
@@ -141,12 +149,14 @@ public class HrmsCheckInNotificationTask {
 
       // 上午打卡通知逻辑。
       if (between(now, MORNING_START, MORNING_END)) {
-        hrmsCheckInNotificationJob.morningCheckInNotification();
+        taskExecutionRecorder.execute("hrmsCheckInNotification.morning",
+            () -> hrmsCheckInNotificationJob.morningCheckInNotification());
       }
 
       // 下午打卡通知逻辑。
       if (between(now, AFTERNOON_START, AFTERNOON_END)) {
-        hrmsCheckInNotificationJob.afternoonCheckInNotification();
+        taskExecutionRecorder.execute("hrmsCheckInNotification.afternoon",
+            () -> hrmsCheckInNotificationJob.afternoonCheckInNotification());
       }
 
     } catch (Exception e) {

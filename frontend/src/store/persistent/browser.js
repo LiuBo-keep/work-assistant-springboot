@@ -28,6 +28,29 @@ class BrowserStore {
     localStorage.setItem('hrms.username', username)
   }
 
+  get role() {
+    return localStorage.getItem('hrms.role') || ''
+  }
+
+  setRole(role) {
+    localStorage.setItem('hrms.role', role)
+  }
+
+  get displayName() {
+    return localStorage.getItem('hrms.displayName') || ''
+  }
+
+  setDisplayName(displayName) {
+    localStorage.setItem('hrms.displayName', displayName)
+  }
+
+  clearAuth() {
+    localStorage.removeItem('hrms.accessToken')
+    localStorage.removeItem('hrms.username')
+    localStorage.removeItem('hrms.role')
+    localStorage.removeItem('hrms.displayName')
+  }
+
   get en() {
     return localStorage.getItem('hrms.en') || ''
   }

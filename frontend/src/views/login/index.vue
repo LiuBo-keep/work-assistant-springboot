@@ -41,12 +41,20 @@
           label-position="top"
           @keydown.enter.prevent="login"
         >
+          <transition name="el-zoom-in-top">
+            <div v-if="errorMsg" class="login-error" role="alert">
+              <el-icon><CircleCloseFilled /></el-icon>
+              <span>{{ errorMsg }}</span>
+            </div>
+          </transition>
+
           <el-form-item prop="userName" label="用户名">
             <el-input
               v-model="loginForm.userName"
               placeholder="请输入用户名"
               size="large"
               clearable
+              @input="errorMsg = ''"
             >
               <template #prefix>
                 <el-icon><User /></el-icon>
@@ -62,6 +70,7 @@
               size="large"
               show-password
               clearable
+              @input="errorMsg = ''"
             >
               <template #prefix>
                 <el-icon><Lock /></el-icon>
@@ -93,8 +102,7 @@
 import { reactive, ref, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import dayjs from 'dayjs'
-import { User, Lock, Suitcase, CircleCheckFilled } from '@element-plus/icons-vue'
-import { ElNotification } from 'element-plus'
+import { User, Lock, Suitcase, CircleCheckFilled, CircleCloseFilled } from '@element-plus/icons-vue'
 
 import browser from '../../store/persistent/browser'
 import userService from '@/services/user/user.service.js'
@@ -105,6 +113,7 @@ const router = useRouter()
 
 const loginFormRef = ref()
 const loading = ref(false)
+const errorMsg = ref('')
 const version = pkg.version
 
 const loginForm = reactive({
@@ -124,25 +133,28 @@ async function login() {
 
   try {
     loading.value = true
+    errorMsg.value = ''
     const response = await userService.login({
       userName: loginForm.userName,
       password: loginForm.password
     })
 
     if (response.code !== 200) {
-      ElNotification.error({ message: response.error })
+      errorMsg.value = response.error || '登录失败，请重试'
       return
     }
 
     browser.setUsername(loginForm.userName)
     browser.setAccessToken(response.data.token)
+    browser.setRole(response.data.role || '')
+    browser.setDisplayName(response.data.displayName || loginForm.userName)
     browser.setcCurrentTime(dayjs().format('YYYY-MM-DDTHH:mm:ss'))
 
     const redirect = route.query.redirect || '/'
     router.push({ path: decodeURIComponent(redirect) })
   } catch (e) {
     console.error(e)
-    ElNotification.error({ message: e.message || '登录失败' })
+    errorMsg.value = e?.error || e?.message || '登录失败，请重试'
   } finally {
     loading.value = false
   }
@@ -281,6 +293,26 @@ async function login() {
   .card-sub {
     font-size: 14px;
     color: var(--color-text-secondary);
+  }
+}
+
+/* ===== 登录错误提示 ===== */
+.login-error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  border-radius: var(--radius-md);
+  background: var(--el-color-danger-light-9, #fef0f0);
+  border: 1px solid var(--el-color-danger-light-7, #fbc4c4);
+  color: var(--el-color-danger, #f56c6c);
+  font-size: 13px;
+  line-height: 1.5;
+
+  .el-icon {
+    font-size: 16px;
+    flex-shrink: 0;
   }
 }
 
